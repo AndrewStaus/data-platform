@@ -19,6 +19,9 @@
 		{
 			"name": "Snowpark",
 			"path": "../data_platform/defs/snowpark/snowpark"
+		},
+		{
+			"path": "../analyses"
 		}
 	],
 	"settings": {
