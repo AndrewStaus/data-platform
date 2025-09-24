@@ -13,6 +13,7 @@
         },
         post_hook = ["{{
             apply_privacy_rules(
+                apply_mask=True,
                 delete_interval='10 years',
                 anonymize_interval='5 years',
                 reference_date_column='updated_at',

@@ -10,6 +10,5 @@ def materialize(
         ) -> dict[str, Any]:
     
     context.log.info("hello world")
-    df = session.table("transactions")
     
     return {}

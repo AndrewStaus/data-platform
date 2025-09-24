@@ -14,8 +14,8 @@ dependencies = [
     "faker",
     "psutil",
     "snowflake",
-    "snowflake-ml-python==1.11.0",
-    "snowflake-snowpark-python==1.36.0",
+    "snowflake-ml-python",
+    "snowflake-snowpark-python",
 ]
 
 [dependency-groups]
@@ -31,11 +31,15 @@ dev = [
     "mkdocstrings-python",
     "sphinx",
     "sqlfluff",
-    "seaborn>=0.13.2",
-    "itables>=2.4.5",
-    "faker==37.3.0",
-    "pandas==2.3.1",
-    "numpy==2.2.5",
+    "seaborn",
+    "itables",
+    "faker",
+    "pandas",
+    "numpy<2",
+    "snowpark-extensions",
+    "pygwalker[snowflake]",
+    "ipywidgets",
+    "ipylab>=1.0.0",
 ]
 
 [build-system]

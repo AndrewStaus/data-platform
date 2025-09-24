@@ -19,7 +19,7 @@ def hello_world(
         context: dg.AssetExecutionContext,
         snowpark: SnowparkResource) -> dg.MaterializeResult:
     
-    session = snowpark.get_session(schema="transactions_db")
+    session = snowpark.get_session(schema="transaction_db")
 
     result_metadata = materialize(session, context)
 
