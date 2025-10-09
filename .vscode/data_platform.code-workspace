@@ -3,25 +3,6 @@
 		{
 			"name": "Project",
 			"path": ".."
-		},
-		{
-			"name": "Sling",
-			"path": "../data_platform/defs/sling/sling"
-		},
-		{
-			"name": "dltHub",
-			"path": "../data_platform/defs/dlthub/dlthub"
-		},
-		{
-			"name": "dbt",
-			"path": "../dbt"
-		},
-		{
-			"name": "Snowpark",
-			"path": "../data_platform/defs/snowpark/snowpark"
-		},
-		{
-			"path": "../analyses"
 		}
 	],
 	"settings": {
@@ -81,9 +62,27 @@
 				]
 			},
 			{
+				"label": "dbt clean",
+				"type": "shell",
+				"command": "uv run --env-file .env.dev  dbt clean --target dev",
+				"icon": {"id":"server"},
+			},
+			{
+				"label": "dbt deps",
+				"type": "shell",
+				"command": "uv run --env-file .env.dev  dbt deps --target dev",
+				"icon": {"id":"server"},
+			},
+			{
 				"label": "dbt parse",
 				"type": "shell",
 				"command": "uv run --env-file .env.dev  dbt parse --target dev",
+				"icon": {"id":"server"},
+			},
+			{
+				"label": "dbt compile",
+				"type": "shell",
+				"command": "uv run --env-file .env.dev  dbt compile --target dev",
 				"icon": {"id":"server"},
 			},
 			{
@@ -131,9 +130,44 @@
 				}
 			},
 			{
+				"label": "dagster profile",
+				"type": "shell",
+				"command": [
+					"$PSDefaultParameterValues['*:Encoding'] = 'utf8';",
+					"$env:PYTHONPROFILEIMPORTTIME=1;",
+					"uv run --env-file .env.dev dagster dev 2> ./logs/import.log;"
+				],
+				"icon": {"id":"server"},
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared",
+					"showReuseMessage": false,
+					"clear": true
+				}
+			},
+			{
+				"label": "tuna",
+				"type": "shell",
+				"command": [
+					"python ./logs/process_log.py;",
+					"tuna ./logs/import.log;"
+				],
+				"icon": {"id":"server"},
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared",
+					"showReuseMessage": false,
+					"clear": true
+				}
+			},
+			{
 				"label": "dagster dev",
 				"type": "shell",
-				"command": "uv run --env-file .env.dev  dagster dev",
+				"command": "uv run --env-file .env.dev dagster dev",
 				"icon": {"id":"server"},
 				"presentation": {
 					"echo": true,

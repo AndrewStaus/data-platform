@@ -4,18 +4,27 @@ version = "0.1.0"
 description = "Data platform demonstration that integrates dagster, dbt, sling, and dlt."
 requires-python = ">=3.10, <3.11"
 dependencies = [
-    "dagster-cloud",
-    "dagster-dbt",
-    "dagster-dlt",
-    "dagster-k8s",
-    "dagster-postgres",
-    "dagster-sling",
-    "dagster-snowflake",
-    "faker",
-    "psutil",
-    "snowflake",
-    "snowflake-ml-python",
-    "snowflake-snowpark-python",
+    "dagster-cloud==1.11.12",
+    "dagster-dbt==0.27.12",
+    "dagster-dlt==0.27.12",
+    "dagster-k8s==0.27.12",
+    "dagster-postgres==0.27.12",
+    "dagster-sling==0.27.12",
+    "dagster-snowflake==0.27.12",
+    "faker==37.11.0",
+    "llvmlite==0.41.1",
+    "numba==0.58.1",
+    "psutil==7.1.0",
+    "snowflake==1.8.0",
+    "snowflake-ml-python==1.11.0",
+    "snowflake-snowpark-python==1.36.0",
+    "xgboost-cpu==3.0.5"
+]
+
+[tool.uv]
+override-dependencies = [
+    "dbt-core; sys_platform == 'never'",
+    "xgboost; sys_platform == 'never'"
 ]
 
 [dependency-groups]
@@ -35,11 +44,8 @@ dev = [
     "itables",
     "faker",
     "pandas",
-    "numpy<2",
-    "snowpark-extensions",
-    "pygwalker[snowflake]",
-    "ipywidgets",
-    "ipylab>=1.0.0",
+    "tuna",
+    "snowpark-extensions"
 ]
 
 [build-system]
@@ -59,8 +65,12 @@ quote-style = "double"
 indent-style = "space"
 [tool.ruff.lint]
 select = [
-    # pycodestyle, Pyflakes, pyupgrade, flake8-bugbear, flake8-simplify, isort
-    "E",           "F",     "UP",       "B",            "SIM",          "I",
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
 ]
 
 [tool.sqlfluff]

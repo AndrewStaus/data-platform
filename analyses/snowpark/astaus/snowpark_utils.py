@@ -5,10 +5,12 @@ from pathlib import Path
 import pandas as pd
 import pygwalker as pyg
 import snowpark_extensions
+from IPython.core.display_functions import display as legacy_display
 from pygwalker.api.pygwalker import PygWalker
 from pygwalker.data_parsers.database_parser import Connector
 from snowflake import snowpark
 from snowflake.snowpark import Session
+
 
 
 def _var(key) -> str:
@@ -47,24 +49,31 @@ def get_session(warehouse=None) -> snowpark.Session:
 
     return session
 
-def display(data: str | snowpark.DataFrame | pd.DataFrame | Collection) -> PygWalker | None:
-    if isinstance(data, str | snowpark.DataFrame):
-        _display_snowpark(data)
+def display(data: str | snowpark.DataFrame | pd.DataFrame | Collection,
+            spec:str|None = None) -> PygWalker | None:
+    if isinstance(data, str | snowpark.DataFrame | snowpark.dataframe.DataFrame):
+        _display_snowpark(data, spec=spec)
     else:
-        df = pd.DataFrame(data)
-        _display_df(df)
+        try:
+            df = pd.DataFrame(data)
+            _display_df(df, spec=spec)
+        except ValueError:
+            legacy_display(data)
 
 
-def _display_df(df: pd.DataFrame) -> None:
-    pyg.walk(
-        df,
-        default_tab="data",
-        theme_key="streamlit",
-        appearance="light",
-        show_cloud_tool=False
-    )
+def _display_df(df: pd.DataFrame, spec:str|None = None) -> None:
+    if spec:
+        pyg.render(df, spec, theme_key="streamlit", appearance="light")
+    else: 
+        pyg.walk(
+            df,
+            default_tab="data",
+            theme_key="streamlit",
+            appearance="light",
+            show_cloud_tool=False
+        )
 
-def _display_snowpark(data: snowpark.DataFrame | str) -> None:
+def _display_snowpark(data: snowpark.DataFrame | str, spec:str|None = None) -> None:
     session = get_session()
     sql = data.queries["queries"][0] if isinstance(data, snowpark.DataFrame) else data
 
@@ -84,18 +93,26 @@ def _display_snowpark(data: snowpark.DataFrame | str) -> None:
     setattr(existing_snowflake_connection,"_interpolate_empty_sequences", False)  # noqa: B010
     existing_snowflake_connection._paramstyle = "pyformat"
 
-    conn = Connector(
-        conn_url,
-        sql,
-        engine_params={"creator": lambda: existing_snowflake_connection}
-    )
+    try:
+        conn = Connector(
+            conn_url,
+            sql,
+            engine_params={"creator": lambda: existing_snowflake_connection}
+        )
+    except TypeError:
+        legacy_display(data)
+        return
 
-    pyg.walk(
-        conn,
-        default_tab="data",
-        theme_key="streamlit",
-        appearance="light",
-        show_cloud_tool=False
-    )
+
+    if spec:
+        pyg.render(conn, spec, theme_key="streamlit", appearance="light")
+    else: 
+        pyg.walk(
+            conn,
+            default_tab="data",
+            theme_key="streamlit",
+            appearance="light",
+            show_cloud_tool=False
+        )
 
 session = get_session()

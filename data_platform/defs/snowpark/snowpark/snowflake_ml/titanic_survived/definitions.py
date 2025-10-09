@@ -1,8 +1,8 @@
 import dagster as dg
+from dagster.components import definitions
 
 from ......utils.automation_conditions import CustomAutomationCondition
 from ....resources import SnowparkResource
-from .model import materialze
 
 
 class MLTrainConfig(dg.Config):
@@ -22,16 +22,18 @@ def asset(
         context: dg.AssetExecutionContext,
         snowpark: SnowparkResource,
         config: MLTrainConfig) -> dg.MaterializeResult:
+    from .train_pipeline import materialze
 
     session = snowpark.get_session(schema="open_data")
     metadata = materialze(context, session, config.retrain_treshold)
-
     return dg.MaterializeResult(metadata=metadata)
+
+
 
 @dg.asset_check(
         asset=["ml", "model", "titanic_survived"],
         description=("Check that default version of model scores above"
-                     "threshold for retraining")
+                    "threshold for retraining")
 )
 def score_above_threshold_check(
         snowpark: SnowparkResource,
@@ -45,4 +47,13 @@ def score_above_threshold_check(
     return dg.AssetCheckResult(
         passed=bool(score > config.retrain_treshold),
         metadata={"score": score}
+    )
+
+
+@definitions
+def defs() -> dg.Definitions:
+    
+    return dg.Definitions(
+        assets=[asset],
+        asset_checks=[score_above_threshold_check]
     )

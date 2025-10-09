@@ -1,4 +1,5 @@
 [Console]::CursorVisible = $false
+kubectl config set-context desktop-linux --namespace default --cluster docker-desktop --user=docker-desktop
 while($true) {
     $buffer = kubectl get pods
     cls

@@ -1,16 +1,6 @@
 from typing import Any
 
 import dagster as dg
-from snowflake.ml.modeling.ensemble.random_forest_classifier import (
-    RandomForestClassifier,
-)
-from snowflake.ml.modeling.framework.base import BaseTransformer
-from snowflake.ml.modeling.pipeline.pipeline import Pipeline
-from snowflake.ml.modeling.preprocessing.one_hot_encoder import OneHotEncoder
-from snowflake.ml.modeling.preprocessing.standard_scaler import StandardScaler
-from snowflake.ml.modeling.xgboost.xgb_classifier import XGBClassifier
-from snowflake.ml.registry.registry import Registry
-from snowflake.snowpark import functions as F
 from snowflake.snowpark.dataframe import DataFrame
 from snowflake.snowpark.session import Session
 
@@ -32,6 +22,8 @@ def materialze(
     9. else register and promote model as default version
     10. if score is still below threshold, asset check will alert an issue in dagster
     """
+    from snowflake.ml.model.type_hints import SupportedModelType
+    from snowflake.ml.registry.registry import Registry
 
 
     model_name = "titanic_survived"
@@ -53,9 +45,9 @@ def materialze(
 
     if model_ref:
         context.log.info("previous version found, checking score.")
-        model = model_ref.load() 
+        model: SupportedModelType = model_ref.load() 
         old_version_name = model_ref.version_name
-        old_score = model.score(val)
+        old_score = model.score(val) # type: ignore
         model_ref.set_metric("score", old_score)
         if old_score >= retrain_threshold:
             context.log.info("Score above threshold, skipping retrain.")
@@ -74,7 +66,7 @@ def materialze(
                          numerical_columns,
                          target_column)
 
-    model = _train_model(df, context,
+    model: SupportedModelType = _train_model(df, context,
                          categorical_columns,
                          numerical_columns,
                          target_column)
@@ -91,8 +83,8 @@ def materialze(
             metrics={"score": new_score},
         )
         version_name = model_ref.version_name
-        model = registry.get_model(model_name)
-        model.default = version_name
+        model_ref = registry.get_model(model_name)
+        model_ref.default = version_name
 
         return {"version": version_name, "score": new_score}
     
@@ -104,8 +96,17 @@ def materialze(
 def _train_model(df: DataFrame, context: dg.AssetExecutionContext,
                     categorical_columns: list[str],
                     numerical_columns: list[str],
-                    target_column: str) -> BaseTransformer:
+                    target_column: str):
 
+    from snowflake.ml.modeling.ensemble.random_forest_classifier import (
+        RandomForestClassifier,
+    )
+    from snowflake.ml.modeling.pipeline.pipeline import Pipeline
+    from snowflake.ml.modeling.preprocessing.one_hot_encoder import OneHotEncoder
+    from snowflake.ml.modeling.preprocessing.standard_scaler import StandardScaler
+    from snowflake.ml.modeling.xgboost.xgb_classifier import XGBClassifier
+    from snowflake.snowpark import functions as F
+    
     # use SMOTE here
     positive_count = df.filter(F.col(target_column) == 1).count()
     negative_count = df.filter(F.col(target_column) == 0).count()
@@ -155,7 +156,7 @@ def _train_model(df: DataFrame, context: dg.AssetExecutionContext,
             top_score = score
 
     context.log.info(f"{selected_type} model selected")
-    return selected_model # type: ignore
+    return selected_model
 
 def _get_train_data(session: Session,
                     categorical_columns: list[str],

@@ -52,4 +52,4 @@ uv run --env-file .env.prod dbt parse --project-dir $dbt_path --profiles-dir $db
 
 Write-Host("`CREATING PROJECT DOCS")
 uv run mkdocs build
-# uv run --env-file .env.prod dbt docs generate --project-dir $dbt_path --target prod
+uv run --env-file .env.prod dbt docs generate --project-dir $dbt_path --target prod

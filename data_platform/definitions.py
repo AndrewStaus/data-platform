@@ -5,6 +5,7 @@ import dagster as dg
 from dagster.components import definitions
 
 warnings.filterwarnings("ignore", category=dg.BetaWarning)
+warnings.filterwarnings("ignore", category=UserWarning)
 
 
 @definitions

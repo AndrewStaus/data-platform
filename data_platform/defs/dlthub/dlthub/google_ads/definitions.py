@@ -17,7 +17,7 @@ def defs() -> Definitions:
                 name="google_ads.campaigns",
                 table_name="campaigns",
                 primary_key="id",
-                write_disposition="merge",
+                write_disposition="merge"
             ),
             kinds={"api"},
             meta={

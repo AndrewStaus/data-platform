@@ -1,11 +1,5 @@
-import os
-import sys
-
 import dagster as dg
 from dagster.components import definitions
-from snowflake.snowpark import Session
-
-from ...utils.helpers import get_database_name, get_schema_name
 
 
 class SnowparkResource(dg.ConfigurableResource):
@@ -17,7 +11,14 @@ class SnowparkResource(dg.ConfigurableResource):
 
     def get_session(self, database="analytics",
                     schema: str | None = None,
-                    warehouse: str|None =None) -> Session:
+                    warehouse: str|None = None) -> "snowflake.snowpark.Session":  # type: ignore # noqa
+        """Get or create a Snowpark session"""
+        import os
+        import sys
+
+        from snowflake.snowpark import Session
+
+        from ...utils.helpers import get_database_name, get_schema_name
 
         if sys.platform == "win32":
             import pathlib
@@ -32,7 +33,6 @@ class SnowparkResource(dg.ConfigurableResource):
         if not warehouse:
             warehouse = os.getenv("DESTINATION__WAREHOUSE", "")
 
-        """Get or create a Snowpark session"""
         self._session = (
             Session.builder.configs({ 
                 "database":  get_database_name(database),
@@ -40,7 +40,7 @@ class SnowparkResource(dg.ConfigurableResource):
                 "user":      os.getenv("DESTINATION__USER", ""),
                 "password":  os.getenv("DESTINATION__PASSWORD", ""),
                 "role":      os.getenv("DESTINATION__ROLE", ""),
-                "warehouse": os.getenv("DESTINATION__WAREHOUSE", ""),
+                "warehouse": warehouse,
             })
             .create()
         )
