@@ -1,0 +1,11 @@
+load_from:
+    - python_module:
+        module_name: data_foundation.definitions
+        working_directory: data_foundation/
+        location_name: data_foundation
+        executable_path: data_foundation/.venv/Scripts/python
+    - python_module:
+        module_name: data_science.definitions
+        working_directory: data_science/
+        location_name: data_science
+        executable_path: data_science/.venv/Scripts/python

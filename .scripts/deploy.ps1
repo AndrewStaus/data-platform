@@ -1,10 +1,19 @@
-$dbt_path = ".\dbt"
+$dbt_path = ".\data_foundation\dbt"
 $branch_id = (-join ((97..122) | Get-Random -Count 15 | ForEach-Object {[char]$_}))
 
-Write-Host("`nBUILDING DOCKER IMAGE")
-$new_image = "dagster/data-platform:"+$branch_id
+Write-Host("`nBUILDING FOUNDATION DOCKER IMAGE")
+cd ./data_foundation/
+$new_foundation_image = "dagster/data-foundation:"+$branch_id
 $destination__password = ((Get-Content .env.prod) -match 'DESTINATION__PASSWORD=(.*)').split("=")[1].trim()
-docker build . --target data_platform -t $new_image --build-arg DESTINATION__PASSWORD=$destination__password
+docker build . --target data_foundation -t $new_foundation_image --build-arg DESTINATION__PASSWORD=$destination__password
+cd ..
+
+Write-Host("`nBUILDING SCIENCE DOCKER IMAGE")
+cd ./data_science/
+$new_science_image = "dagster/data-science:"+$branch_id
+$destination__password = ((Get-Content .env.prod) -match 'DESTINATION__PASSWORD=(.*)').split("=")[1].trim()
+docker build . --target data_science -t $new_science_image --build-arg DESTINATION__PASSWORD=$destination__password
+cd ..
 
 Write-Host("`nDEPLOYING BUILD")
 helm repo update
@@ -23,17 +32,31 @@ kubectl delete pod --field-selector=status.phase==ImagePullBackoff
 
 Write-Host("`nCLEANING DOCKER REPOSITORY")
 
-$old_image=docker inspect data-platform | ConvertFrom-Json
-$old_image=$old_image.Config.Image
+$old_foundation_image=docker inspect data-foundation | ConvertFrom-Json
+$old_foundation_image=$old_foundation_image.Config.Image
 
-docker stop data-platform
-docker rm data-platform
+docker stop data-foundation
+docker rm data-foundation
 
-docker container create -t --name data-platform $new_image
+docker container create -t --name data-foundation $new_foundation_image
 
-docker stop data-platform-rollback
-docker rm data-platform-rollback
-docker container create -t --name data-platform-rollback $old_image
+docker stop data-foundation-rollback
+docker rm data-foundation-rollback
+docker container create -t --name data-foundation-rollback $old_foundation_image
+
+###
+
+$old_science_image=docker inspect data-science | ConvertFrom-Json
+$old_science_image=$old_science_image.Config.Image
+
+docker stop data-science
+docker rm data-science
+
+docker container create -t --name data-science $new_science_image
+
+docker stop data-science-rollback
+docker rm data-science-rollback
+docker container create -t --name data-science-rollback $new_science_image
 
 Start-Sleep 5
 docker image prune -a --force

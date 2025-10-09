@@ -3,12 +3,18 @@
 		{
 			"name": "Project",
 			"path": ".."
+		},
+		{
+			"path": "../data_science"
+		},
+		{
+			"path": "../data_foundation"
 		}
 	],
 	"settings": {
 		"dbt.environmentVariables": {
 			"PROJECT_DIR": "./dbt",
-			"DBT_DEFER_STATE": "C:\\Users\\Andrew\\Code\\data_platform\\dbt\\state"
+			"DBT_DEFER_STATE": "C:/Users/Andrew/Code/data_platform/data_foundation/dbt/state/"
 		},
 		"sqlfluff.dbtInterface.enabled": false,
 		"sqlfluff.dialect": "",
