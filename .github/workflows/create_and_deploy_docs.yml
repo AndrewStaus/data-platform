@@ -34,14 +34,18 @@ jobs:
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
-      - name: Build docs
-        working-directory: ./.mkdocs/
+      - name: Build Docs
+        working-directory: ./.mkdocs
         run: uv run --only-group docs mkdocs build
+
+      - name: View Generated Files
+        working-directory: ./.mkdocs/docs
+        run: tree
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload artifact
+      - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './.mkdocs/site' # Upload only compiled html
