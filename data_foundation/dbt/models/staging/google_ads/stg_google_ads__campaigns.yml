@@ -1,0 +1,12 @@
+# Documentation for targeting criteria produced by the Google Ads staging model.
+models:
+  - name: stg_google_ads__campaigns
+    columns:
+      - name: campaign_id
+        data_type: number
+      - name: campaign_name
+        data_type: varchar
+      - name: campaign_start_date
+        data_type: date
+      - name: _loaded_at
+        data_type: timestamp_ntz

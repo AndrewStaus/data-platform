@@ -1,0 +1,29 @@
+# Staging model for core account attributes from the accounts_db source.
+models:
+  - name: stg_accounts_db__accounts
+    columns:
+      - name: account_id
+        data_type: varchar
+        description: ''
+
+      - name: account_first_name
+        data_type: varchar
+        description: ''
+
+      - name: account_last_name
+        data_type: varchar
+        description: ''
+
+      - name: account_email
+        data_type: varchar
+        description: ''
+
+      - name: indvidual_party_key
+        data_type: varchar
+        description: ''
+
+      - name: _loaded_at
+        data_type: timestamp_ntz
+        description: ''
+        data_tests:
+        - not_null

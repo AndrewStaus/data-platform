@@ -5,26 +5,30 @@
 			"path": ".."
 		},
 		{
-			"name": "Sling",
-			"path": "../data_platform/defs/sling/sling"
+			"name": "sling",
+			"path": "../data_foundation/data_foundation/defs/sling/sling"
 		},
 		{
-			"name": "dltHub",
-			"path": "../data_platform/defs/dlthub/dlthub"
+			"name": "dlthub",
+			"path": "../data_foundation/data_foundation/defs/dlthub/dlthub"
 		},
 		{
 			"name": "dbt",
-			"path": "../dbt"
+			"path": "../data_foundation/dbt"
 		},
 		{
-			"name": "Snowpark",
-			"path": "../data_platform/defs/snowpark/snowpark"
+			"name": "snowpark",
+			"path": "../data_science/data_science/defs/snowpark/snowpark"
+		},
+		{
+			"name": "data_analytics",
+			"path": "../data_analytics"
 		}
 	],
 	"settings": {
 		"dbt.environmentVariables": {
 			"PROJECT_DIR": "./dbt",
-			"DBT_DEFER_STATE": "C:\\Users\\Andrew\\Code\\data_platform\\dbt\\state"
+			"DBT_DEFER_STATE": "C:\\Users\\Andrew\\Code\\data_platform\\data_foundation\\dbt\\state"
 		},
 		"sqlfluff.dbtInterface.enabled": false,
 		"sqlfluff.dialect": "",
@@ -50,7 +54,7 @@
 			{
 				"label": "build and deploy",
 				"type": "shell",
-				"command": "./.scripts/deploy.ps1",
+				"command": "./.vscode/tasks/deploy.ps1",
 				"problemMatcher": [],
 				"group": {
 					"kind": "build",
@@ -78,9 +82,27 @@
 				]
 			},
 			{
+				"label": "dbt clean",
+				"type": "shell",
+				"command": "uv run --env-file .env  dbt clean --target dev",
+				"icon": {"id":"server"},
+			},
+			{
+				"label": "dbt deps",
+				"type": "shell",
+				"command": "uv run --env-file .env  dbt deps --target dev",
+				"icon": {"id":"server"},
+			},
+			{
 				"label": "dbt parse",
 				"type": "shell",
-				"command": "uv run --env-file .env.dev  dbt parse --target dev",
+				"command": "uv run --env-file .env  dbt parse --target dev",
+				"icon": {"id":"server"},
+			},
+			{
+				"label": "dbt compile",
+				"type": "shell",
+				"command": "uv run --env-file .env  dbt compile --target dev",
 				"icon": {"id":"server"},
 			},
 			{
@@ -102,7 +124,7 @@
 			{
 				"label": "k8s pod status",
 				"type": "shell",
-				"command": "./.scripts/pod_status.ps1",
+				"command": "./.vscode/tasks/pod_status.ps1",
 				"icon": {"id":"server"},
 				"presentation": {
 					"echo": true,
@@ -116,7 +138,42 @@
 			{
 				"label": "k8s port forward",
 				"type": "shell",
-				"command": "./.scripts/forward_ports.ps1",
+				"command": "./.vscode/tasks/forward_ports.ps1",
+				"icon": {"id":"server"},
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared",
+					"showReuseMessage": false,
+					"clear": true
+				}
+			},
+			{
+				"label": "dagster profile",
+				"type": "shell",
+				"command": [
+					"$PSDefaultParameterValues['*:Encoding'] = 'utf8';",
+					"$env:PYTHONPROFILEIMPORTTIME=1;",
+					"uv run --env-file .env dagster dev 2> ./logs/import.log;"
+				],
+				"icon": {"id":"server"},
+				"presentation": {
+					"echo": true,
+					"reveal": "always",
+					"focus": false,
+					"panel": "shared",
+					"showReuseMessage": false,
+					"clear": true
+				}
+			},
+			{
+				"label": "tuna",
+				"type": "shell",
+				"command": [
+					"python ./logs/process_log.py;",
+					"tuna ./logs/import.log;"
+				],
 				"icon": {"id":"server"},
 				"presentation": {
 					"echo": true,
@@ -130,7 +187,7 @@
 			{
 				"label": "dagster dev",
 				"type": "shell",
-				"command": "uv run --env-file .env.dev  dagster dev",
+				"command": "uv run --env-file .env dagster dev",
 				"icon": {"id":"server"},
 				"presentation": {
 					"echo": true,

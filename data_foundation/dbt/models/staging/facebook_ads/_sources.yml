@@ -1,0 +1,9 @@
+# Source definition for the facebook_ads schema replicated by Sling.
+version: 2
+
+sources:
+  - name: facebook_ads
+    database: "{{ generate_database_name('raw') }}"
+    schema: "{{ generate_schema_name('facebook_ads') }}"
+    tables:
+      - name: campaigns

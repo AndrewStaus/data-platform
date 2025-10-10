@@ -1,0 +1,6 @@
+# Ownership metadata for marketing-specific marts and tests.
+groups:
+  - name: marketing
+    owner:
+      name: Tom Smith
+      email: marketing@email.com

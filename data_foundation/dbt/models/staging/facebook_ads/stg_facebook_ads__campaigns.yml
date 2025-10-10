@@ -1,0 +1,15 @@
+# Staging model documentation for Facebook Ads campaigns. Captures the columns
+# exposed after light transformations in stg_facebook_ads__campaigns.sql.
+models:
+  - name: stg_facebook_ads__campaigns
+    columns:
+      - name: campaign_id
+        data_type: number
+      - name: campaign_name
+        data_type: varchar
+      - name: campaign_start_date
+        data_type: date
+      - name: campaign_update_date
+        data_type: timestamp_ntz
+      - name: _loaded_at
+        data_type: timestamp_ntz

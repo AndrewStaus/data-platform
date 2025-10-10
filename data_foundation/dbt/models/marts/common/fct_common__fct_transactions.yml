@@ -1,0 +1,38 @@
+# Fact table documentation for the shared transactions mart powering multiple
+# analytics domains.
+models:
+  - name: fct_common__fct_transactions
+    columns:
+      - name: transaction_id
+        description: The identifier of the transaction, unique when concatentated with product_id
+        data_tests:
+          - not_null
+      - name: product_id
+        description: The id of the product sold on the transaction, unique when concatentated with transaction_id
+        data_tests:
+          - not_null
+      - name: transaction_revenue
+        description: the total sale item
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: transaction_margin
+        description: the gross margin after unit costs are considered
+        data_tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: _loaded_at
+        description: the time the data was loaded from source
+        data_tests:
+          - not_null
+    config:
+      meta:
+        dagster:
+          freshness_check:
+            lower_bound_delta_seconds: 1800 # 30 mins

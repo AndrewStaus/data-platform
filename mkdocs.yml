@@ -1,18 +1,24 @@
+# MkDocs configuration for building the developer documentation site. Platform
+# engineers can tweak theme/plugins here while data engineers can add new docs by
+# extending the navigation under docs/.
 site_name: Data Platform
 theme:
   name: "readthedocs"
 
+# The repo uses Windows-style paths in mkdocs.yml to support GitHub Pages builds on
+# Windows runners. Update both docs_dir and site_dir together if you reorganize docs.
 docs_dir: "docs\\docs"
 site_dir: "docs\\site"
 
 theme:
+  # We use Material for MkDocs to unlock advanced navigation and search features.
   name: material
 
 plugins:
-  - search
-  - mkdocstrings
-  - gen-files:
+  - search # Standard full-text search across generated pages.
+  - mkdocstrings # Autodoc support for Python objects referenced in the docs/ tree.
+  - gen-files: # Dynamically generate stub pages for Dagster assets and dbt models.
       scripts:
       - docs/gen_doc_stubs.py
-  - mermaid2:
+  - mermaid2: # Enable Mermaid diagrams in Markdown files for architecture documentation.
       javascript: https://unpkg.com/mermaid/dist/mermaid.min.js

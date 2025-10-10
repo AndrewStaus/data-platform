@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+- name: open_data
+  database: "{{ generate_database_name('raw') }}"
+  schema: "{{ generate_schema_name('open_data') }}"
+  tables:
+  - name: titanic

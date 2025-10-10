@@ -1,0 +1,42 @@
+[project]
+name = "analytics_utils"
+version = "0.2.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.10.*"
+dependencies = [
+    "SQLAlchemy==1.4.49",
+    "snowflake-sqlalchemy==1.5.0",
+    "pyarrow==10.0.1",
+    "pygwalker[snowflake]>=0.4.9.15",
+    "snowpark-extensions>=0.0.47",
+    "ipython>=8.37.0",
+    "snowflake-snowpark-python>=1.40.0",
+    "dotenv>=0.9.9",
+    "numpy<2.0.0",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-dir]
+analytics_utils = "analytics_utils"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 20
+quote-style = "double"
+indent-style = "space"
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
+]

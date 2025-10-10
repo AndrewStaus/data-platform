@@ -1,0 +1,12 @@
+# Source definition for Google Ads data replicated via dltHub.
+version: 2
+
+sources:
+  - name: google_ads
+    database: "{{ generate_database_name('raw') }}"
+    schema: "{{ generate_schema_name('google_ads') }}"
+    tables:
+      - name: campaigns
+      - name: dlt_loads
+      - name: criteria
+      - name: campaigns__criteria

@@ -1,0 +1,6 @@
+# https://hub.getdbt.com/packages:
+# Catalog of dbt packages pulled from dbt Hub. Add any shared macros here so both
+# local development and CI resolve dependencies consistently.
+packages:
+  - package: dbt-labs/dbt_utils
+    version: 1.3.0

@@ -1,7 +1,7 @@
 {
     "dbt_sources_scaffold":{
         "prefix": "dbt_sources_scaffold",
-        "scope": "jinja-yaml, yaml",
+        "scope": "jinja-yaml,yaml",
         "description": "description",
         "body": [
             "version: 2",
@@ -16,7 +16,7 @@
         ]
     },
     "dbt_staged_scaffold": {
-        "scope": "jinja-sql, sql, snowflake-sql",
+        "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "dbt_staged_scaffold",
         "description": "description",
         "body": [
@@ -43,7 +43,7 @@
     },
     "dbt_snapshot_scaffold":{
         "prefix": "dbt_snapshot_scaffold",
-        "scope": "jinja-yaml, yaml",
+        "scope": "jinja-yaml,yaml",
         "description": "description",
         "body": [
             "version: 2",
@@ -83,7 +83,7 @@
         ]
     },
     "dbt_with_source_cte":{
-        "scope": "jinja-sql, sql, snowflake-sql",
+        "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "dbt_with_source_cte",
         "description": "description",
         "body": [
@@ -93,7 +93,7 @@
         ]
     },
     "dbt_source_cte":{
-        "scope": "jinja-sql, sql, snowflake-sql",
+        "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "dbt_source_cte",
         "description": "description",
         "body": [
@@ -103,7 +103,7 @@
         ]
     },
     "dbt_with_ref_cte":{
-        "scope": "jinja-sql, sql, snowflake-sql",
+        "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "dbt_with_ref_cte",
         "description": "description",
         "body": [
@@ -113,7 +113,7 @@
         ]
     },
     "dbt_ref_cte":{
-        "scope": "jinja-sql, sql, snowflake-sql",
+        "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "dbt_ref_cte",
         "description": "description",
         "body": [
@@ -123,7 +123,7 @@
         ]
     },
     "dbt_incremental_config": {
-        "scope": "jinja-sql, sql, snowflake-sql",
+        "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "dbt_incremental_config",
         "description": "description",
         "body": [
@@ -137,7 +137,7 @@
         ]
     },
     "dbt_is_incremental": {
-        "scope": "jinja-sql, sql, snowflake-sql",
+        "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "dbt_is_incremental",
         "description": "description",
         "body": [
@@ -147,7 +147,7 @@
         ]
     },
     "dbt_partition_config": {
-        "scope": "jinja-sql, sql, snowflake-sql",
+        "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "dbt_partition",
         "description": "description",
         "body": [
@@ -157,7 +157,7 @@
         ]
     },
     "dbt_partition_is_incremental": {
-        "scope": "jinja-sql, sql, snowflake-sql",
+        "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "dbt_partition_is_incremental",
         "description": "description",
         "body": [

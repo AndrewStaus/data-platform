@@ -1,8 +1,0 @@
-version: 2
-
-sources:
-- name: transaction_db
-  database: "{{ generate_database_name('raw') }}"
-  schema: "{{ generate_schema_name('transaction_db') }}"
-  tables:
-  - name: transactions

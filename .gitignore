@@ -6,11 +6,13 @@ secrets.toml
 **/*$py.class
 logs/
 *.egg-info
-
+**/build/
+**/dist/
 key_vault/
 
 */conda.yml
 
+!.helm/
 !.gitignore
 !.dockerignore
 

@@ -1,0 +1,72 @@
+# Documentation for the normalized Adobe Experience hit-level table.
+models:
+  - name: stg_adobe_experience__hits
+    columns:
+      - name: hit_source
+        description: the platform that captured the hit, web or app
+        data_type: varchar
+        data_tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - web
+                  - app
+        config:
+          meta: {}
+          tags: []
+      - name: hit_at
+        description: the time the hit was registerd
+        data_type: timestamp_ntz
+        config:
+          meta: {}
+          tags: []
+      - name: marketing_cloud_visitor_id
+        data_type: varchar
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: visit_id
+        data_type: varchar
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: hit_id
+        data_type: varchar
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: hit_sid
+        data_type: varchar
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: hit_url
+        data_type: varchar
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: individual_party_key
+        description: "{{ doc('individual_party_key') }}"
+        data_type: varchar
+        config:
+          meta:
+            doc_blocks:
+              - doc.dbt_core.individual_party_key
+          tags: []
+      - name: order_id
+        data_type: number
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: _loaded_at
+        data_type: timestamp_tz
+        description: ''
+        config:
+          meta: {}
+          tags: []

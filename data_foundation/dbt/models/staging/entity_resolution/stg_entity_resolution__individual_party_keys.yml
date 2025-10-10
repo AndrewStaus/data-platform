@@ -1,0 +1,14 @@
+# Documentation for the identity stitching staging model.
+models:
+  - name: stg_entity_resolution__individual_party_keys
+    columns:
+      - name: individual_party_key
+        data_type: varchar
+        description: "{{ doc('individual_party_key') }}"
+      - name: individual_id
+        data_type: varchar
+        description: "{{ doc('individual_id') }}"
+      - name: updated_at
+        data_type: timestamp_ntz
+      - name: _loaded_at
+        data_type: timestamp_tz

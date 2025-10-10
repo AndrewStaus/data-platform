@@ -2,27 +2,13 @@
 name = "data_platform"
 version = "0.1.0"
 description = "Data platform demonstration that integrates dagster, dbt, sling, and dlt."
-requires-python = ">=3.10, <3.11"
-dependencies = [
-    "dagster-cloud",
-    "dagster-dbt",
-    "dagster-dlt",
-    "dagster-k8s",
-    "dagster-postgres",
-    "dagster-sling",
-    "dagster-snowflake",
-    "faker",
-    "psutil",
-    "snowflake",
-    "snowflake-ml-python==1.11.0",
-    "snowflake-snowpark-python==1.36.0",
-]
+requires-python = ">=3.13"
+dependencies = []
 
 [dependency-groups]
 dev = [
     "dagster-dg-cli",
     "dagster-webserver",
-    "jupyter",
     "mkdocs",
     "mkdocs-gen-files",
     "mkdocs-material",
@@ -30,20 +16,15 @@ dev = [
     "mkdocstrings",
     "mkdocstrings-python",
     "sphinx",
-    "sqlfluff",
-    "seaborn>=0.13.2",
-    "itables>=2.4.5",
-    "faker==37.3.0",
-    "pandas==2.3.1",
-    "numpy==2.2.5",
+    "sqlfluff"
 ]
 
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.package-dir]
-mypkg = "data_platform"
+[tool.setuptools.packages.find]
+include = []
 
 [tool.ruff]
 line-length = 88
@@ -55,8 +36,12 @@ quote-style = "double"
 indent-style = "space"
 [tool.ruff.lint]
 select = [
-    # pycodestyle, Pyflakes, pyupgrade, flake8-bugbear, flake8-simplify, isort
-    "E",           "F",     "UP",       "B",            "SIM",          "I",
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
 ]
 
 [tool.sqlfluff]
@@ -68,17 +53,3 @@ layout.type.alias_expression.spacing_before = "align"
 layout.type.alias_expression.align_within = "select_clause"
 rules.aliasing.table.aliasing = "implicit"
 rules.aliasing.column.aliasing = "implicit"
-
-# # core.templater = "dbt"
-# # templater.dbt.project_dir = "./dbt"
-# # templater.dbt.profiles_dir = "./dbt"
-# # experimental.format.executeInTerminal = true
-
-[tool.dagster]
-module_name = "data_platform.definitions"
-code_location_name = "data_platform"
-
-[tool.dg]
-directory_type = "project"
-project.root_module = "data_platform"
-

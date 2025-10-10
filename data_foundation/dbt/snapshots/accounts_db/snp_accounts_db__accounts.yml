@@ -1,0 +1,35 @@
+# Slowly changing dimension snapshot capturing account history from the raw
+# accounts_db source. Ensures PII handling rules are applied before exposing data
+# downstream.
+version: 2
+
+snapshots:
+- name: snp_accounts_db__accounts
+  relation: source('accounts_db', 'accounts')
+  config:
+    database: snapshots
+    schema: accounts_db
+    alias: accounts
+    unique_key: [id]
+    strategy: timestamp
+    updated_at: updated_at
+    dbt_valid_to_current: "to_date('9999-12-31')"
+    snapshot_meta_column_names: {
+      "dbt_valid_from": "_valid_from",
+      "dbt_valid_to": "_valid_to",
+      "dbt_scd_id": "_scd_id",
+      "dbt_updated_at": "_updated_at",
+      "dbt_is_deleted": "_is_deleted"
+    }
+    post_hook: [
+      "{{ apply_privacy_rules(
+        delete_interval='10 years',
+        anonymize_interval='5 years',
+        reference_date_column='updated_at',
+        pii_columns=[
+          'first_name',
+          'last_name',
+          'email',
+        ]
+      ) }}"
+    ]

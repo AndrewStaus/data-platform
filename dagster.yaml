@@ -1,2 +1,8 @@
+# Dagster instance configuration shared by all developers. Keeping these settings
+# in version control helps platform engineers review operational defaults that
+# affect local runs, CI, and deployments.
 telemetry:
+  # Disable Dagster telemetry to avoid sending anonymized usage data from local and
+  # CI environments. Platform teams can flip this to `true` in downstream forks if
+  # they want to participate in usage analytics.
   enabled: false
