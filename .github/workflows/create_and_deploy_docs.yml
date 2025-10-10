@@ -36,6 +36,10 @@ jobs:
 
       - name: Build Docs
         working-directory: ./.mkdocs
+        run: uv run --only-group docs ./gen_doc_stubs.py
+
+      - name: Build docs
+        working-directory: ./.mkdocs
         run: uv run --only-group docs mkdocs build
 
       - name: View Generated Files
