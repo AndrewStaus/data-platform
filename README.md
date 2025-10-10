@@ -10,9 +10,11 @@ can collaborate with clear ownership boundaries.
 
 | Path | Owner Focus | Description |
 | --- | --- | --- |
-| `data_platform/` | Platform | Dagster definitions, resource configuration, and integration glue code. Includes Sling source connection YAML that controls raw data ingestion. |
-| `dbt/` | Data & Analytics | dbt project containing models, seeds, snapshots, and tests. YAML files document sources, staging models, and marts. |
-| `analyses/` | Data | Exploratory dbt analyses and notebooks. |
+| `data_foundation/data_foundation/` | Platform | Dagster definitions, resource configuration, and integration glue code. Includes Sling source connection YAML that controls raw data ingestion. |
+| `data_foundation/dbt/` | Cross-functional | dbt project containing models, seeds, snapshots, and tests. YAML files document sources, staging models, and marts. |
+| `data_science/` | Data & Analytics | Dagster definitions, resource configuration, and integration glue code. Includes Snowpark definitions for ML-Ops. |
+| `data_analytics/` | Data & Analytics | Exploratory sql analyses and notebooks. |
+| `libs/` | Cross-functional | Shared libraries. |
 | `docs/` | Cross-functional | Markdown sources for the MkDocs site published via GitHub Pages. |
 | `Dockerfile`, `pyproject.toml`, `uv.lock` | Platform | Runtime dependencies for orchestrator workers and local development. |
 | `.github/workflows/` | Platform | CI/CD automation (publishing docs, running checks). |
