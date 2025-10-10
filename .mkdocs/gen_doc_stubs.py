@@ -33,7 +33,7 @@ for source_root, doc_root in roots:
         import_path = ("."
             .join(source_path
                   .with_suffix("") # remove .py extension
-                  .parts[len(source_root.parts):] # index for relative path
+                  .parts[len(source_root.parts)-1:] # index for relative path
             )
             .replace(".__init__", "") # remove init so parent dir name is used 
             .strip() # remove whitespace
