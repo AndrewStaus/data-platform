@@ -30,9 +30,11 @@ Dagster assets and schedules live under `data_platform/defs/`. Key concepts:
   layers in Snowflake. These YAML files now include inline comments describing
   connection secrets, replication cadence, and how Dagster automation metadata
   is applied.
+- `dlthub/` contains source replication code to ingest raw layers in Snowflake
+  through Python defined logic.
 - Dagster uses the `dagster.yaml` file in the repository root for instance
   settings shared across developers and CI, such as disabling telemetry.
-- Helm deployment scaffolding is stored in `.scripts/helm_template.yaml` to
+- Helm deployment scaffolding is stored in `.helm/values.yaml` to
   help platform engineers customize Kubernetes deployments while preserving
   upstream defaults.
 
@@ -78,11 +80,10 @@ The dbt project is in the `dbt/` directory and is structured as follows:
 
 ### Secrets and configuration
 
-- Environment-specific secrets are loaded from `.env.<environment>` files (for
-  example `.env.dev`). Sling connections will be skipped—but the rest of the
-  Dagster code location will still load—when the required secrets are missing,
-  and a warning is emitted in the code-server logs to help track down the
-  missing value. Populate the secret and restart the containers to activate the
+- Environment-specific secrets are loaded from `.env` file. Sling connections will be
+  skipped—but the rest of the Dagster code location will still load—when the required
+  secrets are missing,  and a warning is emitted in the code-server logs to help track
+  down the missing value. Populate the secret and restart the containers to activate the
   connection.
 - If your network proxies TLS, export `DBT_ALLOW_INSECURE_SSL=1` before running
   `docker compose` or `dagster dev`. The code temporarily disables certificate
