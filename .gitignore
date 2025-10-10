@@ -12,7 +12,6 @@ logs/
 **/dist/
 key_vault/
 
-
 !.helm/
 !.gitignore
 !.dockerignore

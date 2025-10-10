@@ -1,1 +1,0 @@
-{{ test_accepted_values(column_name="hit_source", model=get_where_subquery(ref('stg_adobe_experience__hits')), values=["web","app"]) }}
