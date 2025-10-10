@@ -1,5 +1,5 @@
 # Workflow for building and deploying auto-generated docs to GitHub Pages
-name: Deploy Docs
+name: Github-Pages Deploy
 
 on:
   # Runs on pushes targeting the default branch
@@ -34,17 +34,13 @@ jobs:
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
-      - name: Build Docs
+      - name: Create Stubs
         working-directory: ./.mkdocs
         run: uv run --only-group docs ./gen_doc_stubs.py
 
       - name: Build docs
         working-directory: ./.mkdocs
         run: uv run --only-group docs mkdocs build
-
-      - name: View Generated Files
-        working-directory: ./.mkdocs/
-        run: tree
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
