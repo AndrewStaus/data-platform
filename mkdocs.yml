@@ -7,8 +7,8 @@ theme:
 
 # The repo uses Windows-style paths in mkdocs.yml to support GitHub Pages builds on
 # Windows runners. Update both docs_dir and site_dir together if you reorganize docs.
-docs_dir: "docs\\docs"
-site_dir: "docs\\site"
+docs_dir: "docs/docs"
+site_dir: "docs/site"
 
 theme:
   # We use Material for MkDocs to unlock advanced navigation and search features.

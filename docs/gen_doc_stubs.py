@@ -44,5 +44,4 @@ for src_root in modules:
             # Emit a simple directive that instructs MkDocs to include the module level API
             # reference when documentation is built.
             with mkdocs_gen_files.open(doc_path, "w") as f:
-                # print(ident)
                 print("::: " + ident, file=f)
