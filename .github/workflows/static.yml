@@ -37,9 +37,10 @@ jobs:
       - name: install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh 
       - name: install dependancies
-        run: uv sync
+        run: uv pip install mkdocs mkdocs-gen-files mkdocs-material \
+                            mkdocs-mermaid2-plugin mkdocstrings mkdocstrings-python
       - name: build docs
-        run: uv run mkdocs build        
+        run: uv run mkdocs build
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
