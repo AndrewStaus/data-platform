@@ -5,6 +5,7 @@ from pathlib import Path
 import pandas as pd
 import pygwalker as pyg
 import snowpark_extensions
+from dotenv import find_dotenv, load_dotenv
 from IPython.core.display_functions import display as legacy_display
 from pygwalker.api.pygwalker import PygWalker
 from pygwalker.data_parsers.database_parser import Connector
@@ -12,13 +13,13 @@ from snowflake import snowpark
 from snowflake.snowpark import Session
 
 
-
 def _var(key) -> str:
 
-    from dotenv import load_dotenv
 
-    path = Path(__file__).joinpath("../../../../.env.dev").resolve()
-    load_dotenv(path)
+    env_path = find_dotenv(raise_error_if_not_found=True,
+                            usecwd=True)
+
+    load_dotenv(env_path)
     return os.getenv(key) or ""
 
 def get_session(warehouse=None) -> snowpark.Session:
@@ -41,11 +42,11 @@ def get_session(warehouse=None) -> snowpark.Session:
             .create()
         )
 
-        print("session_id:", session.session_id)
-        print("version:",    session.version)
-        print("database:",   session.get_current_database())
-        print("schema:",     session.get_current_schema())
-        print("user:",       session.get_current_user())
+    print("session_id:", session.session_id)
+    print("version:",    session.version)
+    print("database:",   session.get_current_database())
+    print("schema:",     session.get_current_schema())
+    print("user:",       session.get_current_user())
 
     return session
 

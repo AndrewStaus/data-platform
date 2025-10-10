@@ -3,6 +3,26 @@
 		{
 			"name": "Project",
 			"path": ".."
+		},
+		{
+			"name": "sling",
+			"path": "../data_foundation/data_foundation/defs/sling/sling"
+		},
+		{
+			"name": "dlthub",
+			"path": "../data_foundation/data_foundation/defs/dlthub/dlthub"
+		},
+		{
+			"name": "dbt",
+			"path": "../data_foundation/dbt"
+		},
+		{
+			"name": "snowpark",
+			"path": "../data_science/data_science/defs/snowpark/snowpark"
+		},
+		{
+			"name": "data_analytics",
+			"path": "../data_analytics"
 		}
 	],
 	"settings": {
