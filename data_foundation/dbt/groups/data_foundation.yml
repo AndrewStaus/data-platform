@@ -1,3 +1,4 @@
+# dbt group ownership metadata for shared foundational models.
 groups:
   - name: data_foundation
     owner:

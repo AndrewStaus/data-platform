@@ -1,3 +1,5 @@
+# Sling target connection that receives all raw data ingested by Sling. Platform
+# engineers rotate credentials here without touching individual replication specs.
 connections:
   - name: snowflake
     type: snowflake

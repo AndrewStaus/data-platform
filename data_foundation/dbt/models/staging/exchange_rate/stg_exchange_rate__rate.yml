@@ -1,3 +1,4 @@
+# Documentation for the normalized exchange rate reference table.
 models:
   - name: stg_exchange_rate__rate
     description: exchange rate from cad to different currancies

@@ -1,3 +1,4 @@
+# Snapshot of transactional facts to support slowly changing order attributes.
 version: 2
 
 snapshots:

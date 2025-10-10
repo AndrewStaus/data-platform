@@ -1,12 +1,21 @@
+# Primary dbt project configuration. This is the contract between analytics code
+# and the orchestrator, so both platform and data engineers should review changes
+# carefully when altering paths, groups, or flags.
 name: 'dbt_foundation'
 version: '1.0.0'
 
 query-comment:
+  # Embed metadata so downstream observability tools can tie queries back to Dagster
+  # runs and dbt nodes.
   comment: "snowflake_dagster_dbt_v1_opaque_id[[[{{ node.unique_id }}:{{ invocation_id }}]]]"
   append: true
 
+# `profile` must align with the entry in profiles.yml so dbt knows how to connect
+# to Snowflake.
 profile: 'dbt'
 
+# Folder mappings that control how dbt discovers resources. Update in tandem with
+# the repository structure documented in README.md.
 model-paths: ["models", "groups"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
@@ -59,5 +68,7 @@ snapshots:
       columns: true
   dbt_foundation:
     +group: data_foundation
+
 flags:
+  # Enforce explicit arguments on generic tests to avoid ambiguous macros.
   require_generic_test_arguments_property: true

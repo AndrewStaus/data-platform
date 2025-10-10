@@ -1,3 +1,5 @@
+# Sling connection profile for Adobe Experience event data. These high-volume web
+# and app hits drive marketing attribution models downstream.
 connections:
   - name: adobe_experience
     type: postgres
@@ -9,6 +11,8 @@ connections:
   
 replications:
   - name: adobe_experience->snowflake
+    # Hourly backfills accommodate late-arriving events from Adobe. Adjust the
+    # schedule/partition metadata as SLAs evolve.
     env: {SLING_LOADED_AT_COLUMN: timestamp}
     source: adobe_experience
     target: snowflake
@@ -29,5 +33,7 @@ replications:
           automation_condition_config: {"cron_schedule":"@hourly", "cron_timezone":"utc"}
           # freshness_check: {"deadline_cron": "30 * * * *"}
     streams:
+      # Separate streams allow us to assign different Dagster partitions later if
+      # web and app latency diverge.
       adobe_experience.web_hits:
       adobe_experience.app_hits:

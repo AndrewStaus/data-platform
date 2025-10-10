@@ -1,3 +1,4 @@
+# Documentation for targeting criteria produced by the Google Ads staging model.
 models:
   - name: stg_google_ads__campaigns
     columns:

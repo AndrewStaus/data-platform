@@ -1,3 +1,4 @@
+# Staging model for order line transactions powering the finance mart.
 models:
   - name: stg_transaction_db__transactions
     description: Completed transactions

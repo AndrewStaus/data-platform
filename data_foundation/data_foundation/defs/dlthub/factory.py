@@ -1,3 +1,5 @@
+"""Factory helpers that translate dlt resources into Dagster definitions."""
+
 import os
 from collections.abc import Generator, Sequence
 from datetime import timedelta
@@ -15,9 +17,10 @@ from .translator import CustomDagsterDltTranslator
 
 
 class ConfigurableDltResource(DltResource):
-    """Wrapper class to add aditional attributes to the DltResource class.  These
-    attributes are used in the factory to add aditional configuration such as automation
-    conditions, asset checks, tags, and upstream external assets.
+    """Extend :class:`dlt.extract.resource.DltResource` with Dagster-specific metadata.
+
+    The wrapper exposes hooks for automation conditions, tags, and kinds that the
+    Dagster factory consumes when creating asset definitions.
     """
 
     meta: dict | None
@@ -31,8 +34,17 @@ class ConfigurableDltResource(DltResource):
         tags: list[str] | None = None,
         kinds: set[str] | None = None,
     ) -> "ConfigurableDltResource":
-        """Returns a ConfigurableDltResource wrapped DltResource with aditional
-        attributes used by the factory to generate enhanced definitions.
+        """Attach Dagster metadata to a dlt resource.
+
+        Args:
+            resource: The dlt resource to wrap.
+            meta: Optional metadata dictionary forwarded to Dagster asset definitions.
+            tags: Dagster tag values applied to downstream assets.
+            kinds: Dagster ``kind`` labels used for categorizing assets.
+
+        Returns:
+            ConfigurableDltResource: The wrapped resource enriched with the provided
+            metadata.
         """
         resource = ConfigurableDltResource._convert(resource, meta, tags, kinds)
         return resource  # type: ignore
@@ -44,7 +56,7 @@ class ConfigurableDltResource(DltResource):
         tags: list[str] | None,
         kinds: set[str] | None,
     ) -> "ConfigurableDltResource":
-        """Helper method to wrap a DltResource"""
+        """Apply metadata attributes to the underlying dlt resource."""
         dlt_resource.tags = tags  # type: ignore
         dlt_resource.meta = meta  # type: ignore
         dlt_resource.kinds = kinds  # type: ignore
@@ -52,9 +64,20 @@ class ConfigurableDltResource(DltResource):
 
 
 class DagsterDltFactory:
+    """Utility class for building Dagster ``Definitions`` from dlt resources."""
     @cache
     @staticmethod
     def build_definitions(resources: list[ConfigurableDltResource]) -> dg.Definitions:
+        """Create Dagster definitions for the provided dlt resources.
+
+        Args:
+            resources: Collection of :class:`ConfigurableDltResource` instances that
+                describe how to materialize data via dlt.
+
+        Returns:
+            dagster.Definitions: Definitions containing Dagster assets representing the
+            supplied resources plus any derived asset checks.
+        """
         assets_definitions = []
         freshness_checks = []
         for resource in resources:
@@ -72,6 +95,16 @@ class DagsterDltFactory:
     def _build_assets(
         resource: ConfigurableDltResource,
     ) -> list[dg.AssetsDefinition | dg.AssetSpec]:
+        """Build the Dagster asset definition and matching dependency spec.
+
+        Args:
+            resource: The configured dlt resource to expose via Dagster assets.
+
+        Returns:
+            list[dg.AssetsDefinition | dg.AssetSpec]: The Dagster asset definition that
+            executes the dlt pipeline alongside the dependency ``AssetSpec`` describing
+            upstream source data.
+        """
         schema, table = resource.name.split(".")
         dataset_name = schema
         if os.getenv("TARGET") == "dev":
@@ -100,6 +133,17 @@ class DagsterDltFactory:
         def assets(
             context: dg.AssetExecutionContext, dlt: DagsterDltResource
         ) -> Generator[DltEventType, Any, None]:
+            """Invoke the dlt pipeline and stream structured event data.
+
+            Args:
+                context: Dagster execution context supplying runtime configuration.
+                dlt: Dagster resource for executing the dlt pipeline.
+
+            Yields:
+                dagster_dlt.dlt_event_iterator.DltEventType: Structured events emitted
+                from the dlt pipeline run which Dagster converts into asset materialize
+                events.
+            """
             yield from dlt.run(context=context)
 
         dep = dg.AssetSpec(
@@ -112,6 +156,17 @@ class DagsterDltFactory:
     def _build_freshness_checks(
         resource: ConfigurableDltResource,
     ) -> Sequence[dg.AssetChecksDefinition] | None:
+        """Create freshness checks based on metadata embedded within the resource.
+
+        Args:
+            resource: Configured dlt resource whose metadata may include freshness
+                expectations.
+
+        Returns:
+            Sequence[dagster.AssetChecksDefinition] | None: Freshness checks when the
+            metadata includes ``freshness_lower_bound_delta_seconds``; otherwise
+            ``None`` to skip check generation.
+        """
         schema, table = resource.name.split(".")
 
         meta = resource.meta or {}

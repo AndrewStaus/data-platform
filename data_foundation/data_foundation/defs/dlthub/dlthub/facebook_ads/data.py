@@ -1,10 +1,20 @@
+"""Static dataset helpers that emulate Facebook Ads API responses.
+
+The mock data supports dlt resource examples and allows Dagster assets to run without
+network access. Callers consume generators that yield lists of campaign dictionaries.
+"""
+
 from collections.abc import Generator
 from typing import Any
 
 
-def get_campaigns() -> Generator[list[dict[str, Any]], Any, None]:
-    """A generator that will yield responses from a stub representing an api to
-    download data from facebook ads.
+def get_campaigns() -> Generator[list[dict[str, Any]], Any]:
+    """Yield a collection of mock Facebook campaign records.
+
+    Yields:
+        list[dict[str, Any]]: Batches of campaign data objects that mimic responses
+        from the Facebook Ads API. Each dictionary contains ``id``, ``name``,
+        ``start_date``, and ``updated`` fields.
     """
 
     response = [

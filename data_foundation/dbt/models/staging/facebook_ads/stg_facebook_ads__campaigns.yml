@@ -1,3 +1,5 @@
+# Staging model documentation for Facebook Ads campaigns. Captures the columns
+# exposed after light transformations in stg_facebook_ads__campaigns.sql.
 models:
   - name: stg_facebook_ads__campaigns
     columns:

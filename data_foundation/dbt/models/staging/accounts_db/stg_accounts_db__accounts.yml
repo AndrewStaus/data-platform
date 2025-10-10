@@ -1,3 +1,4 @@
+# Staging model for core account attributes from the accounts_db source.
 models:
   - name: stg_accounts_db__accounts
     columns:

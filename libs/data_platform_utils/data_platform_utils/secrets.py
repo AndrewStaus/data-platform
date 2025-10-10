@@ -1,3 +1,6 @@
+"""A wrapper for a keyvault to integrate with the Dagster EnvVar class for secure
+secret usage in dagster.
+"""
 import os
 
 import dagster as dg

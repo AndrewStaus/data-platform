@@ -1,5 +1,4 @@
-# from typing import override
-
+"""Organization specific collection of reusable Dagster automation conditions."""
 from dagster import AssetSelection, AutomationCondition
 from dagster._core.definitions.declarative_automation.operators import (
     AndAutomationCondition,

@@ -1,3 +1,4 @@
+# Ownership metadata for marketing-specific marts and tests.
 groups:
   - name: marketing
     owner:

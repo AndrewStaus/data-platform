@@ -1,3 +1,5 @@
+# Sling connection profile for the entity resolution service. These reference
+# keys power downstream identity stitching models.
 connections:
   - name: entity_resolution
     type: postgres
@@ -9,6 +11,8 @@ connections:
   
 replications:
   - name: entity_resolution->snowflake
+    # Daily incremental sync keeps the curated identity graph aligned with source
+    # updates without reprocessing the full history.
     env: {SLING_LOADED_AT_COLUMN: timestamp}
     source: entity_resolution
     target: snowflake
@@ -22,6 +26,8 @@ replications:
         add_new_columns: true
         adjust_column_type: true
     streams:
+      # Downstream dbt sources expect this table name and keys; update both here
+      # and in dbt/models/staging/entity_resolution if schemas change.
       entity_resolution.individual_party_keys:
         object: ENTITY_RESOLUTION.INDIVIDUAL_PARTY_KEYS
         mode: incremental

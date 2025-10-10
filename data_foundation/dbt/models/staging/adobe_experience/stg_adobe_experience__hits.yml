@@ -1,3 +1,4 @@
+# Documentation for the normalized Adobe Experience hit-level table.
 models:
   - name: stg_adobe_experience__hits
     columns:

@@ -1,3 +1,5 @@
+# Sling connection profile for the transactional fact source. This powers the
+# core revenue pipeline and is typically the highest-volume ingest for Sling.
 connections:
   - name: transaction_db
     type: postgres
@@ -9,6 +11,8 @@ connections:
   
 replications:
   - name: transaction_db->snowflake
+    # Mirrors the production CDC feed: incremental loads with a composite key that
+    # downstream fact tables expect.
     env: {SLING_LOADED_AT_COLUMN: timestamp}
     source: transaction_db
     target: snowflake
@@ -22,6 +26,8 @@ replications:
         add_new_columns: true
         adjust_column_type: true
     streams:
+      # Captures the order line items. Keep the composite key aligned with dbt
+      # expectations when modeling fct_common__fct_transactions.
       transaction_db.transactions:
         primary_key: [order_id, product_id]
         meta:

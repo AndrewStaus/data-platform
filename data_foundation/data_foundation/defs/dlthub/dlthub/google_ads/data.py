@@ -1,15 +1,33 @@
+"""Stub datasets that emulate Google Ads API responses for demos and tests."""
 from collections.abc import Callable, Generator
 from typing import Any
 
 
-def google_ads(endpoint) -> Callable[[], Generator[list[dict[str, Any]], Any, None]]:
-    """Return a generator that will yield responses from a stub representing an api to
-    download data from google ads.
+def google_ads(endpoint) -> Callable[[], Generator[list[dict[str, Any]], Any]]:
+    """Return a generator that yields sample payloads for the requested endpoint.
+
+    Args:
+        endpoint: Name of the Google Ads API endpoint to emulate.
+
+    Returns:
+        Callable[[], Generator[list[dict[str, Any]], Any, None]]: Zero-argument callable
+        that yields batches of dictionaries representing API responses for the
+        requested endpoint.
+
+    Raises:
+        KeyError: If the provided endpoint is not supported by the stub implementation.
     """
 
     if endpoint == "get_campaigns":
 
-        def get_campaigns() -> Generator[list[dict[str, Any]], Any, None]:
+        def get_campaigns() -> Generator[list[dict[str, Any]], Any]:
+            """Yield a canned list of campaign records with related criteria.
+
+            Yields:
+                list[dict[str, Any]]: Campaign objects that mimic the subset of fields
+                commonly consumed downstream, including associated targeting
+                ``criteria`` IDs for join operations.
+            """
             response = [
                 {
                     "id": 10001,
@@ -30,7 +48,13 @@ def google_ads(endpoint) -> Callable[[], Generator[list[dict[str, Any]], Any, No
 
     if endpoint == "get_criterion":
 
-        def get_criterion() -> Generator[list[dict[str, Any]], Any, None]:
+        def get_criterion() -> Generator[list[dict[str, Any]], Any]:
+            """Yield mock targeting criterion records referenced by campaigns.
+
+            Yields:
+                list[dict[str, Any]]: Criterion dictionaries keyed by ``id`` along with
+                ``type`` and ``value`` metadata for enrichment joins.
+            """
             response = [
                 {"id": 1, "type": "audience", "value": "summer_shoppers"},
                 {"id": 2, "type": "age", "value": "20-35"},

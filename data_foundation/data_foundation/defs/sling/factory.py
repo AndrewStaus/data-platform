@@ -1,3 +1,5 @@
+"""Factory helpers for translating Sling YAML configs into Dagster definitions."""
+
 import os
 from collections.abc import Generator
 from datetime import timedelta
@@ -16,12 +18,21 @@ from .translator import CustomDagsterSlingTranslator
 
 
 class DagsterSlingFactory:
-    """Factory to generate dagster definitions from Sling yaml config files."""
+    """Factory to generate Dagster definitions from Sling YAML config files."""
 
     @cache
     @staticmethod
     def build_definitions(config_dir: Path) -> dg.Definitions:
-        """Returns a Definitions object for a path that contains Sling yaml configs."""
+        """Create Dagster definitions from a directory of Sling YAML configs.
+
+        Args:
+            config_dir: Absolute path to the folder containing Sling configuration
+                files.
+
+        Returns:
+            dagster.Definitions: Definitions containing assets, resources, and
+            freshness checks derived from the provided configuration files.
+        """
         connections = []
         assets = []
         freshness_checks = []
@@ -61,9 +72,21 @@ class DagsterSlingFactory:
     def _get_connections(
         connection_configs, connections, kind_map
     ) -> tuple[list[SlingConnectionResource], dict[str, str]]:
-        """Returns a list of SlingConnectionResource for connections in the Sling
-        yaml file.
+        """Parse connection blocks and produce Sling connection resources.
+
+        Args:
+            connection_configs: Raw connection configuration dictionaries from YAML.
+            connections: Mutable list accumulating :class:`SlingConnectionResource`
+                instances.
+            kind_map: Mapping of connection names to their declared kinds.
+
+        Returns:
+            tuple[list[SlingConnectionResource], dict[str, str]]: The updated
+            connections list and kind mapping including the newly processed entries.
         """
+        # Each connection block yields a resource definition and updates the map of
+        # connection names to their declared kinds.  The kind map is used later when
+        # building external assets for dependencies.
         for connection_config in connection_configs:
             if connection := DagsterSlingFactory._get_connection(connection_config):
                 source = connection_config.get("name")
@@ -75,7 +98,16 @@ class DagsterSlingFactory:
 
     @staticmethod
     def _get_connection(connection_config: dict) -> SlingConnectionResource | None:
-        """Returns a SlingConnectionResource for a connection in the Sling yaml file."""
+        """Materialize a Sling connection resource from a configuration dictionary.
+
+        Args:
+            connection_config: Configuration block describing the Sling connection.
+
+        Returns:
+            SlingConnectionResource | None: Concrete connection resource populated with
+            secrets resolved from the key vault stub. Returns ``None`` when the config
+            does not produce a valid resource.
+        """
         for k, v in connection_config.items():
             if isinstance(v, dict):
                 secret_name = list(v.keys())[0]
@@ -93,9 +125,21 @@ class DagsterSlingFactory:
     def _get_replications(
         replication_configs, freshness_checks, kind_map, assets
     ) -> tuple[list[dg.AssetsDefinition], list[dg.AssetChecksDefinition]]:
-        """Returns a list of AssetsDefinitions for
-        replications in a Sling yaml file
+        """Construct Dagster assets and freshness checks for Sling replications.
+
+        Args:
+            replication_configs: Iterable of replication configuration dictionaries.
+            freshness_checks: Mutable list accumulating generated freshness checks.
+            kind_map: Mapping of source names to their declared resource kind.
+            assets: Mutable list accumulating Dagster asset definitions.
+
+        Returns:
+            tuple[list[dg.AssetsDefinition], list[dg.AssetChecksDefinition]]: Updated
+            assets and freshness checks lists containing entries for the processed
+            replications.
         """
+        # Iterate through each replication block and build Dagster assets, any
+        # associated freshness checks, and companion external assets for dependencies.
         for replication_config in replication_configs:
             if bool(os.getenv("DAGSTER_IS_DEV_CLI")):
                 replication_config = DagsterSlingFactory._set_dev_schema(
@@ -122,8 +166,14 @@ class DagsterSlingFactory:
 
     @staticmethod
     def _get_replication(config: dict) -> dg.AssetsDefinition:
-        """Returns a AssetsDefinition for replication
-        in a Sling yaml file
+        """Create a Dagster assets definition for a single Sling replication.
+
+        Args:
+            config: Sling replication configuration dictionary.
+
+        Returns:
+            dagster.AssetsDefinition: Assets definition that wraps the Sling
+            replication and streams structured events back to Dagster.
         """
 
         @sling_assets(
@@ -135,7 +185,18 @@ class DagsterSlingFactory:
         )
         def assets(
             context: dg.AssetExecutionContext, sling: SlingResource
-        ) -> Generator[SlingEventType, Any, None]:
+        ) -> Generator[SlingEventType, Any]:
+            """Execute the Sling replication and emit structured events.
+
+            Args:
+                context: Dagster execution context providing partition metadata.
+                sling: Configured Sling resource capable of running the replication.
+
+            Yields:
+                dagster_sling.sling_event_iterator.SlingEventType: Structured logs and
+                progress events produced during the replication.
+            """
+
             if "defaults" not in config:
                 config["defaults"] = {}
 
@@ -164,9 +225,17 @@ class DagsterSlingFactory:
 
     @staticmethod
     def _set_dev_schema(replication_config: dict) -> dict:
-        """Override the desination schema set in the yaml file when the environment
-        is set to dev to point to a unique schema based on the developer.
+        """Override destination schemas with user-specific suffixes when configured.
+
+        Args:
+            replication_config: Raw replication dictionary that may specify destination
+                objects and per-stream overrides.
+
+        Returns:
+            dict: Updated replication configuration incorporating the rendered schema
+            suffix when the active environment requests user-level isolation.
         """
+
         user = os.environ["DESTINATION__SNOWFLAKE__CREDENTIALS__USERNAME"].upper()
         if default_object := replication_config["defaults"]["object"]:
             schema, table = default_object.split(".")
@@ -188,8 +257,15 @@ class DagsterSlingFactory:
     def _get_sling_deps(
         replication_config: dict, kind: str | None
     ) -> list[dg.AssetSpec] | None:
-        """Create an external asset that is placed in the same prefix
-        as the asset, and assigned the correct resource kind.
+        """Create external asset specs representing upstream Sling dependencies.
+
+        Args:
+            replication_config: Replication configuration describing dependent streams.
+            kind: Resource kind associated with the upstream connection.
+
+        Returns:
+            list[dagster.AssetSpec] | None: Asset specs mirroring upstream data sources
+            or ``None`` when no dependencies are declared.
         """
         kinds = {kind} if kind else None
 
@@ -206,9 +282,15 @@ class DagsterSlingFactory:
     def _get_freshness_checks(
         replication_config: dict,
     ) -> list[dg.AssetChecksDefinition]:
-        """Returns a list of AssetChecksDefinition for replication configs.
-        Configs supplied on the stream will take priority, otherwise the
-        default will be used.
+        """Build freshness checks for each stream declared in a replication config.
+
+        Args:
+            replication_config: Replication configuration containing optional freshness
+                metadata at both the default and stream level.
+
+        Returns:
+            list[dagster.AssetChecksDefinition]: Freshness checks constructed from the
+            merged configuration, one per stream with configured thresholds.
         """
         freshness_checks = []
 

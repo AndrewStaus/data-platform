@@ -1,3 +1,4 @@
+"""Shared helper utilities used across Dagster definition factories and resources."""
 import os
 from collections.abc import Callable, Mapping
 from datetime import datetime
@@ -10,12 +11,30 @@ from .automation_conditions import CustomAutomationCondition
 
 
 def get_schema_name(schema: str) -> str:
+    """Return the schema name adjusted for the current environment.
+
+    Args:
+        schema: Base schema name defined in configuration.
+
+    Returns:
+        str: Schema name suffixed with the destination user when targeting ``dev`` to
+        ensure isolation between developers.
+    """
     postfix = os.getenv("DESTINATION__USER", "")
     if os.getenv("TARGET") == "dev":
         schema = f"{schema}__{postfix}"
     return schema
 
 def get_database_name(database: str) -> str:
+    """Return the database name adjusted for the current environment.
+
+    Args:
+        database: Base database name configured for the deployment.
+
+    Returns:
+        str: Database name optionally prefixed with ``_dev_`` in development
+        environments.
+    """
     if os.getenv("TARGET") == "dev":
         database = f"_dev_{database}"
     return database
@@ -49,10 +68,6 @@ def get_automation_condition_from_meta(
     try:
         return condition(**condition_config)
     except Exception as e:
-        # e.message(
-        #     "'condition_config' is missing required keys"
-        #     f"for condition '{condition_name}'"
-        # )
         raise e
 
 
@@ -101,7 +116,16 @@ def get_partitions_def_from_meta(
 
 
 def sanitize_input_signature(func: Callable, kwargs: dict) -> dict:
-    """Remove any arguments that are not expected by the recieving function."""
+    """Remove any arguments that are not expected by the receiving function.
+
+    Args:
+        func: Callable whose signature should be respected.
+        kwargs: Proposed keyword arguments to sanitize.
+
+    Returns:
+        dict: Filtered keyword arguments containing only parameters accepted by
+        ``func``.
+    """
     sig = signature(func)
     key_words = list(kwargs.keys())
     expected_arguments = {argument for argument, _ in sig.parameters.items()}

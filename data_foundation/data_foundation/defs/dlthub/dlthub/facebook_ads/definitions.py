@@ -1,3 +1,5 @@
+"""dltHub resources that simulate Facebook Ads ingestion for Dagster demos."""
+
 import dlt
 from dagster import Definitions
 from dagster.components import definitions
@@ -6,6 +8,12 @@ from dagster.components import definitions
 #######################################################
 @definitions
 def defs() -> Definitions:
+    """Assemble Dagster definitions for the mock Facebook Ads dataset.
+
+    Returns:
+        dagster.Definitions: Definitions that wrap the dlt resource used to ingest
+        campaign data, including automation metadata surfaced through the factory.
+    """
     from ...factory import ConfigurableDltResource, DagsterDltFactory
     from .data import get_campaigns
 
@@ -33,4 +41,5 @@ def defs() -> Definitions:
         )
         #######################################################
     ]
+    # Reuse the shared factory to ensure consistent resource wiring.
     return DagsterDltFactory.build_definitions(tuple(resources))

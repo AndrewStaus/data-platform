@@ -1,3 +1,11 @@
+"""dltHub resources that fetch and land exchange rate datasets.
+
+The module wires mocked API loaders into :class:`DagsterDltFactory` so the example
+repository can materialize exchange rate tables using Dagster. Each resource exposes
+automation metadata to demonstrate how scheduling information flows through dlt to
+Dagster assets.
+"""
+
 import dlt
 from dagster import Definitions
 from dagster.components import definitions
@@ -6,6 +14,13 @@ from dagster.components import definitions
 #######################################################
 @definitions
 def defs() -> Definitions:
+    """Assemble Dagster definitions for the exchange rate dlt resources.
+
+    Returns:
+        dagster.Definitions: Definitions containing Dagster assets that wrap the dlt
+        resources defined in this module, complete with automation metadata and
+        freshness checks emitted by :class:`DagsterDltFactory`.
+    """
     from ...factory import ConfigurableDltResource, DagsterDltFactory
     from .data import get_exchange_rate
     resources = [
@@ -53,4 +68,6 @@ def defs() -> Definitions:
         ),
         #######################################################
     ]
+    # The factory consumes the configured dlt resources and produces Dagster assets,
+    # freshness checks, and external asset placeholders.
     return DagsterDltFactory.build_definitions(tuple(resources))

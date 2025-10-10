@@ -1,6 +1,10 @@
+# Connection profiles that tell dbt how to talk to Snowflake in each environment.
+# Platform engineers should manage account/warehouse defaults here, while data
+# engineers primarily switch the TARGET environment variable when running locally.
 dbt:
   outputs:
     prod:
+      # Production analytics role used by scheduled Dagster jobs.
       database: analytics
       schema: prod
       account: cbzrqfv-ok21331
@@ -11,6 +15,7 @@ dbt:
       type: snowflake
       warehouse: compute_wh
     dev:
+      # Developer sandbox settings for local iteration.
       database: _dev_analytics
       schema: astaus
       account: cbzrqfv-ok21331
@@ -21,4 +26,5 @@ dbt:
       threads: 1
       type: snowflake
 
+  # Default target can be overridden via TARGET environment variable.
   target: "{{ env_var('TARGET', 'dev') }}"

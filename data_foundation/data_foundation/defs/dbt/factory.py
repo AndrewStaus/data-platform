@@ -1,3 +1,11 @@
+"""Factory responsible for turning dbt projects into Dagster assets and sensors.
+
+The helper exposes :class:`DagsterDbtFactory`, which coordinates how Dagster loads
+dbt metadata, partitions models, and configures runtime options surfaced through the
+Launchpad. Each documented function clarifies the expected parameters and emitted
+values to make customizations easier.
+"""
+
 import json
 import os
 from collections.abc import Callable, Generator
@@ -22,8 +30,15 @@ defer_to_prod = os.getenv("TARGET", "").lower() != "prod"
 
 
 class DbtConfig(dg.Config):
-    """Exposes configuration options to end users in the Dagster
-    launchpad.
+    """Runtime configuration options surfaced to the Dagster Launchpad UI.
+
+    Attributes:
+        full_refresh: When ``True`` the factory issues ``--full-refresh`` so dbt
+            rebuilds models from scratch.
+        defer_to_prod: Controls whether ``--defer`` arguments are passed to reference
+            production artifacts during local runs.
+        favor_state: Augments ``--defer`` by preferring stored state when resolving
+            nodes, matching dbt Cloud's behavior.
     """
 
     full_refresh: bool = False
@@ -37,7 +52,17 @@ class DagsterDbtFactory:
     @cache
     @staticmethod
     def build_definitions(dbt: Callable[[], DbtProject]) -> dg.Definitions:
-        """Returns a Definitions object from a dbt project."""
+        """Create Dagster definitions backed by the supplied dbt project factory.
+
+        Args:
+            dbt: A zero-argument callable that yields a ready-to-use
+                :class:`DbtProject` instance.
+
+        Returns:
+            dagster.Definitions: Definitions composed of dbt assets, freshness checks,
+            and the dbt CLI resource configured with the project directory supplied by
+            the callable.
+        """
         
         assets = [
             DagsterDbtFactory._get_assets(
@@ -75,9 +100,20 @@ class DagsterDbtFactory:
         select: str = DBT_DEFAULT_SELECT,
         exclude: str | None = None,
     ) -> dg.AssetsDefinition:
-        """Returns a AssetsDefinition with different execution for partitioned
-        and non-partitioned models so that they can be ran on the same job.
+        """Build a ``dbt_assets`` definition for a subset of the dbt project.
+
+        Args:
+            name: The Dagster asset group name used to namespace materializations.
+            dbt: Callable that produces the configured :class:`DbtProject`.
+            partitioned: Indicates whether the assets rely on partition time windows.
+            select: dbt selection string narrowing which models to materialize.
+            exclude: Optional selection string for excluding models from the run.
+
+        Returns:
+            dagster.AssetsDefinition: A Dagster assets definition that streams dbt CLI
+            events and respects the provided partitioning behavior.
         """
+
         dbt_project = dbt()
         assert dbt_project
 
@@ -98,6 +134,21 @@ class DagsterDbtFactory:
         def assets(
             context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
         ) -> Generator[DbtEventIterator, Any, Any]:
+            """Materialize the selected dbt models via the dbt CLI resource.
+
+            Args:
+                context: Dagster execution context providing partition metadata and
+                    structured logging APIs.
+                dbt: The Dagster-provided dbt CLI resource bound to the selected
+                    project directory.
+                config: Runtime configuration emitted from :class:`DbtConfig` that
+                    toggles dbt CLI flags.
+
+            Yields:
+                dagster_dbt.core.dbt_event_iterator.DbtEventIterator: The stream of
+                structured dbt events produced during the CLI invocation. Yielding the
+                iterator allows Dagster to surface granular run status in the UI.
+            """
             args = ["build"]
 
             if config.full_refresh:
@@ -108,6 +159,8 @@ class DagsterDbtFactory:
                     args.append("--favor-state")
 
             if partitioned:
+                # Partitioned assets inject the selected time window into dbt vars so
+                # the models can filter appropriately.
                 time_window = context.partition_time_window
                 format = "%Y-%m-%d %H:%M:%S"
                 dbt_vars = {

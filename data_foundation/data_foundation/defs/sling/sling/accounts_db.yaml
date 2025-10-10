@@ -1,3 +1,6 @@
+# Sling connection profile for the Accounts database source. Platform engineers
+# control network credentials here, while data engineers can inspect the
+# replication defaults to understand how raw tables land in Snowflake.
 connections:
   - name: accounts_db
     type: postgres
@@ -9,6 +12,8 @@ connections:
 
 replications:
   - name: accounts_db->snowflake
+    # Configure how Sling moves data from the operational system into Snowflake.
+    # The defaults below describe an incremental sync that the dbt models depend on.
     env: {SLING_LOADED_AT_COLUMN: timestamp}
     source: accounts_db
     target: snowflake
@@ -26,4 +31,6 @@ replications:
           automation_condition: "on_schedule"
           automation_condition_config: {"cron_schedule":"@daily", "cron_timezone":"utc"}
     streams:
+      # Each stream entry captures table-level metadata that Dagster surfaces in the
+      # UI. Keep these tags in sync with data governance expectations.
       accounts_db.accounts: {"meta": {"dagster": {"tags": ['contains_pii', 'my_tag']}}}

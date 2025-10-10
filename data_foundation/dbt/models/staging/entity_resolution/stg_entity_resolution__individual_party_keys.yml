@@ -1,3 +1,4 @@
+# Documentation for the identity stitching staging model.
 models:
   - name: stg_entity_resolution__individual_party_keys
     columns:

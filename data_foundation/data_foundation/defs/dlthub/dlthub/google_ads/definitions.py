@@ -1,3 +1,5 @@
+"""dltHub pipelines that simulate Google Ads data ingestion."""
+
 import dlt
 from dagster import Definitions
 from dagster.components import definitions
@@ -6,6 +8,13 @@ from dagster.components import definitions
 #######################################################
 @definitions
 def defs() -> Definitions:
+    """Create Dagster definitions that wrap the simulated Google Ads loaders.
+
+    Returns:
+        dagster.Definitions: Definitions representing the Google Ads campaign and
+        criterion resources with scheduling metadata applied through
+        :class:`DagsterDltFactory`.
+    """
     from ...factory import ConfigurableDltResource, DagsterDltFactory
     from .data import google_ads
 
@@ -54,4 +63,6 @@ def defs() -> Definitions:
         ),
         #######################################################
     ]
+    # Delegate to the shared factory so that asset metadata stays consistent across
+    # dlt-based examples.
     return DagsterDltFactory.build_definitions(tuple(resources))

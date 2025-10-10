@@ -1,3 +1,5 @@
+# Sling connection profile for the Inventory database source. This defines how
+# product dimension data is replicated into Snowflake for downstream marts.
 connections:
   - name: inventory_db
     type: postgres
@@ -9,6 +11,7 @@ connections:
   
 replications:
   - name: inventory_db->snowflake
+    # Standard incremental sync that keeps product attributes fresh for dbt models.
     env: {SLING_LOADED_AT_COLUMN: timestamp}
     source: inventory_db
     target: snowflake
@@ -24,6 +27,8 @@ replications:
     env:
       SLING_LOADED_AT_COLUMN: timestamp
     streams:
+      # The products table is tagged for Dagster automation so the scheduler keeps
+      # the dimensional data up to date. Uncomment freshness checks as SLOs mature.
       inventory_db.products:
         meta:
           dagster:

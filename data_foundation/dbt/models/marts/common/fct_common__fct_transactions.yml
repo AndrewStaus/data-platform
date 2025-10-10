@@ -1,3 +1,5 @@
+# Fact table documentation for the shared transactions mart powering multiple
+# analytics domains.
 models:
   - name: fct_common__fct_transactions
     columns:

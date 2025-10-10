@@ -1,3 +1,11 @@
+"""Custom dbt translator that enriches assets with organization specific metadata.
+
+The translator hooks into Dagster's dbt integration to map naming conventions and
+custom ``meta`` fields to Dagster concepts such as asset keys, groups, and automation
+conditions. Each override documents the required dbt metadata shape and the Dagster
+structure returned.
+"""
+
 import re
 from collections.abc import Mapping
 from typing import Any, override
@@ -23,6 +31,17 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
     @override
     def get_asset_key(self, dbt_resource_props: Mapping[str, Any]) -> dg.AssetKey:
+        """Derive the Dagster asset key from dbt metadata or naming conventions.
+
+        Args:
+            dbt_resource_props: Dictionary representing the dbt node. ``config.meta``
+                values are inspected for overrides while naming conventions provide
+                sensible defaults when metadata is absent.
+
+        Returns:
+            dagster.AssetKey: Asset key built either from explicit metadata or
+            inferred from the resource name, schema, and processing step.
+        """
         meta = dbt_resource_props.get("config", {}).get(
             "meta", {}
         ) or dbt_resource_props.get("meta", {})
@@ -52,6 +71,16 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
     @override
     def get_group_name(self, dbt_resource_props: Mapping[str, Any]) -> str | None:
+        """Extract the asset group from the dbt resource naming convention.
+
+        Args:
+            dbt_resource_props: dbt node dictionary used to extract the schema portion
+                of the resource name.
+
+        Returns:
+            str | None: The schema name used as the Dagster asset group or ``None``
+            when no schema-based grouping can be determined.
+        """
         prop_key = "name"
         if dbt_resource_props.get("version"):
             prop_key = "alias"
@@ -66,6 +95,17 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     def get_partitions_def(
         self, dbt_resource_props: Mapping[str, Any]
     ) -> dg.PartitionsDefinition | None:
+        """Inspect dbt metadata for partition configuration and map to Dagster types.
+
+        Args:
+            dbt_resource_props: dbt node dictionary whose ``config.meta.dagster``
+                section may declare partition information.
+
+        Returns:
+            dagster.PartitionsDefinition | None: A concrete partitions definition when
+            metadata is provided, otherwise ``None`` so Dagster treats the asset as
+            unpartitioned.
+        """
         if meta := get_nested(dbt_resource_props, ["config", "meta", "dagster"]):
             return get_partitions_def_from_meta(meta)
 
@@ -73,6 +113,16 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
     def get_automation_condition(
         self, dbt_resource_props: Mapping[str, Any]
     ) -> dg.AutomationCondition | None:
+        """Translate organization-specific automation defaults for dbt resources.
+
+        Args:
+            dbt_resource_props: dbt node dictionary that may include explicit automation
+                directives under ``config.meta.dagster``.
+
+        Returns:
+            dagster.AutomationCondition | None: The resolved automation condition, or
+            ``None`` when the default Dagster behavior should apply.
+        """
         if meta := get_nested(dbt_resource_props, ["config", "meta", "dagster"]):
             automation_condition = get_automation_condition_from_meta(meta)
             if automation_condition:
@@ -91,5 +141,15 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
     @override
     def get_tags(self, dbt_resource_props: Mapping[str, Any]) -> Mapping[str, str]:
+        """Augment the base translator's tags with organization-specific entries.
+
+        Args:
+            dbt_resource_props: dbt node dictionary used by the parent implementation
+                to build the default tag mapping.
+
+        Returns:
+            Mapping[str, str]: Tag dictionary that can be surfaced on Dagster assets
+            for discovery and documentation purposes.
+        """
         tags = super().get_tags(dbt_resource_props)
         return tags

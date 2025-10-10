@@ -1,3 +1,4 @@
+# Source definition for Google Ads data replicated via dltHub.
 version: 2
 
 sources:

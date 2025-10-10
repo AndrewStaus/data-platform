@@ -1,3 +1,4 @@
+# Staging model for product master data supporting marts and dimensions.
 models:
   - name: stg_inventory_db__products
     columns:

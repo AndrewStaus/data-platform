@@ -1,3 +1,6 @@
+# Slowly changing dimension snapshot capturing account history from the raw
+# accounts_db source. Ensures PII handling rules are applied before exposing data
+# downstream.
 version: 2
 
 snapshots:

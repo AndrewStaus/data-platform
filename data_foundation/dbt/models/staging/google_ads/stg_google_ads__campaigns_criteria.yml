@@ -1,3 +1,4 @@
+# Staging model for Google Ads campaign metadata as landed in Snowflake.
 models:
   - name: stg_google_ads__campaigns_criteria
     columns:

@@ -1,3 +1,4 @@
+"""Minimal stub that emulates the subset of Azure Key Vault functionality used."""
 from dotenv import find_dotenv
 
 

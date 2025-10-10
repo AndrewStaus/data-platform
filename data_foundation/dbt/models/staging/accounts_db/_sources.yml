@@ -1,3 +1,4 @@
+# Source definition for operational account data replicated into Snowflake.
 version: 2
 
 sources:
