@@ -1,26 +1,21 @@
-
+# dotfiles
 .*
-!.env.example
-secrets.toml
-
-**/__pycache__/
-**/*.py[cod]
-**/*$py.class
-logs/
-*.egg-info
-**/build/
-**/dist/
-key_vault/
-
 !.helm/
 !.gitignore
 !.dockerignore
 !.vscode/
+!.env.example
 
+# python build and cache artifacts
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+**/*.egg-info
+**/build/
+**/dist/
 **/uv.lock
 **/dagster_home/*
 
-
-# dbt targets and deps
-
+# tool artifacts
+logs/
 docs/site/*

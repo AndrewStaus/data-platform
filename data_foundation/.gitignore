@@ -1,15 +1,3 @@
-
-.*
-secrets.toml
-**/__pycache__/
-**/*.py[cod]
-**/*$py.class
-logs/
-*.egg-info
-**/build/
-**/dist/
-uv.lock
-
 dbt/dbt_internal_packages
 dbt/dbt_packages
 dbt/target
