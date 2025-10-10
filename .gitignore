@@ -12,6 +12,7 @@ key_vault/
 
 */conda.yml
 
+!.helm/
 !.gitignore
 !.dockerignore
 
