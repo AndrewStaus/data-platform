@@ -18,7 +18,7 @@ key_vault/
 !.dockerignore
 !.vscode/
 
-uv.lock
+**/uv.lock
 **/dagster_home/*
 
 
