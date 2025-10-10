@@ -4,9 +4,9 @@ from pathlib import Path
 
 import mkdocs_gen_files
 
-project_dir = Path(__file__).joinpath(*[".."] * 2)
-# relative paths to the module src files
-modules = (
+project_dir = Path(__file__).joinpath(*[".."]*2)
+
+modules = ( # relative paths to the module src files
     "data_foundation/data_foundation",
     "data_science/data_science",
     "libs/analytics_utils/analytics_utils",
@@ -50,3 +50,4 @@ for source_root, doc_root in roots:
         # create mkdocs stub
         with mkdocs_gen_files.open(doc_path, "w") as f:
             print("::: " + import_path, file=f)
+        print(doc_path)

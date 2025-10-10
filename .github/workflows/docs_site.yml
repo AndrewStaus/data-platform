@@ -1,4 +1,4 @@
-# Simple workflow for deploying static content to GitHub Pages
+# Workflow for building and deploying auto-generated docs to GitHub Pages
 name: Deploy Docs
 
 on:
@@ -15,8 +15,8 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# Allow only one concurrent deployment, canceling in-progress runs so that docs are
+# always representing the latest code version
 concurrency:
   group: "pages"
   cancel-in-progress: true
@@ -30,19 +30,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          python-version: "3.13"
+
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
       - name: Build docs
-        run: uv run --only-group docs mkdocs build
         working-directory: ./.mkdocs/
+        run: uv run --only-group docs mkdocs build
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './.mkdocs/site' # Upload compiled html
+          path: './.mkdocs/site' # Upload only compiled html
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
