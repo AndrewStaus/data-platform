@@ -35,12 +35,9 @@ jobs:
         with:
           python-version: "3.13"
       - name: Install uv
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh 
-      - name: Create virtual environment
-        run: uv venv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
       - name: Install dependancies
-        run: uv pip install --system mkdocs mkdocs-gen-files mkdocs-material \
-                            mkdocs-mermaid2-plugin mkdocstrings mkdocstrings-python
+        run: uv sync --only-group docs
       - name: Build docs
         run: uv run mkdocs build
       - name: Setup Pages
