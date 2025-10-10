@@ -37,7 +37,7 @@ jobs:
       - name: install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh 
       - name: install dependancies
-        run: uv pip install mkdocs mkdocs-gen-files mkdocs-material \
+        run: uv pip install --system mkdocs mkdocs-gen-files mkdocs-material \
                             mkdocs-mermaid2-plugin mkdocstrings mkdocstrings-python
       - name: build docs
         run: uv run mkdocs build
