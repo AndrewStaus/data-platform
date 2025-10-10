@@ -1,1 +1,0 @@
-select * from analytics.accounts_db.accounts --noqa:all

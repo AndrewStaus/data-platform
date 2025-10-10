@@ -1,37 +1,21 @@
+# dotfiles
 .*
-.env
-!.env.example
-secrets.toml
-**/__pycache__/
-**/*.py[cod]
-**/*$py.class
-logs/
-*.egg-info
-**/build/
-**/dist/
-key_vault/
-
-*/conda.yml
-
 !.helm/
 !.gitignore
 !.dockerignore
 !.vscode/
+!.env.example
 
-!.scripts/
-
-
-helm_values.yaml
-package-lock.yml
+# python build and cache artifacts
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+**/*.egg-info
+**/build/
+**/dist/
+**/uv.lock
 **/dagster_home/*
 
-
-# dbt targets and deps
-**/target/*
-**/defer/*
-!**/dbt/target/index.html
-!**/dbt/manifest.json
-!**/dbt/target/catalog.json
-
-**/dbt_packages/*
-**/dbt_internal_packages/*
+# tool artifacts
+logs/
+docs/site

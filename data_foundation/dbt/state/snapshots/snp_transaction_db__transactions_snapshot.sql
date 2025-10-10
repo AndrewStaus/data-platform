@@ -1,1 +1,0 @@
-select * from {{ source('transaction_db', 'transactions') }}

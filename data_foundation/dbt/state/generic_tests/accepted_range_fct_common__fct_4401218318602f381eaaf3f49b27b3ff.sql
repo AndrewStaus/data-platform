@@ -1,1 +1,0 @@
-{{ dbt_utils.test_accepted_range(column_name="transaction_margin", inclusive=true, min_value=0, model=get_where_subquery(ref('fct_common__fct_transaction'))) }}

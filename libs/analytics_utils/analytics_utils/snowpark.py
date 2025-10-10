@@ -1,3 +1,4 @@
+"""Helpers to make interactive sessions with snowpark more seamless."""
 import os
 from collections.abc import Collection
 from pathlib import Path

@@ -1,0 +1,12 @@
+
+.*
+secrets.toml
+**/__pycache__/
+**/*.py[cod]
+**/*$py.class
+logs/
+*.egg-info
+**/build/
+**/dist/
+
+uv.lock

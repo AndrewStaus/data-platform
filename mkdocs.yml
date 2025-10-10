@@ -16,7 +16,10 @@ theme:
 
 plugins:
   - search # Standard full-text search across generated pages.
-  - mkdocstrings # Autodoc support for Python objects referenced in the docs/ tree.
+  - mkdocstrings: # Autodoc support for Python objects referenced in the docs/ tree.
+      handlers:
+        python:
+          paths: [data_foundation, data_science, libs/analytics_utils, libs/data_platform_utils]
   - gen-files: # Dynamically generate stub pages for Dagster assets and dbt models.
       scripts:
       - docs/gen_doc_stubs.py
