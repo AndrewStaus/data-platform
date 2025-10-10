@@ -39,7 +39,7 @@ jobs:
         run: uv run --only-group docs mkdocs build
 
       - name: View Generated Files
-        working-directory: ./.mkdocs/docs
+        working-directory: ./.mkdocs/
         run: tree
 
       - name: Setup Pages
