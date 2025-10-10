@@ -1,7 +1,5 @@
 
 .*
-.env
-!.env.example
 secrets.toml
 **/__pycache__/
 **/*.py[cod]
@@ -10,31 +8,5 @@ logs/
 *.egg-info
 **/build/
 **/dist/
-key_vault/
 
-*/conda.yml
-
-!.helm/
-!.gitignore
-!.dockerignore
-!.vscode/
-
-!.scripts/
-
-
-helm_values.yaml
-package-lock.yml
-**/dagster_home/*
-
-
-# dbt targets and deps
-**/target/*
-**/defer/*
-!**/dbt/target/index.html
-!**/dbt/manifest.json
-!**/dbt/target/catalog.json
-
-**/dbt_packages/*
-**/dbt_internal_packages/*
-
-docs/site
+uv.lock
