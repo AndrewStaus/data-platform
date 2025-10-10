@@ -65,6 +65,4 @@ Copy-Item -Path $dbt_path"\target\manifest.json" -Destination $defer_path -Force
 uv run --env-file .env.prod dbt parse --project-dir $dbt_path --profiles-dir $dbt_path --target prod
 
 Write-Host("`CREATING PROJECT DOCS")
-.\data_foundation\.venv\Scripts\activate
-uv run mkdocs build
 # # uv run --env-file .env.prod dbt docs generate --project-dir $dbt_path --target prod
