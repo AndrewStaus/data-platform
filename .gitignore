@@ -16,11 +16,7 @@ key_vault/
 !.helm/
 !.gitignore
 !.dockerignore
-
 !.vscode/
-.vscode/*
-!.vscode/*.code-snippets
-!.vscode/*.code-workspace
 
 !.scripts/
 
