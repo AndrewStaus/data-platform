@@ -9,13 +9,16 @@ dependencies = []
 dev = [
     "dagster-dg-cli",
     "dagster-webserver",
+    "sqlfluff"
+]
+
+docs = [
     "mkdocs",
     "mkdocs-gen-files",
     "mkdocs-material",
     "mkdocs-mermaid2-plugin",
     "mkdocstrings",
-    "mkdocstrings-python",
-    "sqlfluff"
+    "mkdocstrings-python"
 ]
 
 [build-system]
