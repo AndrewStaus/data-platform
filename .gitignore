@@ -16,6 +16,7 @@
 **/.dagster_home/*
 **/dagster_home/*
 .mkdocs/site
+.mkdocs/docs/data_platform
 logs/
 
 # exceptions
