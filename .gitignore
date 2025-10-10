@@ -1,12 +1,9 @@
 # dotfiles
-.*
-!.helm/
-!.gitignore
-!.dockerignore
-!.vscode/
-!.env.example
+**/.env*
+**/.user.yml
 
 # python build and cache artifacts
+**/.venv*
 **/__pycache__/
 **/*.py[cod]
 **/*$py.class
@@ -14,8 +11,14 @@
 **/build/
 **/dist/
 **/uv.lock
-**/dagster_home/*
 
 # tool artifacts
+**/.dagster_home/*
+**/dagster_home/*
+.mkdocs/site
 logs/
-docs/site
+
+# exceptions
+!.env.example
+!**/.gitkeep
+!**/.gitignore

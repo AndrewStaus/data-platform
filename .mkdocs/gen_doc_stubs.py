@@ -8,10 +8,10 @@ import mkdocs_gen_files
 # The package root that will be inspected for Python modules that should receive stub
 # documentation pages.
 modules = [
-    "data_foundation/data_foundation",
-    "data_science/data_science",
-    "libs/analytics_utils/analytics_utils",
-    "libs/data_platform_utils/data_platform_utils",
+    "../data_foundation/data_foundation",
+    "../data_science/data_science",
+    "../libs/analytics_utils/analytics_utils",
+    "../libs/data_platform_utils/data_platform_utils",
 ]
 
 for src_root in modules:
