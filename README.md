@@ -1,5 +1,5 @@
 # Data Platform
-## Dagster + dbt + Snowflake
+**Dagster** + **dbt** + **Snowflake**
 
 This repository contains a reference implementation of a modern data platform
 that combines [Dagster](https://dagster.io/) orchestration, [dbt](https://www.getdbt.com/)
