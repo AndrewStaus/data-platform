@@ -4,8 +4,7 @@ from typing import Any, override
 import dagster as dg
 import dagster_sling as dg_sling
 from dagster._utils.tags import is_valid_tag_key
-
-from ...utils.helpers import (
+from data_platform_utils.helpers import (
     get_automation_condition_from_meta,
     get_partitions_def_from_meta,
 )

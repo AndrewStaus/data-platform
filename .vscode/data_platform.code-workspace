@@ -3,18 +3,12 @@
 		{
 			"name": "Project",
 			"path": ".."
-		},
-		{
-			"path": "../data_science"
-		},
-		{
-			"path": "../data_foundation"
 		}
 	],
 	"settings": {
 		"dbt.environmentVariables": {
 			"PROJECT_DIR": "./dbt",
-			"DBT_DEFER_STATE": "C:/Users/Andrew/Code/data_platform/data_foundation/dbt/state/"
+			"DBT_DEFER_STATE": "C:\\Users\\Andrew\\Code\\data_platform\\data_foundation\\dbt\\state"
 		},
 		"sqlfluff.dbtInterface.enabled": false,
 		"sqlfluff.dialect": "",
@@ -40,7 +34,7 @@
 			{
 				"label": "build and deploy",
 				"type": "shell",
-				"command": "./.scripts/deploy.ps1",
+				"command": "./.vscode/tasks/deploy.ps1",
 				"problemMatcher": [],
 				"group": {
 					"kind": "build",
@@ -70,25 +64,25 @@
 			{
 				"label": "dbt clean",
 				"type": "shell",
-				"command": "uv run --env-file .env.dev  dbt clean --target dev",
+				"command": "uv run --env-file .env  dbt clean --target dev",
 				"icon": {"id":"server"},
 			},
 			{
 				"label": "dbt deps",
 				"type": "shell",
-				"command": "uv run --env-file .env.dev  dbt deps --target dev",
+				"command": "uv run --env-file .env  dbt deps --target dev",
 				"icon": {"id":"server"},
 			},
 			{
 				"label": "dbt parse",
 				"type": "shell",
-				"command": "uv run --env-file .env.dev  dbt parse --target dev",
+				"command": "uv run --env-file .env  dbt parse --target dev",
 				"icon": {"id":"server"},
 			},
 			{
 				"label": "dbt compile",
 				"type": "shell",
-				"command": "uv run --env-file .env.dev  dbt compile --target dev",
+				"command": "uv run --env-file .env  dbt compile --target dev",
 				"icon": {"id":"server"},
 			},
 			{
@@ -110,7 +104,7 @@
 			{
 				"label": "k8s pod status",
 				"type": "shell",
-				"command": "./.scripts/pod_status.ps1",
+				"command": "./.vscode/tasks/pod_status.ps1",
 				"icon": {"id":"server"},
 				"presentation": {
 					"echo": true,
@@ -124,7 +118,7 @@
 			{
 				"label": "k8s port forward",
 				"type": "shell",
-				"command": "./.scripts/forward_ports.ps1",
+				"command": "./.vscode/tasks/forward_ports.ps1",
 				"icon": {"id":"server"},
 				"presentation": {
 					"echo": true,
@@ -141,7 +135,7 @@
 				"command": [
 					"$PSDefaultParameterValues['*:Encoding'] = 'utf8';",
 					"$env:PYTHONPROFILEIMPORTTIME=1;",
-					"uv run --env-file .env.dev dagster dev 2> ./logs/import.log;"
+					"uv run --env-file .env dagster dev 2> ./logs/import.log;"
 				],
 				"icon": {"id":"server"},
 				"presentation": {
@@ -173,7 +167,7 @@
 			{
 				"label": "dagster dev",
 				"type": "shell",
-				"command": "uv run --env-file .env.dev dagster dev",
+				"command": "uv run --env-file .env dagster dev",
 				"icon": {"id":"server"},
 				"presentation": {
 					"echo": true,

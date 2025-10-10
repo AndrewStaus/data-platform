@@ -11,6 +11,7 @@ dependencies = [
     "dagster-postgres==0.27.12",
     "dagster-sling==0.27.12",
     "dagster-snowflake==0.27.12",
+    "data-platform-utils",
     "pandas>=2.3.3",
     "psutil==7.1.0",
 ]
@@ -19,6 +20,9 @@ dependencies = [
 override-dependencies = [
     "dbt-core; sys_platform == 'never'",
 ]
+
+[tool.uv.sources]
+data-platform-utils = { path = "../libs/data_platform_utils" }
 
 [dependency-groups]
 dev = [

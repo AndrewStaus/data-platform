@@ -16,9 +16,8 @@ class SnowparkResource(dg.ConfigurableResource):
         import os
         import sys
 
+        from data_platform_utils.helpers import get_database_name, get_schema_name
         from snowflake.snowpark import Session
-
-        from ...utils.helpers import get_database_name, get_schema_name
 
         if sys.platform == "win32":
             import pathlib

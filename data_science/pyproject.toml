@@ -7,6 +7,8 @@ dependencies = [
     "dagster-cloud==1.11.12",
     "dagster-k8s==0.27.12",
     "dagster-snowflake==0.27.12",
+    "dagster_postgres==0.27.12",
+    "data-platform-utils",
     "faker==37.11.0",
     "llvmlite==0.41.1",
     "numba==0.58.1",
@@ -14,13 +16,16 @@ dependencies = [
     "snowflake==1.8.0",
     "snowflake-ml-python==1.11.0",
     "snowflake-snowpark-python==1.36.0",
-    "xgboost-cpu==3.0.5"
+    "xgboost-cpu==3.0.5",
 ]
 
 [tool.uv]
 override-dependencies = [
     "xgboost; sys_platform == 'never'"
 ]
+
+[tool.uv.sources]
+data-platform-utils = { path = "../libs/data_platform_utils" }
 
 [dependency-groups]
 dev = [

@@ -774,6 +774,17 @@ wheels = [
 ]
 
 [[package]]
+name = "data-platform-utils"
+version = "0.1.1"
+source = { directory = "../libs/data_platform_utils" }
+dependencies = [
+    { name = "dagster" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "dagster", specifier = ">=1.11.12" }]
+
+[[package]]
 name = "data-science"
 version = "0.1.0"
 source = { editable = "." }
@@ -781,6 +792,7 @@ dependencies = [
     { name = "dagster-cloud" },
     { name = "dagster-k8s" },
     { name = "dagster-snowflake" },
+    { name = "data-platform-utils" },
     { name = "faker" },
     { name = "llvmlite" },
     { name = "numba" },
@@ -817,6 +829,7 @@ requires-dist = [
     { name = "dagster-cloud", specifier = "==1.11.12" },
     { name = "dagster-k8s", specifier = "==0.27.12" },
     { name = "dagster-snowflake", specifier = "==0.27.12" },
+    { name = "data-platform-utils", directory = "../libs/data_platform_utils" },
     { name = "faker", specifier = "==37.11.0" },
     { name = "llvmlite", specifier = "==0.41.1" },
     { name = "numba", specifier = "==0.58.1" },

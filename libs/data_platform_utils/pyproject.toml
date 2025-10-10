@@ -1,0 +1,33 @@
+[project]
+name = "data_platform_utils"
+version = "0.1.1"
+description = "Data platform demonstration that integrates dagster, dbt, sling, and dlt."
+requires-python = ">=3.10, <3.14"
+dependencies = [
+    "dagster>=1.11.12"
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-dir]
+data_platform_utils = "data_platform_utils"
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 20
+quote-style = "double"
+indent-style = "space"
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
+]

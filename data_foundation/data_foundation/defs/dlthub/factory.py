@@ -8,9 +8,9 @@ import dagster as dg
 import dlt
 from dagster_dlt import DagsterDltResource, dlt_assets
 from dagster_dlt.dlt_event_iterator import DltEventType
+from data_platform_utils.helpers import get_nested
 from dlt.extract.resource import DltResource
 
-from ...utils.helpers import get_nested
 from .translator import CustomDagsterDltTranslator
 
 

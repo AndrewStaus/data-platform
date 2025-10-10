@@ -1,0 +1,28 @@
+FROM python:3.10-bullseye AS builder
+
+    ENV UV_LINK_MODE=copy
+    ENV UV_PROJECT_ENVIRONMENT=/usr/local/
+
+    COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+    COPY ./data_science/pyproject.toml ./data_science/pyproject.toml
+    COPY ./libs ./libs
+
+    WORKDIR /data_science/
+
+    RUN uv sync --no-install-project --no-dev --no-cache --compile-bytecode
+
+
+FROM python:3.10-slim-bullseye AS data_science
+
+    ENV DAGSTER_HOME=/opt/dagster/dagster_home
+    ENV TARGET=prod
+    COPY --from=builder /usr/local/ /usr/local/
+    COPY dagster.yaml $DAGSTER_HOME/dagster.yaml
+
+    WORKDIR /data_science/
+
+    COPY /data_science/pyproject.toml pyproject.toml
+    COPY /data_science/data_science data_science
+    COPY .env.prod .env
+    
+    EXPOSE 80

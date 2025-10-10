@@ -1,4 +1,4 @@
-name: 'dbt_core'
+name: 'dbt_foundation'
 version: '1.0.0'
 
 query-comment:
@@ -15,9 +15,8 @@ macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
 dispatch:
-  - macro_namespace: dbt
-    search_order: ['dbt_core', 'dbt_snowflake', 'dbt']
-
+  - macro_namespace: dbt_foundation
+    search_order: ['dbt_foundation', 'dbt_snowflake', 'dbt']
 
 clean-targets:
   - "target"
@@ -26,7 +25,7 @@ models:
   +persist_docs:
     relation: true
     columns: true
-  dbt_core:
+  dbt_foundation:
     +group: data_foundation
 
     staging:
@@ -41,14 +40,14 @@ models:
         +group: marketing
 
 tests:
-  dbt_core:
+  dbt_foundation:
     +group: data_foundation
 
 seeds:
   +persist_docs:
     relation: true
     columns: true
-  dbt_core:
+  dbt_foundation:
     +group: data_foundation
 
     mrt_marketing:
@@ -58,7 +57,7 @@ snapshots:
   +persist_docs:
       relation: true
       columns: true
-  dbt_core:
+  dbt_foundation:
     +group: data_foundation
 flags:
   require_generic_test_arguments_property: true

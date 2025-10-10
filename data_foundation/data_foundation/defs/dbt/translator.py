@@ -4,9 +4,8 @@ from typing import Any, override
 
 import dagster as dg
 from dagster_dbt import DagsterDbtTranslator
-
-from ...utils.automation_conditions import CustomAutomationCondition
-from ...utils.helpers import (
+from data_platform_utils.automation_conditions import CustomAutomationCondition
+from data_platform_utils.helpers import (
     get_automation_condition_from_meta,
     get_nested,
     get_partitions_def_from_meta,

@@ -9,9 +9,9 @@ import dagster as dg
 import yaml
 from dagster_sling import SlingConnectionResource, SlingResource, sling_assets
 from dagster_sling.sling_event_iterator import SlingEventType
+from data_platform_utils.helpers import get_nested, sanitize_input_signature
+from data_platform_utils.secrets import get_secret
 
-from ...utils.helpers import get_nested, sanitize_input_signature
-from ...utils.secrets import get_secret
 from .translator import CustomDagsterSlingTranslator
 
 

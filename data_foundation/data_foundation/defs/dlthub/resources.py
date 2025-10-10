@@ -18,8 +18,7 @@ def defs() -> Definitions:
 
     import dagster as dg
     from dagster_dlt import DagsterDltResource
-
-    from ...utils.keyvault_stub import SecretClient
+    from data_platform_utils.keyvault_stub import SecretClient
 
     kv = SecretClient(
         vault_url=os.getenv("AZURE_KEYVAULT_URL"),

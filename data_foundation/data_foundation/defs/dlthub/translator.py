@@ -5,12 +5,11 @@ import dagster as dg
 from dagster._utils.tags import is_valid_tag_key
 from dagster_dlt import DagsterDltTranslator
 from dagster_dlt.translator import DltResourceTranslatorData
-from dlt.extract.resource import DltResource
-
-from ...utils.helpers import (
+from data_platform_utils.helpers import (
     get_automation_condition_from_meta,
     get_partitions_def_from_meta,
 )
+from dlt.extract.resource import DltResource
 
 
 class CustomDagsterDltTranslator(DagsterDltTranslator):

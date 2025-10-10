@@ -596,6 +596,7 @@ dependencies = [
     { name = "dagster-postgres" },
     { name = "dagster-sling" },
     { name = "dagster-snowflake" },
+    { name = "data-platform-utils" },
     { name = "pandas" },
     { name = "psutil" },
 ]
@@ -617,6 +618,7 @@ requires-dist = [
     { name = "dagster-postgres", specifier = "==0.27.12" },
     { name = "dagster-sling", specifier = "==0.27.12" },
     { name = "dagster-snowflake", specifier = "==0.27.12" },
+    { name = "data-platform-utils", directory = "../libs/data_platform_utils" },
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "psutil", specifier = "==7.1.0" },
 ]
@@ -628,6 +630,17 @@ dev = [
     { name = "sphinx" },
     { name = "sqlfluff" },
 ]
+
+[[package]]
+name = "data-platform-utils"
+version = "0.1.1"
+source = { directory = "../libs/data_platform_utils" }
+dependencies = [
+    { name = "dagster" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "dagster", specifier = ">=1.11.12" }]
 
 [[package]]
 name = "dbt-adapters"

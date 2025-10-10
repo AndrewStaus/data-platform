@@ -1,7 +1,7 @@
 import dagster as dg
 from dagster.components import definitions
+from data_platform_utils.automation_conditions import CustomAutomationCondition
 
-from ......utils.automation_conditions import CustomAutomationCondition
 from ....resources import SnowparkResource
 
 
