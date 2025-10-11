@@ -48,7 +48,6 @@ def defs() -> Definitions:
             state_path=state_path,
             profile="dbt",
         )
-        # if os.getenv("TARGET") == "dev":
         project.prepare_if_dev()
         return project
 

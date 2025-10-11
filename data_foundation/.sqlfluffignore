@@ -1,0 +1,6 @@
+**/macros/*
+**/logs/*
+**/dbt_internal_packages/*
+**/dbt_packages/*
+**/target/*
+**/state/*

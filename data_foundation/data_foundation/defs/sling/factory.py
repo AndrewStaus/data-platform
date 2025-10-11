@@ -141,7 +141,7 @@ class DagsterSlingFactory:
         # Iterate through each replication block and build Dagster assets, any
         # associated freshness checks, and companion external assets for dependencies.
         for replication_config in replication_configs:
-            if bool(os.getenv("DAGSTER_IS_DEV_CLI")):
+            if bool(os.getenv("ENV")) == "dev":
                 replication_config = DagsterSlingFactory._set_dev_schema(
                     replication_config
                 )

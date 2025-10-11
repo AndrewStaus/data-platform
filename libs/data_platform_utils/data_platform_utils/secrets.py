@@ -19,11 +19,15 @@ def get_secret(env_var_name: str) -> dg.EnvVar:
     Returns a secret from the keyvault and set it to an environment variable that can be
     used securly with dagsters EnvVar class.
     """
-    if secret := keyvault.get_secret(env_var_name):
-        os.environ[env_var_name] = secret
-        return dg.EnvVar(env_var_name)
+    secret = keyvault.get_secret(env_var_name)
+    os.environ[env_var_name] = secret
+    return dg.EnvVar(env_var_name)
 
-    raise ValueError(
-        f"Secret for key '{env_var_name}' not found."
-        "Please check that this is the correct key."
-    )
+
+def get_secret_value(env_var_name: str) -> str:
+    """A wrapper for a keyvault to integrate with the Dagster EnvVar class.
+
+    Returns a secret from the keyvault and set it to an environment variable that can be
+    used securly with dagsters EnvVar class.
+    """
+    return keyvault.get_secret(env_var_name)

@@ -1,5 +1,5 @@
 # Workflow for building and deploying auto-generated docs to GitHub Pages
-name: Github-Pages Deploy
+name: Github Pages Docs Deploy
 
 on:
   # Runs on pushes targeting the default branch
@@ -24,7 +24,7 @@ concurrency:
 jobs:
   deploy:
     environment:
-      name: github-pages
+      name: docs
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
