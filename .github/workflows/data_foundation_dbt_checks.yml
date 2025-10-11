@@ -7,7 +7,7 @@ on:
       - "main"
       - "dev"
     paths:
-      - "/data_foundation/**/*.sql"
+      - "data_foundation/**/*.sql"
 
 permissions:
   checks: write

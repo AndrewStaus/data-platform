@@ -7,7 +7,7 @@ on:
       - "main"
       - "dev"
     paths:
-      - "/data_foundation/**/*.py"
+      - "data_foundation/**/*.py"
 
 permissions:
   checks: write
