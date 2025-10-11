@@ -7,7 +7,7 @@ on:
       - "main"
       - "dev"
     paths:
-      - "/data_science/**/*.py"
+      - "data_science/**/*.py"
 
 permissions:
   checks: write
