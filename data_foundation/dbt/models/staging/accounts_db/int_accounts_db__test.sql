@@ -10,4 +10,4 @@ with test as (
     select * from {{ ref('stg_accounts_db__accounts') }}
 )
 
-select * from test 
+select * from test

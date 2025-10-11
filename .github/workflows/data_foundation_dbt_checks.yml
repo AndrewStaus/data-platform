@@ -27,4 +27,4 @@ jobs:
 
       - name: SQLFluff Check
         working-directory: ./data_foundation
-        run: uv run sqlfluff lint
+        run: uv run --only-group sqlfluff sqlfluff lint --format github-annotation-native
