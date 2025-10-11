@@ -1,5 +1,5 @@
 # Workflow for building and deploying auto-generated docs to GitHub Pages
-name: Github Pages Docs Deploy
+name: Docs Deploy
 
 on:
   # Runs on pushes targeting the default branch

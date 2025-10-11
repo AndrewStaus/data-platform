@@ -1,0 +1,46 @@
+# Workflow for running dbt checks on data foundation package
+name: Linting Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - "main"
+      - "dev"
+    paths:
+      - "**/*.sql"
+      - "**/*.py"
+
+permissions:
+  checks: write
+  contents: read
+
+jobs:
+  dbt_checks:
+    environment:
+      name: linting_checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: SQLFluff Check
+        run: uv run --only-group sqlfluff sqlfluff lint --format github-annotation-native
+
+  python_linting:
+    environment:
+      name: linting_checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: Ruff Check
+        run: uv run --only-group ruff ruff check --output-format github
+
