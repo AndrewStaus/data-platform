@@ -3,6 +3,8 @@ name: Data Foundation dbt Checks
 
 on:
   pull_request:
+    types:
+      - opened
     branches:
       - "main"
       - "dev"
@@ -10,6 +12,7 @@ on:
       - "/data_foundation/**/*.sql"
 
 permissions:
+  checks: write
   contents: read
 
 jobs:
