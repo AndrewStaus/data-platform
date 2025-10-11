@@ -30,7 +30,6 @@ dev = [
     "dagster-dg-cli",
     "dagster-webserver"
 ]
-ruff = ["ruff"]
 
 [build-system]
 requires = ["setuptools"]
