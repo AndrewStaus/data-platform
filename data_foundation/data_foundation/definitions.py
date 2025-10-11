@@ -9,8 +9,8 @@ resources, and schedules declared under :mod:`data_platform.defs`.
 import warnings
 from pathlib import Path
 
-import dagster as dg
 from dagster.components import definitions
+import dagster as dg
 
 warnings.filterwarnings("ignore", category=dg.BetaWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
