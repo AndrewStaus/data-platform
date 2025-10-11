@@ -4,9 +4,10 @@ name: Data Science Python Checks
 on:
   pull_request:
     branches:
-      - branches: ["main", "dev"]
+      - "main"
+      - "dev"
     paths:
-      - "data_science/data_science" # Triggers only if changes are in the 'src' directory
+      - "/data_science/**/*.py"
 
 permissions:
   contents: read
