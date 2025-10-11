@@ -30,9 +30,6 @@ dev = [
     "dagster-webserver",
 ]
 
-sqlfluff = ["sqlfluff"]
-ruff = ["ruff"]
-
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
