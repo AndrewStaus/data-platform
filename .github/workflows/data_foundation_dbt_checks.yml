@@ -3,8 +3,6 @@ name: Data Foundation dbt Checks
 
 on:
   pull_request:
-    types:
-      - opened
     branches:
       - "main"
       - "dev"
