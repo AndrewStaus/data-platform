@@ -4,9 +4,10 @@ name: Data Foundation Python Checks
 on:
   pull_request:
     branches:
-      - branches: ["main", "dev"]
+      - "main"
+      - "dev"
     paths:
-      - "data_foundation/data_foundation"
+      - "/data_foundation/**/*.py"
 
 permissions:
   contents: read

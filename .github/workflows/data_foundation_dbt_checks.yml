@@ -4,9 +4,10 @@ name: Data Foundation dbt Checks
 on:
   pull_request:
     branches:
-      - branches: ["main", "dev"]
+      - "main"
+      - "dev"
     paths:
-      - "data_foundation/dbt"
+      - "/data_foundation/**/*.sql"
 
 permissions:
   contents: read
