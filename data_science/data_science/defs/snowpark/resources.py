@@ -1,5 +1,6 @@
 import dagster as dg
 from dagster.components import definitions
+from data_platform_utils.secrets import get_secret_value
 
 
 class SnowparkResource(dg.ConfigurableResource):
@@ -13,7 +14,6 @@ class SnowparkResource(dg.ConfigurableResource):
                     schema: str | None = None,
                     warehouse: str|None = None) -> "snowflake.snowpark.Session":  # type: ignore # noqa
         """Get or create a Snowpark session"""
-        import os
         import sys
 
         from data_platform_utils.helpers import get_database_name, get_schema_name
@@ -26,19 +26,19 @@ class SnowparkResource(dg.ConfigurableResource):
         if schema:
             schema = get_schema_name(schema)
         else:
-            schema = os.getenv("DESTINATION__USER", "")
+            schema = get_secret_value("DESTINATION_SNOWFLAKE_USER")
 
         
         if not warehouse:
-            warehouse = os.getenv("DESTINATION__WAREHOUSE", "")
+            warehouse = get_secret_value("DESTINATION_SNOWFLAKE_WAREHOUSE")
 
         self._session = (
             Session.builder.configs({ 
                 "database":  get_database_name(database),
-                "account":   os.getenv("DESTINATION__HOST", ""),
-                "user":      os.getenv("DESTINATION__USER", ""),
-                "password":  os.getenv("DESTINATION__PASSWORD", ""),
-                "role":      os.getenv("DESTINATION__ROLE", ""),
+                "account":   get_secret_value("DESTINATION_SNOWFLAKE_HOST"),
+                "user":      get_secret_value("DESTINATION_SNOWFLAKE_USER"),
+                "password":  get_secret_value("DESTINATION_SNOWFLAKE_PASSWORD"),
+                "role":      get_secret_value("DESTINATION_SNOWFLAKE_ROLE"),
                 "warehouse": warehouse,
             })
             .create()

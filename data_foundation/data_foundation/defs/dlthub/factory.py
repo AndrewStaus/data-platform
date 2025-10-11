@@ -113,7 +113,7 @@ class DagsterDltFactory:
             )
 
         @dlt.source()
-        def source() -> Generator[DltResource, Any, None]:
+        def source() -> Generator[DltResource, Any]:
             yield resource
 
         @dlt_assets(
@@ -132,7 +132,7 @@ class DagsterDltFactory:
         )
         def assets(
             context: dg.AssetExecutionContext, dlt: DagsterDltResource
-        ) -> Generator[DltEventType, Any, None]:
+        ) -> Generator[DltEventType, Any]:
             """Invoke the dlt pipeline and stream structured event data.
 
             Args:
