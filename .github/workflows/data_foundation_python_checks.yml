@@ -27,4 +27,4 @@ jobs:
 
       - name: Ruff Check
         working-directory: ./data_foundation
-        run: uv run ruff check
+        run: uv run --only-group ruff ruff check --output-format github
