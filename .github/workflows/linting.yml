@@ -14,8 +14,6 @@ permissions:
 
 jobs:
   sql_linting:
-    environment:
-      name: linting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -28,8 +26,6 @@ jobs:
         run: uv run --only-group sqlfluff sqlfluff lint --format github-annotation-native
 
   python_linting:
-    environment:
-      name: linting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
