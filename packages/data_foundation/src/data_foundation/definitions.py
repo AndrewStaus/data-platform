@@ -6,8 +6,8 @@ This module provides that hook and centralizes the logic that discovers assets,
 resources, and schedules declared under :mod:`data_platform.defs`.
 """
 
-from pathlib import Path
 import warnings
+from pathlib import Path
 
 import dagster as dg
 from dagster.components import definitions
