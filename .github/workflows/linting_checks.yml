@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  dbt_checks:
+  sql_linting:
     environment:
       name: linting_checks
     runs-on: ubuntu-latest

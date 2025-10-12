@@ -17,6 +17,10 @@ Write-Host("`nBUILDING SCIENCE DOCKER IMAGE")
 docker build . -f Dockerfile.data_science --target data_science -t $new_science_image
 
 Write-Host("`nDEPLOYING BUILD")
+winget install Helm.Helm
+kubectl config set-context desktop-linux --namespace default --cluster docker-desktop --user=docker-desktop
+kubectl config use-context desktop-linux
+helm repo add dagster https://dagster-io.github.io/helm
 helm repo update
 kubectl delete secret destination-password
 kubectl create secret generic destination-password `
@@ -34,35 +38,35 @@ kubectl delete pod --field-selector=status.phase==Completed
 kubectl delete pod --field-selector=status.phase==ErrImagePull
 kubectl delete pod --field-selector=status.phase==ImagePullBackoff
 
-Write-Host("`nCLEANING DOCKER REPOSITORY")
-docker stop data-foundation
-docker rm data-foundation
-docker container create -t --name data-foundation $new_foundation_image
-docker stop data-foundation-rollback
-docker rm data-foundation-rollback
-docker container create -t --name data-foundation-rollback $old_foundation_image
+# Write-Host("`nCLEANING DOCKER REPOSITORY")
+# docker stop data-foundation
+# docker rm data-foundation
+# docker container create -t --name data-foundation $new_foundation_image
+# docker stop data-foundation-rollback
+# docker rm data-foundation-rollback
+# docker container create -t --name data-foundation-rollback $old_foundation_image
 
-docker stop data-science
-docker rm data-science
-docker container create -t --name data-science $new_science_image
-docker stop data-science-rollback
-docker rm data-science-rollback
-docker container create -t --name data-science-rollback $new_science_image
+# docker stop data-science
+# docker rm data-science
+# docker container create -t --name data-science $new_science_image
+# docker stop data-science-rollback
+# docker rm data-science-rollback
+# docker container create -t --name data-science-rollback $new_science_image
 
-Start-Sleep 5
-docker image prune -a --force
+# Start-Sleep 5
+# docker image prune -a --force
 
-Write-Host("`nDEPLOYMENT COMPLETE")
-Write-Host("Branch ID: " + $tag + "`n")
+# Write-Host("`nDEPLOYMENT COMPLETE")
+# Write-Host("Branch ID: " + $tag + "`n")
 
-Write-Host("`BUILDING DBT Deferal Target")
-if (!(Test-Path -Path $defer_path -PathType Container)) {
-    New-Item -Path $defer_path -ItemType Directory
-}
-Copy-Item -Path $dbt_path"\target\manifest.json" -Destination $defer_path -Force
+# Write-Host("`BUILDING DBT Deferal Target")
+# if (!(Test-Path -Path $defer_path -PathType Container)) {
+#     New-Item -Path $defer_path -ItemType Directory
+# }
+# Copy-Item -Path $dbt_path"\target\manifest.json" -Destination $defer_path -Force
 
-.\data_foundation\.venv\Scripts\activate
-uv run --env-file .env.prod dbt parse --project-dir $dbt_path --profiles-dir $dbt_path --target prod
+# .\data_foundation\.venv\Scripts\activate
+# uv run --env-file .env.prod dbt parse --project-dir $dbt_path --profiles-dir $dbt_path --target prod
 
-Write-Host("`CREATING PROJECT DOCS")
+# # Write-Host("`CREATING PROJECT DOCS") # fusion does not have doc generation yet
 # # uv run --env-file .env.prod dbt docs generate --project-dir $dbt_path --target prod

@@ -4,18 +4,29 @@ from pathlib import Path
 
 import mkdocs_gen_files
 
+
+def replace_seperator(source_path:Path, source_root:Path, sep:str) -> str:
+    return (sep
+        .join(source_path
+                .with_suffix("") # remove .py extension
+                .parts[len(source_root.parts):] # index for relative path
+        )
+        .replace(".__init__", "") # remove init so parent dir name is used 
+        .strip() # remove whitespace
+    )
+
 project_dir = Path(__file__).joinpath(*[".."]*2)
 
 modules = ( # relative paths to the module src files
-    "data_foundation/data_foundation",
-    "data_science/data_science",
-    "libs/analytics_utils/analytics_utils",
-    "libs/data_platform_utils/data_platform_utils",
+    "data_foundation/src",
+    "data_science/src",
+    "libs/analytics_utils/src",
+    "libs/data_platform_utils/src",
 )
 
 roots = [(
         Path(join(project_dir, module)).resolve(),
-        Path(join(project_dir, ".mkdocs", "docs", "data_platform", module)).resolve())
+        Path(join(project_dir, ".mkdocs", "docs", "packages", module)).resolve())
     for module in modules
 ]
 
@@ -30,24 +41,15 @@ for source_root, doc_root in roots:
                 continue
 
         # convert file path to import path in dot notation
-        import_path = ("."
-            .join(source_path
-                  .with_suffix("") # remove .py extension
-                  .parts[len(source_root.parts)-1:] # index for relative path
-            )
-            .replace(".__init__", "") # remove init so parent dir name is used 
-            .strip() # remove whitespace
-        )
+        import_path = replace_seperator(source_path, source_root, sep=".")
 
         # generate the .md file path for the documentation stub
-        doc_path = Path(join(doc_root, source_path.relative_to(source_root)))
-        # if the file is a an init file, then take the name of the parent folder
-        doc_path = Path(
-            join(doc_path.parent, doc_path.parent.name)
-        ) if source_path.name == "__init__.py" else doc_path
-        doc_path = doc_path.with_suffix(".md")        
+        doc_path = join(doc_root,
+                        Path(replace_seperator(source_path, source_root, sep="/")
+                    ).with_suffix(".md"))
+       
         
         # create mkdocs stub
+        print(doc_path)
         with mkdocs_gen_files.open(doc_path, "w") as f:
             print("::: " + import_path, file=f)
-        print(doc_path)

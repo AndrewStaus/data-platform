@@ -1,56 +1,59 @@
-FROM python:3.13-bullseye AS builder
+FROM python:3.12-bullseye AS sling_builder
+    # install and compress the latest sling binary for use in other stages.
+    # binary will be availible in the builder root directory `/sling`.
+    RUN apt-get update && apt-get --no-install-recommends -y install binutils upx
+    RUN curl -LO 'https://github.com/slingdata-io/sling-cli/releases/latest/download/sling_linux_amd64.tar.gz' \
+        && tar xf sling_linux_amd64.tar.gz \
+        && rm -f sling_linux_amd64.tar.gz \
+        && chmod +x sling \
+        && strip sling && upx sling
 
-    ENV UV_COMPILE_BYTECODE=1
-    ENV UV_LINK_MODE=copy
-    ENV UV_PROJECT_ENVIRONMENT=/usr/local/
-    ENV UV_CACHE_DIR=/var/cache/uv
+FROM python:3.12-bullseye AS dbt_builder
+    # install and compress the latest dbt fusion binary for use in other stages.
+    # binary will be availible in the builder root directory `/dbt`.
+    RUN apt-get update && apt-get --no-install-recommends -y install binutils upx
+    RUN curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh \
+            | /bin/bash -s -- --update \
+        && cd /root/.local/bin/ \
+        && strip dbt && upx dbt \
+        && mv /root/.local/bin/dbt /dbt
 
-    COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
-    COPY ./data_foundation/pyproject.toml ./data_foundation/pyproject.toml
-    COPY ./libs ./libs
-
-    WORKDIR /data_foundation/
-
-    RUN curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh | /bin/bash -s -- --update && \
-        uv sync --no-install-project --no-dev --no-cache --compile-bytecode && \
-        python -c 'from sling.bin import *; download_binary(get_sling_version())'
-    
-    RUN apt-get update && apt-get --no-install-recommends -y install binutils upx && \
-        cd /root/.sling/bin/sling/ && cd $(ls -d */|head -n 1) && \
-        mv sling /usr/local/bin/sling && \
-        mv /root/.local/bin/dbt /usr/local/bin/dbt && \
-        cd /usr/local/bin/  && \
-        strip sling && upx sling && \
-        strip dbt && upx dbt
-
-FROM python:3.13-slim-bullseye AS dbt_builder
+FROM python:3.12-slim-bullseye AS dbt_compiler
+    # compile dbt target so that recompile is not needed at runtime in dagster
     ENV TARGET=prod
-
-    COPY ./data_foundation/dbt dbt
-    COPY --from=builder /usr/local/bin/dbt/ /usr/local/bin/dbt
-
+    COPY --from=dbt_builder dbt /usr/local/bin/dbt
+    COPY /packages/data_foundation/dbt dbt
     RUN --mount=type=secret,id=DESTINATION__PASSWORD \
-            export DESTINATION__PASSWORD=$(cat /run/secrets/DESTINATION__PASSWORD) && \
-        cd dbt && \
-        dbt clean && \
-        dbt deps && \
-        dbt parse && \
-        dbt compile
+            export DESTINATION__PASSWORD=$(cat /run/secrets/DESTINATION__PASSWORD) \
+        && cd dbt && dbt clean && dbt deps && dbt compile
 
-FROM python:3.13-slim-bullseye AS data_foundation
-
+FROM python:3.12-slim-bullseye AS data_foundation
+    # install binaries from build stages, copy compiled dbt and python sources,
+    # and build project.
+    ENV PATH="/opt/dagster/app/.venv/bin:$PATH"
     ENV DAGSTER_HOME=/opt/dagster/dagster_home
     ENV TARGET=prod
     ENV SLING_BINARY=/usr/local/bin/sling
 
-    COPY --from=builder /usr/local/ /usr/local/
-    COPY dagster.yaml $DAGSTER_HOME/dagster.yaml
-
-    WORKDIR /data_foundation/
-
-    COPY /data_foundation/pyproject.toml pyproject.toml
-    COPY /data_foundation/data_foundation data_foundation
-    COPY --from=dbt_builder dbt dbt
-    COPY .env.prod .env
+    # install binaries
+    COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+    COPY --from=sling_builder sling /usr/local/bin/sling
+    COPY --from=dbt_builder dbt /usr/local/bin/dbt
     
-    EXPOSE 80
+    # copy libs and configs
+    WORKDIR /opt/dagster/
+    COPY dagster.yaml dagster_home/dagster.yaml
+    COPY /libs/data_platform_utils libs/data_platform_utils
+
+    # install user code
+    WORKDIR /opt/dagster/app
+    COPY /packages/data_foundation/src src
+    COPY /packages/data_foundation/pyproject.toml pyproject.toml
+    RUN --mount=type=cache,target=/root/.cache/uv,id=foundation_uv_cache \
+        uv sync --no-dev --compile-bytecode --link-mode=copy
+    COPY --from=dbt_compiler dbt dbt
+    COPY .env.prod .env
+
+    EXPOSE 4000
+
+    CMD ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-m", "data_foundation"]

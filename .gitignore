@@ -1,7 +1,8 @@
 # dotfiles
 **/.env*
 **/.user.yml
-
+**/.ruff_cache
+w
 # python build and cache artifacts
 **/.venv*
 **/__pycache__/
@@ -10,13 +11,11 @@
 **/*.egg-info
 **/build/
 **/dist/
-**/uv.lock
 
 # tool artifacts
-**/.dagster_home/*
-**/dagster_home/*
+**/*dagster_home*/*
 .mkdocs/site
-.mkdocs/docs/data_platform
+.mkdocs/docs/packages
 logs/
 
 # exceptions

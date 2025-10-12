@@ -19,7 +19,11 @@ plugins:
   - mkdocstrings: # Autodoc support for Python objects referenced in the docs/ tree.
       handlers:
         python:
-          paths: [../data_foundation, ../data_science, ../libs/analytics_utils, ../libs/data_platform_utils]
+          paths: 
+            - ../data_foundation/src
+            - ../data_science/src
+            - ../libs/analytics_utils/src
+            - ../libs/data_platform_utils/src
   - gen-files: # Dynamically generate stub pages for Dagster assets and dbt models.
       scripts:
       - gen_doc_stubs.py

@@ -2,14 +2,19 @@
 name = "data_platform"
 version = "0.1.0"
 description = "Data platform demonstration that integrates dagster, dbt, sling, and dlt."
-requires-python = ">=3.13"
-dependencies = []
+requires-python = ">=3.12, <3.13"
+
+dependencies = [
+    "dagster-dg-cli",
+    "dagster-webserver",
+    "uv",
+    "sqlfluff",
+    "ruff"
+]
 
 [dependency-groups]
-dev = [
-    "dagster-dg-cli",
-    "dagster-webserver"
-]
+sqlfluff = ["sqlfluff"]
+ruff = ["ruff"]
 
 docs = [
     "mkdocs",
@@ -17,12 +22,57 @@ docs = [
     "mkdocs-material",
     "mkdocs-mermaid2-plugin",
     "mkdocstrings",
-    "mkdocstrings-python"
+    "mkdocstrings-python",
+    "mkdocs_gen_files"
 ]
 
-sqlfluff = ["sqlfluff"]
-ruff = ["ruff"]
+# [tool.uv.workspace]
+# members = ["data_foundation", "data_science"]
 
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+
+[tool.dg]
+directory_type = "workspace"
+
+[[tool.dg.workspace.projects]]
+path = "packages/data_foundation"
+[[tool.dg.workspace.projects]]
+path = "packages/data_science"
+
+[tool.ruff]
+exclude = ["data_analytics/"]
+line-length = 88
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 20
+quote-style = "double"
+indent-style = "space"
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle
+    "F", # Pyflakes
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "SIM", # flake8-simplify
+    "I", # isort
+]
+
+[tool.sqlfluff]
+core.exclude_rules = ["AL07", "RF02", "ST06"]
+core.max_line_length = 88
+core.dialect = "snowflake"
+indentation.tab_space_size = 4
+layout.type.alias_expression.spacing_before = "align"
+layout.type.alias_expression.align_within = "select_clause"
+rules.aliasing.table.aliasing = "implicit"
+rules.aliasing.column.aliasing = "implicit"
+
+# disabled for dbt fusion, enable when support is availible
+# # core.templater = "dbt"
+# # templater.dbt.project_dir = "./dbt"
+# # templater.dbt.profiles_dir = "./dbt"
+# # experimental.format.executeInTerminal = true

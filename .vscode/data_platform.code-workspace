@@ -3,26 +3,6 @@
 		{
 			"name": "Project",
 			"path": ".."
-		},
-		{
-			"name": "sling",
-			"path": "../data_foundation/data_foundation/defs/sling/sling"
-		},
-		{
-			"name": "dlthub",
-			"path": "../data_foundation/data_foundation/defs/dlthub/dlthub"
-		},
-		{
-			"name": "dbt",
-			"path": "../data_foundation/dbt"
-		},
-		{
-			"name": "snowpark",
-			"path": "../data_science/data_science/defs/snowpark/snowpark"
-		},
-		{
-			"name": "data_analytics",
-			"path": "../data_analytics"
 		}
 	],
 	"settings": {
@@ -43,14 +23,6 @@
 	"tasks": {
 		"version": "2.0.0",
 		"tasks": [
-			{
-				"label": "docs build",
-				"command": "mkdocs build"
-			},
-			{
-				"label": "docs serve",
-				"command": "mkdocs serve"
-			},
 			{
 				"label": "build and deploy",
 				"type": "shell",
@@ -116,9 +88,6 @@
 					"panel": "shared",
 					"showReuseMessage": false,
 					"clear": true
-				},
-				"runOptions": {
-					"runOn": "folderOpen",
 				}
 			},
 			{
@@ -150,44 +119,9 @@
 				}
 			},
 			{
-				"label": "dagster profile",
-				"type": "shell",
-				"command": [
-					"$PSDefaultParameterValues['*:Encoding'] = 'utf8';",
-					"$env:PYTHONPROFILEIMPORTTIME=1;",
-					"uv run --env-file .env dagster dev 2> ./logs/import.log;"
-				],
-				"icon": {"id":"server"},
-				"presentation": {
-					"echo": true,
-					"reveal": "always",
-					"focus": false,
-					"panel": "shared",
-					"showReuseMessage": false,
-					"clear": true
-				}
-			},
-			{
-				"label": "tuna",
-				"type": "shell",
-				"command": [
-					"python ./logs/process_log.py;",
-					"tuna ./logs/import.log;"
-				],
-				"icon": {"id":"server"},
-				"presentation": {
-					"echo": true,
-					"reveal": "always",
-					"focus": false,
-					"panel": "shared",
-					"showReuseMessage": false,
-					"clear": true
-				}
-			},
-			{
 				"label": "dagster dev",
 				"type": "shell",
-				"command": "uv run --env-file .env dagster dev",
+				"command": "uv run dg dev",
 				"icon": {"id":"server"},
 				"presentation": {
 					"echo": true,
