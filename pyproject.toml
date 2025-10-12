@@ -18,12 +18,10 @@ ruff = ["ruff"]
 
 docs = [
     "mkdocs",
-    "mkdocs-gen-files",
     "mkdocs-material",
     "mkdocs-mermaid2-plugin",
     "mkdocstrings",
-    "mkdocstrings-python",
-    "mkdocs_gen_files"
+    "mkdocstrings-python"
 ]
 
 # [tool.uv.workspace]

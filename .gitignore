@@ -15,7 +15,7 @@ w
 # tool artifacts
 **/*dagster_home*/*
 .mkdocs/site
-.mkdocs/docs/packages
+.mkdocs/docs/modules
 logs/
 
 # exceptions
