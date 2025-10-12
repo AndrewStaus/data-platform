@@ -5,7 +5,7 @@ FROM python:3.12-slim-bullseye AS data_science
     COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
     
     # copy libs and configs
-    WORKDIR /opt/dagster/ 
+    WORKDIR /opt/
     COPY dagster.yaml dagster_home/dagster.yaml
     COPY /libs/data_platform_utils libs/data_platform_utils
     
