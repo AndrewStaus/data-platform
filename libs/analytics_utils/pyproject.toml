@@ -8,6 +8,7 @@ dependencies = [
     "SQLAlchemy==1.4.49",
     "snowflake-sqlalchemy==1.5.0",
     "pyarrow==10.0.1",
+    "pyarrow-hotfix",
     "pygwalker[snowflake]>=0.4.9.15",
     "snowpark-extensions>=0.0.47",
     "ipython>=8.37.0",
