@@ -11,6 +11,7 @@ dependencies = [
     "ruff",
     "snowflake-ml-python>=1.16.0",
     "sqlfluff",
+    "pyarrow-hotfix",
 ]
 
 [build-system]
