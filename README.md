@@ -9,7 +9,7 @@ can collaborate with clear ownership boundaries.
 
 ## Repository Layout
 
-| Path | Owner Focus | Description |
+| Path | Owner Focus | Description | 
 | --- | --- | --- |
 | `data_foundation/data_foundation/` | Platform | Dagster definitions, resource configuration, and integration glue code. Includes Sling source connection YAML that controls raw data ingestion. |
 | `data_foundation/dbt/` | Cross-functional | dbt project containing models, seeds, snapshots, and tests. YAML files document sources, staging models, and marts. |
