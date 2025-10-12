@@ -1,5 +1,6 @@
 """Generate API documentation stubs for Python packages."""
 import os
+import shutil
 from os.path import join
 from pathlib import Path
 
@@ -57,8 +58,12 @@ def create_new(project_dir: Path, docs_folder: str, modules:list[str]) -> None:
     ]
 
     for source_root, doc_root in roots:
-        # get all python source files in all sub directories
-        source_paths = source_root.glob("**/*.py")
+        # get all python source files in all sub directories ordered so that .md files
+        # are processed first so that md documentation is applied at head of and stubs
+        # are added to the end for cases where two files have the same name.
+        source_paths = list(source_root.glob("**/*.md"))
+        source_paths.extend(list(source_root.glob("**/*.py")))
+
         for source_path in source_paths:
 
             # skip empty file
@@ -66,19 +71,25 @@ def create_new(project_dir: Path, docs_folder: str, modules:list[str]) -> None:
                 if not "".join(file.readlines()).replace(" ",""):
                     continue
 
-            # convert file path to import path in dot notation
-            import_path = compile_path(source_root, source_path, sep=".")
-
             # generate the .md file path for the documentation stub
             doc_rel_path = compile_path(source_root, source_path, sep="/", suffix=".md")
             doc_path = Path(join(doc_root, doc_rel_path))
+
+            # copy md files as is
+            if source_path.suffix == ".md":
+                os.makedirs(doc_path.parent, exist_ok=True)
+                shutil.copyfile(source_path, doc_path)
+                continue
+
+            # convert file path to import path in dot notation
+            import_path = compile_path(source_root, source_path, sep=".")
 
             # rename __init__ files to their parent name
             if doc_path.name == "__init__.md":
                 doc_path = doc_path.with_name(doc_path.parent.name).with_suffix(".md")
 
             os.makedirs(doc_path.parent, exist_ok=True)
-            with open (doc_path, "w") as file:
-                file.write("::: " + import_path)
+            with open(doc_path, "a") as file:
+                file.write("\n::: " + import_path)
 
 main()

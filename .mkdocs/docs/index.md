@@ -1,174 +1,139 @@
-# Home
-A Dagster project integrating dbt, Sling, dltHub, and Snowflake into a single data platform.
-Includes stubs for powerBi, and AzureML, as well as Azure Keyvault to demonstrate
-external integrations.
+# Data Platform
+**Dagster** + **dbt** + **Snowflake**
 
+This repository contains a reference implementation of a modern data platform
+that combines [Dagster](https://dagster.io/) orchestration, [dbt](https://www.getdbt.com/)
+transformation pipelines, and Snowflake data warehousing. It is intentionally
+organized so that data engineers, analytics engineers, and platform engineers
+can collaborate with clear ownership boundaries.
 
-``` mermaid
----
-config:
-  theme: neutral
----
-flowchart LR
-  subgraph s1["sling dlt"]
-        n1["src"]
-        n2["raw"]
-  end
-  subgraph s2["dbt"]
-        n3["pii"]
-        n4["stg"]
-        n5["snp"]
-        n6["int"]
-        n7["mrt"]
-  end
-  subgraph s3["powerbi"]
-        n8["sem"]
-        n9["exp"]
-  end
-  subgraph s4["snowpark"]
-        n10["ml"]
-  end
-  n1 --> n2
-  n2 --> n3
-  n2 --> n4
-  n2 --> n5
-  n5 --> n6
-  n2 --> n6
-  n6 --> n7
-  n7 --> n8
-  n8 --> n9
-  n7 --> n10
-  n6 --> n10
+## Repository Layout
 
-```
+| Path | Owner Focus | Description | 
+| --- | --- | --- |
+| `data_foundation/data_foundation/` | Platform | Dagster definitions, resource configuration, and integration glue code. Includes Sling source connection YAML that controls raw data ingestion. |
+| `data_foundation/dbt/` | Cross-functional | dbt project containing models, seeds, snapshots, and tests. YAML files document sources, staging models, and marts. |
+| `data_science/` | Data & Analytics | Dagster definitions, resource configuration, and integration glue code. Includes Snowpark definitions for ML-Ops. |
+| `data_analytics/` | Data & Analytics | Exploratory sql analyses and notebooks. |
+| `libs/` | Cross-functional | Shared libraries. |
+| `docs/` | Cross-functional | Markdown sources for the MkDocs site published via GitHub Pages. |
+| `Dockerfile`, `pyproject.toml`, `uv.lock` | Platform | Runtime dependencies for orchestrator workers and local development. |
+| `.github/workflows/` | Platform | CI/CD automation (publishing docs, running checks). |
+| `dagster.yaml` | Platform | Shared Dagster instance settings such as telemetry defaults. |
+| `mkdocs.yml` | Cross-functional | Documentation site build configuration. |
 
-# Getting Started
+## Dagster (Platform Engineer View)
 
-## Note on Security
-This is a simple configuration for demonstration.  Some security best practices have
-been skipped in order to make demonstration easier, however oath is supported for a
-real deployment to authenticate developers against the resources their accessing.
+Dagster assets and schedules live under `data_platform/defs/`. Key concepts:
 
-## uv
-This project is configured using the uv python package manager.  To initialize the
-project, install uv if you do not have it already, and enter the command:
-``` bash
-uv sync
-```
-This will create a virtual environment and install all required dependacies.
+- `sling/` contains source replication specifications used to bootstrap raw
+  layers in Snowflake. These YAML files now include inline comments describing
+  connection secrets, replication cadence, and how Dagster automation metadata
+  is applied.
+- `dlthub/` contains source replication code to ingest raw layers in Snowflake
+  through Python defined logic.
+- Dagster uses the `dagster.yaml` file in the repository root for instance
+  settings shared across developers and CI, such as disabling telemetry.
+- Helm deployment scaffolding is stored in `.helm/values.yaml` to
+  help platform engineers customize Kubernetes deployments while preserving
+  upstream defaults.
 
-## Resources
+## dbt (Data & Analytics Engineer View)
 
-### Source Database
-This demo has been set up using a postgres server with a handful of tables in a single
-schema.
+The dbt project is in the `dbt/` directory and is structured as follows:
 
-### Desination Warehouse
-This demo is using a Snowflake warehouse to demonstrate. It assumes the existance of
-the following databases:
+- `dbt_project.yml` and `profiles.yml` capture project-wide behavior and
+  environment-specific Snowflake credentials. Comments highlight the
+  relationship between Dagster, dbt, and warehouse settings.
+- `models/` holds staging layers grouped by source system as well as mart
+  models such as `marts/common/fct_common__fct_transactions.sql`. Each model has
+  an accompanying YAML file that documents columns, tests, and freshness checks.
+- `snapshots/` preserves historical slowly-changing dimensions and facts. Inline
+  comments describe retention and privacy handling for sensitive domains.
+- `seeds/` contains CSV-backed reference data with YAML documentation.
+- `groups/` assigns ownership metadata so alerts and governance roll to the
+  appropriate teams.
+- `packages.yml` lists third-party macro packages used across the project.
 
-#### prod
-##### analytics
-This is where the silver layer data will be stored: staged (stg), incremental (inc),
-dimensions (dim), facts (fct).  This is the main destination for dbt models.  
-##### raw
-The database that stores data ingested from the source systems.
-##### snapshots
-SCD Type 2 data, that is primaraly captured through dbt eagerly on raw data.
+## Documentation Site
 
-#### qa
-The QA environment is not configured for this demonstration, however in a real
-deployment this would exist to perform slim CI on pull requests from feature branchs to
-develop, and pull requests from develop to main. 
+- `mkdocs.yml` defines the MkDocs/Material configuration used to render the
+  docs stored under `docs/`.
+- The GitHub Actions workflow in `.github/workflows/static.yml` publishes the
+  static site to GitHub Pages whenever changes land on `main`.
+- Documentation can be found on the gitHub pages site:
+  #### https://andrewstaus.github.io/data-platform/
 
-#### dev
-The dev databases mirror the production, however each developer will generate shcmeas
-tagged with their user name so that they can develop new assets in isolation.
-##### _dev_analytics
-##### _dev_raw
-##### _dev_snapshots
-
-## .env File
-The .env file will hold your environment variables.
-Create this file in your root project folder and populate it will the correct
-credentials for your database and warehouse.
-
-In a true deployment, this would be set up using more secure methods.
-
-```
-# .env
-TARGET=dev
-DAGSTER_HOME=.\\.dagster_home
-PYTHONLEGACYWINDOWSSTDIO=1
-DBT_PROJECT_DIR=.\\dbt\\
-PREPARE_IF_DEV=1
-
-PROD__DESTINATION__DATABASE=raw
-PROD__DESTINATION__HOST=<your_hostname>
-PROD__DESTINATION__ROLE=<role_with_create_grants_on_prod>
-PROD__DESTINATION__USER=<user_with_create_grants_on_prod>
-PROD__DESTINATION__PASSWORD=<user_password>
-PROD__DESTINATION__WAREHOUSE=<warehouse>
-
-DEV__DESTINATION__DATABASE=raw
-DEV__DESTINATION__HOST=<your_hostname>
-DEV__DESTINATION__ROLE=<role_with_create_grants_on_dev>
-DEV__DESTINATION__USER=<user_with_create_grants_on_dev>
-DEV__DESTINATION__PASSWORD=<user_password>
-DEV__DESTINATION__WAREHOUSE=<warehouse>
-
-ANY__SOURCE__DATABASE=<demo_database>
-ANY__SOURCE__HOST=<demo_host>
-ANY__SOURCE__PORT=<demo_port>
-ANY__SOURCE__USER=<demo_user>
-ANY__SOURCE__PASSWORD=<demo_password>
-```
-PROD configuration is used on the production deployment, and the credentials should have
-appropriate grants for the prod databases on the warehouse.
-
-DEV configuration is used in the local development environment, and should have select
-grants to the analytics databases, and create schema grants on the development
-databases. 
-
-ANY configuration is shared between dev and prod, and will be used to connect to the
-demo database.
-
-# Deployment
 ## Local Development
-Once the above setup steps are complete, you are ready to launch you local development
-server.  A task has been defined in vs code to make running the server easy.
 
-1. Open the command pallet: `ctrl+shift+p`
-2. Type `>Tasks: Run Task` and hit enter
-3. Type `dagster dev` and hit enter
+1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+2. [Install dbt-Fusion](https://docs.getdbt.com/docs/fusion/install-fusion)
+3. Copy `.env.example` to `.env` and set Snowflake credentials.
+4. Run `uv run ./src/main` to start the Dagster UI with local assets.
+5. Orchestrator containers can be started with `docker compose up`. The
+   code-server exposes a health check so the webserver waits until assets are
+   ready before it boots.
+6. Use `dbt deps` and `dbt build` from the `dbt/` directory to compile and test
+   models.
+7. cd to `.mkdocs` directory and run `mkdocs serve` to preview the documentation site
+   locally.
 
-You should now have a dagster development server running on your local machine.
+### Secrets and configuration
 
-## Production Deployment
-To simulate a production deployment a `build and deploy` task has also been created.
-This task assumes that you have docker deskop installed and running, with a 'kind'
-kubernettes cluster availible.
+- Environment-specific secrets are loaded from `.env` file. The Dagster code location
+  will still load—when the required secrets are missing,  and a warning is emitted in
+  the code-server logs to help track down the missing value. Populate the secret and
+  restart the containers to activate the connection.
+- If your network proxies TLS, export `DBT_ALLOW_INSECURE_SSL=1` before running
+  `docker compose` or `dagster dev`. The code temporarily disables certificate
+  verification while dbt downloads packages and restores the settings
+  afterwards.
 
-If so you can run this command to build the 'user code deployment' docker image and
-deploy it to the cluster.  Once deployed you can run the `k8s port forward` to make
-the web server availible at `http://127.0.0.1:63446/`
+## Contribution Guidelines
 
-# Useful VS Code Extensions
-##### Python
-Core python extension from microsoft.  This will provide syntax highlighting for .py
-files.
-##### Ruff
-A python linter that will help conform to style guides for the project.  The styles are
-enforced through settings in the pyproject file so that all contributers write high
-quality, standardized code.
-##### Power User for dbt
-Allows for advanced functionality of dbt assets while the official dbt extension
-becomes availibe in general release.
-##### Even Better TOML
-Provides syntax highlighting for TOML files which are used for sling configurations.
-##### Cron Explained
-When hovering over cron expressions, provides a plain english explanation of what the
-expression means.
-##### Snowflake
-Allows for viewing snowflake resources, and performing SQL, DML, and DDL against the
-warehouse.
+- Keep YAML comments up to date—they explain how orchestration, ingestion, and
+  modeling pieces fit together for the next engineer who reads the config.
+- When adding a new source system, define the Sling connection in
+  `data_foundation/src/defs/sling/sling/` and create matching dbt source definitions
+  under `data_foundation/dbt/models/staging/<system>/`.
+- All production-facing changes should include tests (`dbt test`) and, when
+  relevant, updates to the documentation site.
+
+## Further Reading
+
+- Project docs: <https://andrewstaus.github.io/data-platform/>
+- Dagster docs: <https://docs.dagster.io/>
+- dbt docs: <https://docs.getdbt.com/>
+- Snowflake docs: <https://docs.snowflake.com/>
+
+## Workspace Layout
+```text
+data-platform
+└── packages
+    ├── data_analytics/analyses  .........  Workspace with isolated virtual environment
+    │                                        for interactive analytics and science.
+    ├── data_foundation  .................  Package for dagster data-foundation dagster
+    │   │                                    code location.
+    │   ├── dbt  .........................  dbt Project directory that contains all 
+    │   │                                    transformation logic.
+    │   └── src/data_foundation/defs  ....  Dagster definition files that define assets
+    │       │                                and resources.
+    │       ├── dbt  .....................  Factories for auto generating dagster assets
+    │       │                                 based on dbt project artifacts.
+    │       ├── dlthub  ..................  Factories for auto generating dagster assets
+    │       │   │                             based on dlthub python scripts.
+    │       │   └── dlthub  ..............  Python scripts the utilize the dlthub
+    │       │                                 library to provide robust ingestion
+    │       └── sling  ...................  Factories for auto generating dagster assets
+    │           │                             based on sling replication yaml configs.
+    │           └── sling  ...............  Sling replication config yaml files which
+    │                                         specify table ingestion specs.
+    └── data_science  ....................  Package for dagster data-science dagster
+        │                                    code location.
+        └── src/data_science/defs  .......
+            │
+            └── snowpark  ................
+                │
+                └── snowpark  ............
+
+```
