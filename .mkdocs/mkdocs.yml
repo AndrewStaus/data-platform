@@ -24,8 +24,5 @@ plugins:
             - ../packages/data_science/src
             - ../libs/analytics_utils/src
             - ../libs/data_platform_utils/src
-  - gen-files: # Dynamically generate stub pages for Dagster assets and dbt models.
-      scripts:
-      - make_stubs.py
   - mermaid2: # Enable Mermaid diagrams in Markdown files for architecture documentation.
       javascript: https://unpkg.com/mermaid/dist/mermaid.min.js
