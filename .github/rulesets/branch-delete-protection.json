@@ -1,0 +1,23 @@
+{
+  "id": 6919856,
+  "name": "branch-delete-protection",
+  "target": "branch",
+  "source_type": "Repository",
+  "source": "AndrewStaus/data-platform",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "exclude": [],
+      "include": [
+        "~DEFAULT_BRANCH",
+        "refs/heads/develop"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "type": "deletion"
+    }
+  ],
+  "bypass_actors": []
+}
