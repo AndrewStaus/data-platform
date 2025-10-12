@@ -14,7 +14,7 @@ Link any relevant issues or tasks that this pull request addresses (e.g., #123, 
 - Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - Refactor (code improvement without changing functionality)
 - Documentation update
-- Other
+- Other 
 
 ## Screenshots (if applicable)
 
