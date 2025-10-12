@@ -41,7 +41,7 @@ path = "packages/data_foundation"
 path = "packages/data_science"
 
 [tool.ruff]
-exclude = ["data_analytics/"]
+exclude = ["src/data_analytics/"]
 line-length = 88
 
 [tool.ruff.format]
