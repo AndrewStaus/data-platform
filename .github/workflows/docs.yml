@@ -1,5 +1,5 @@
 # Workflow for building and deploying auto-generated docs to GitHub Pages
-name: Docs Deploy
+name: Docs
 
 on:
   # Runs on pushes targeting the default branch
@@ -18,7 +18,7 @@ permissions:
 # Allow only one concurrent deployment, canceling in-progress runs so that docs are
 # always representing the latest code version
 concurrency:
-  group: "pages"
+  group: "docs"
   cancel-in-progress: true
 
 jobs:

@@ -26,19 +26,19 @@ class SnowparkResource(dg.ConfigurableResource):
         if schema:
             schema = get_schema_name(schema)
         else:
-            schema = get_secret_value("DESTINATION_SNOWFLAKE_USER")
+            schema = get_secret_value("DESTINATION__SNOWFLAKE__USER")
 
         
         if not warehouse:
-            warehouse = get_secret_value("DESTINATION_SNOWFLAKE_WAREHOUSE")
+            warehouse = get_secret_value("DESTINATION__SNOWFLAKE__WAREHOUSE")
 
         self._session = (
             Session.builder.configs({ 
                 "database":  get_database_name(database),
-                "account":   get_secret_value("DESTINATION_SNOWFLAKE_HOST"),
-                "user":      get_secret_value("DESTINATION_SNOWFLAKE_USER"),
-                "password":  get_secret_value("DESTINATION_SNOWFLAKE_PASSWORD"),
-                "role":      get_secret_value("DESTINATION_SNOWFLAKE_ROLE"),
+                "account":   get_secret_value("DESTINATION__SNOWFLAKE__HOST"),
+                "user":      get_secret_value("DESTINATION__SNOWFLAKE__USER"),
+                "password":  get_secret_value("DESTINATION__SNOWFLAKE__PASSWORD"),
+                "role":      get_secret_value("DESTINATION__SNOWFLAKE__ROLE"),
                 "warehouse": warehouse,
             })
             .create()

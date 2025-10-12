@@ -1,5 +1,5 @@
 # Workflow for running dbt checks on data foundation package
-name: Linting Checks
+name: Linting
 
 on:
   pull_request:
@@ -13,9 +13,9 @@ permissions:
   contents: read
 
 jobs:
-  dbt_checks:
+  sql_linting:
     environment:
-      name: linting_checks
+      name: linting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -29,7 +29,7 @@ jobs:
 
   python_linting:
     environment:
-      name: linting_checks
+      name: linting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

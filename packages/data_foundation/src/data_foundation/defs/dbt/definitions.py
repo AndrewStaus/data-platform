@@ -24,7 +24,7 @@ def defs() -> Definitions:
     @definitions decorator will provides lazy loading so that the assets are only
     instantiated when needed.
     """
-    project_dir = Path(__file__).joinpath(*[".."] * 4, "dbt/").resolve()
+    project_dir = Path(__file__).joinpath(*[".."] * 5, "dbt/").resolve()
     state_path = "state/"
 
 

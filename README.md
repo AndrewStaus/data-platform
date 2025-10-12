@@ -66,25 +66,24 @@ The dbt project is in the `dbt/` directory and is structured as follows:
 
 ## Local Development
 
-1. Install dependencies with `uv sync` or `pip install -e .` depending on your
-   Python packaging preference.
-2. Copy `.env.example` (if available) to `.env` and set Snowflake credentials.
-3. Run `dagster dev` to start the Dagster UI with local assets.
-4. Orchestrator containers can be started with `docker compose up`. The
+1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/)
+2. [Install dbt-Fusion](https://docs.getdbt.com/docs/fusion/install-fusion)
+3. Copy `.env.example` to `.env` and set Snowflake credentials.
+4. Run `uv run ./src/main` to start the Dagster UI with local assets.
+5. Orchestrator containers can be started with `docker compose up`. The
    code-server exposes a health check so the webserver waits until assets are
    ready before it boots.
-5. Use `dbt deps` and `dbt build` from the `dbt/` directory to compile and test
+6. Use `dbt deps` and `dbt build` from the `dbt/` directory to compile and test
    models.
-6. `uv run mkdocs serve` (or `mkdocs serve`) will preview the documentation site
+7. cd to `.mkdocs` directory and run `mkdocs serve` to preview the documentation site
    locally.
 
 ### Secrets and configuration
 
-- Environment-specific secrets are loaded from `.env` file. Sling connections will be
-  skipped—but the rest of the Dagster code location will still load—when the required
-  secrets are missing,  and a warning is emitted in the code-server logs to help track
-  down the missing value. Populate the secret and restart the containers to activate the
-  connection.
+- Environment-specific secrets are loaded from `.env` file. The Dagster code location
+  will still load—when the required secrets are missing,  and a warning is emitted in
+  the code-server logs to help track down the missing value. Populate the secret and
+  restart the containers to activate the connection.
 - If your network proxies TLS, export `DBT_ALLOW_INSECURE_SSL=1` before running
   `docker compose` or `dagster dev`. The code temporarily disables certificate
   verification while dbt downloads packages and restores the settings
@@ -95,8 +94,8 @@ The dbt project is in the `dbt/` directory and is structured as follows:
 - Keep YAML comments up to date—they explain how orchestration, ingestion, and
   modeling pieces fit together for the next engineer who reads the config.
 - When adding a new source system, define the Sling connection in
-  `data_platform/defs/sling/sling/` and create matching dbt source definitions
-  under `dbt/models/staging/<system>/`.
+  `data_foundation/src/defs/sling/sling/` and create matching dbt source definitions
+  under `data_foundation/dbt/models/staging/<system>/`.
 - All production-facing changes should include tests (`dbt test`) and, when
   relevant, updates to the documentation site.
 
@@ -106,3 +105,35 @@ The dbt project is in the `dbt/` directory and is structured as follows:
 - Dagster docs: <https://docs.dagster.io/>
 - dbt docs: <https://docs.getdbt.com/>
 - Snowflake docs: <https://docs.snowflake.com/>
+
+## Workspace Layout
+```text
+data-platform
+└── packages
+    ├── data_analytics/analyses  .........  Workspace with isolated virtual environment
+    │                                        for interactive analytics and science.
+    ├── data_foundation  .................  Package for dagster data-foundation dagster
+    │   │                                    code location.
+    │   ├── dbt  .........................  dbt Project directory that contains all 
+    │   │                                    transformation logic.
+    │   └── src/data_foundation/defs  ....  Dagster definition files that define assets
+    │       │                                and resources.
+    │       ├── dbt  .....................  Factories for auto generating dagster assets
+    │       │                                 based on dbt project artifacts.
+    │       ├── dlthub  ..................  Factories for auto generating dagster assets
+    │       │   │                             based on dlthub python scripts.
+    │       │   └── dlthub  ..............  Python scripts the utilize the dlthub
+    │       │                                 library to provide robust ingestion
+    │       └── sling  ...................  Factories for auto generating dagster assets
+    │           │                             based on sling replication yaml configs.
+    │           └── sling  ...............  Sling replication config yaml files which
+    │                                         specify table ingestion specs.
+    └── data_science  ....................  Package for dagster data-science dagster
+        │                                    code location.
+        └── src/data_science/defs  .......
+            │
+            └── snowpark  ................
+                │
+                └── snowpark  ............
+
+```

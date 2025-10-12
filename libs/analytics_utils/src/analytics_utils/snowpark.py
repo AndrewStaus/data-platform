@@ -1,11 +1,10 @@
 """Helpers to make interactive sessions with snowpark more seamless."""
 import os
 from collections.abc import Collection
-from pathlib import Path
 
 import pandas as pd
 import pygwalker as pyg
-import snowpark_extensions
+import snowpark_extensions  # pyright: ignore[reportMissingImports]  # noqa: F401
 from dotenv import find_dotenv, load_dotenv
 from IPython.core.display_functions import display as legacy_display
 from pygwalker.api.pygwalker import PygWalker

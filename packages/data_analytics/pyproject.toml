@@ -1,7 +1,7 @@
 [project]
 name = "data_analytics"
 version = "0.1.0"
-description = "Add your description here"
+description = "Environment for interactive analysis of data stored in snowflake"
 readme = "README.md"
 requires-python = "==3.10.*"
 dependencies = [
@@ -13,8 +13,12 @@ dependencies = [
     "sqlfluff",
 ]
 
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
 [tool.uv.sources]
-analytics-utils = { path = "../libs/analytics_utils" }
+analytics-utils = { path = "../../libs/analytics_utils" }
 
 [tool.ruff]
 line-length = 88
