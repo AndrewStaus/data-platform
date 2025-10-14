@@ -55,17 +55,7 @@
 					"packageManager": "ms-python.python:pip"
 				},
 				{
-					"path": "packages/data_foundation",
-					"envManager": "ms-python.python:venv",
-					"packageManager": "ms-python.python:pip"
-				},
-				{
 					"path": "libs/data_platform_utils",
-					"envManager": "ms-python.python:venv",
-					"packageManager": "ms-python.python:pip"
-				},
-				{
-					"path": "packages/data_science",
 					"envManager": "ms-python.python:venv",
 					"packageManager": "ms-python.python:pip"
 				}
