@@ -5,7 +5,6 @@ description = "Data platform demonstration that integrates dagster, dbt, sling, 
 requires-python = ">=3.12, <3.13"
 
 dependencies = [
-    "dagster-dg-cli",
     "dagster-webserver",
     "uv",
     "sqlfluff",
@@ -24,21 +23,22 @@ docs = [
     "mkdocstrings-python"
 ]
 
-# [tool.uv.workspace]
-# members = ["data_foundation", "data_science"]
+[tool.uv.workspace]
+members = ["packages/*"]
+exclude = ["packages/data_analytics"]
 
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 
-[tool.dg]
-directory_type = "workspace"
+# [tool.dg]
+# directory_type = "workspace"
 
-[[tool.dg.workspace.projects]]
-path = "packages/data_foundation"
-[[tool.dg.workspace.projects]]
-path = "packages/data_science"
+# [[tool.dg.workspace.projects]]
+# path = "packages/data_foundation"
+# [[tool.dg.workspace.projects]]
+# path = "packages/data_science"
 
 [tool.ruff]
 exclude = ["packages/data_analytics"]
