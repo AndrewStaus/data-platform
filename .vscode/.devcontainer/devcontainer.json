@@ -7,7 +7,7 @@
 	},
 	"runArgs": [
 		"--env-file", "../.env",
-		"--env", "DAGSTER_HOME=/workspaces/data-platform/.env/.dagster_home",
+		"--env", "DAGSTER_HOME=/workspaces/data-platform/.dagster_home",
 		"--env", "PROJECT_DIR=/workspaces/data-platform/packages/data_foundation/dbt"
 	],
 	"forwardPorts": [3000],
