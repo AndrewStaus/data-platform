@@ -1,0 +1,75 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+	"name": "Data Platform Dev",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"runArgs": [
+		"--env-file", "../.env",
+		"--env", "DAGSTER_HOME=/workspaces/data-platform/.env/.dagster_home",
+		"--env", "PROJECT_DIR=/workspaces/data-platform/packages/data_foundation/dbt"
+	],
+	"forwardPorts": [3000],
+	"postCreateCommand": [
+		"uv sync --all-packages",
+		". .venv/bin/activate"
+	],
+	"remoteUser": "root",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbtlabsinc.dbt",
+				"samuelcolvin.jinjahtml",
+				"ms-python.python",
+				"tamasfe.even-better-toml",
+				"ms-toolsai.jupyter",
+				"ms-python.vscode-pylance",
+				"charliermarsh.ruff",
+				"snowflake.snowflake-vsc",
+				"dorzey.vscode-sqlfluff",
+				"ptweir.python-string-sql",
+				"ms-python.vscode-python-envs",
+				"wholroyd.jinja",
+				"tumido.cron-explained"
+			]
+		},
+		"settings": {
+			"sqlfluff.dbtInterface.enabled": false,
+			"sqlfluff.dialect": "",
+			"sqlfluff.linter.run": "onSave",
+			"sqlfluff.suppressNotifications": false,
+			"sqlfluff.executablePath": "/workspaces/data-platform/.venv/bin/sqlfluff",
+			"dbt.flag.state": "./state",
+			"dbt.beta.useQueryCache": true,
+			"python.terminal.useEnvFile": true,
+			"python-envs.pythonProjects": [
+				{
+					"path": "libs/analytics_utils",
+					"envManager": "ms-python.python:venv",
+					"packageManager": "ms-python.python:pip"
+				},
+				{
+					"path": "packages/data_analytics",
+					"envManager": "ms-python.python:venv",
+					"packageManager": "ms-python.python:pip"
+				},
+				{
+					"path": "packages/data_foundation",
+					"envManager": "ms-python.python:venv",
+					"packageManager": "ms-python.python:pip"
+				},
+				{
+					"path": "libs/data_platform_utils",
+					"envManager": "ms-python.python:venv",
+					"packageManager": "ms-python.python:pip"
+				},
+				{
+					"path": "packages/data_science",
+					"envManager": "ms-python.python:venv",
+					"packageManager": "ms-python.python:pip"
+				}
+			]
+		}
+	}
+}

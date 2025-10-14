@@ -7,7 +7,7 @@ from ....resources import SnowparkResource
 
 class MLTrainConfig(dg.Config):
     """Exposes configuration options to end users in the Dagster launchpad."""
-    retrain_treshold: float = 0.5
+    retrain_threshold: float = 0.5
 
 
 @dg.asset(
@@ -25,7 +25,7 @@ def asset(
     from .train_pipeline import materialze
 
     session = snowpark.get_session(schema="open_data")
-    metadata = materialze(context, session, config.retrain_treshold)
+    metadata = materialze(context, session, config.retrain_threshold)
     return dg.MaterializeResult(metadata=metadata)
 
 
@@ -45,7 +45,7 @@ def score_above_threshold_check(
     model = registry.get_model("titanic_survived").default
     score = model.get_metric("score")
     return dg.AssetCheckResult(
-        passed=bool(score > config.retrain_treshold),
+        passed=bool(score > config.retrain_threshold),
         metadata={"score": score}
     )
 

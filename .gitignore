@@ -2,7 +2,9 @@
 **/.env*
 **/.user.yml
 **/.ruff_cache
-w
+**/*.code-workspace
+.vscode/settings.json
+
 # python build and cache artifacts
 **/.venv*
 **/__pycache__/
@@ -22,3 +24,4 @@ logs/
 !.env.example
 !**/.gitkeep
 !**/.gitignore
+!**/dagster.yaml

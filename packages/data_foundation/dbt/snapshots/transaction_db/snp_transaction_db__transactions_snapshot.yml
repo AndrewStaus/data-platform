@@ -5,8 +5,8 @@ snapshots:
   - name: snp_transaction_db__transactions_snapshot
     relation: source('transaction_db', 'transactions')
     config:
-      database: "{{ generate_database_name('snapshots') }}"
-      schema: "{{ generate_schema_name('transaction_db') }}"
+      database: snapshots
+      schema: transaction_db
       alias: transactions
       unique_key: order_id
       strategy: timestamp

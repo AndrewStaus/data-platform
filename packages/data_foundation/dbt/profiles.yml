@@ -17,12 +17,12 @@ dbt:
     dev:
       # Developer sandbox settings for local iteration.
       database: _dev_analytics
-      schema: astaus
-      account: cbzrqfv-ok21331
-      role: data_engineer
-      user: astaus
+      schema: "{{ env_var('DESTINATION__USER') }}"
+      account: "{{ env_var('DESTINATION__HOST') }}"
+      role: "{{ env_var('DESTINATION__ROLE') }}"
+      user: "{{ env_var('DESTINATION__USER') }}"
       password: "{{ env_var('DESTINATION__PASSWORD') }}"
-      warehouse: compute_wh
+      warehouse: "{{ env_var('DESTINATION__WAREHOUSE') }}"
       threads: 1
       type: snowflake
 

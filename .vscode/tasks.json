@@ -1,0 +1,114 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build and deploy",
+            "type": "shell",
+            "command": "./.vscode/tasks/deploy.ps1",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "icon": {"id":"package"},
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+
+        {
+            "label": "clear k8s pod history",
+            "type": "shell",
+            "command":[
+                "kubectl config use-context desktop-linux;",
+                "kubectl delete pod --field-selector=status.phase==Completed;",
+                "kubectl delete pod --field-selector=status.phase==Succeeded;",
+                "kubectl delete pod --field-selector=status.phase==Failed;"
+            ]
+        },
+        {
+            "label": "dbt clean",
+            "type": "shell",
+            "command": "uv run --env-file .env  dbt clean --target dev",
+            "icon": {"id":"server"},
+        },
+        {
+            "label": "dbt deps",
+            "type": "shell",
+            "command": "uv run --env-file .env  dbt deps --target dev",
+            "icon": {"id":"server"},
+        },
+        {
+            "label": "dbt parse",
+            "type": "shell",
+            "command": "uv run --env-file .env  dbt parse --target dev",
+            "icon": {"id":"server"},
+        },
+        {
+            "label": "dbt compile",
+            "type": "shell",
+            "command": "uv run --env-file .env  dbt compile --target dev",
+            "icon": {"id":"server"},
+        },
+        {
+            "label": "start app",
+            "dependsOn": ["dagster dev", "k8s port forward", "k8s pod status"],
+            "icon": {"id":"chip"},
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "k8s pod status",
+            "type": "shell",
+            "command": "./.vscode/tasks/pod_status.ps1",
+            "icon": {"id":"server"},
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "k8s port forward",
+            "type": "shell",
+            "command": "./.vscode/tasks/forward_ports.ps1",
+            "icon": {"id":"server"},
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
+            "label": "dagster dev",
+            "type": "shell",
+            "command": "uv run dg dev",
+            "icon": {"id":"server"},
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+    ]
+}
