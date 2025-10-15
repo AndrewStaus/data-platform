@@ -18,7 +18,10 @@ dependencies = [
 ]
 
 [tool.uv]
-override-dependencies = ["xgboost; sys_platform == 'never'"]
+override-dependencies = [
+    "xgboost; sys_platform == 'never'",
+    "nvidia-nccl-cu12; sys_platform == 'never'"
+]
 
 [tool.uv.sources]
 data-platform-utils = { path = "../../libs/data_platform_utils" }

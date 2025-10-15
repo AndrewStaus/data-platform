@@ -3,7 +3,7 @@
 **/.user.yml
 **/.ruff_cache
 **/*.code-workspace
-.vscode/settings.json
+**/*.vscode/settings.json
 
 # python build and cache artifacts
 **/.venv*

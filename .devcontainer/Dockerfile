@@ -26,3 +26,16 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye
     COPY --from=sling_builder sling $SLING_BINARY
     COPY --from=dbt_builder dbt /root/.local/bin/dbt
 
+    ENV SNOWFLAKE_HOME=/root/.config/snowflake/
+    RUN --mount=type=secret,id=env-file,target=/tmp/.env \
+        . /tmp/.env \
+        && mkdir -p $SNOWFLAKE_HOME \ && cd $SNOWFLAKE_HOME \
+        && echo [$DESTINATION__HOST] > connections.toml \
+        && echo "account = \"$DESTINATION__HOST\"" >> connections.toml \
+        && echo "user = \"$DESTINATION__USER\"" >> connections.toml \
+        && echo "authenticator = \"snowflake\"" >> connections.toml \
+        && echo "password = \"$DESTINATION__PASSWORD\"" >> connections.toml \
+        && echo "database = \"_dev_analytics\"" >> connections.toml \
+        && echo "warehouse = \"$DESTINATION__WAREHOUSE\"" >> connections.toml
+
+    RUN uv pip install --system ruff sqlfluff

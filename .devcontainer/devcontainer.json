@@ -1,20 +1,20 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/python
 {
-	"name": "Data Platform Dev",
+	"name": "Data Platform",
 	"build": {
-		"dockerfile": "Dockerfile"
+		"dockerfile": "Dockerfile",
+		"options": [
+			"--secret", "id=env-file,src=.env"
+		]
 	},
 	"runArgs": [
-		"--env-file", "../.env",
-		"--env", "DAGSTER_HOME=/workspaces/data-platform/.env/.dagster_home",
+		"--env-file", ".env",
+		"--env", "DAGSTER_HOME=/workspaces/data-platform/.dagster_home",
 		"--env", "PROJECT_DIR=/workspaces/data-platform/packages/data_foundation/dbt"
 	],
 	"forwardPorts": [3000],
-	"postCreateCommand": [
-		"uv sync --all-packages",
-		". .venv/bin/activate"
-	],
+	"postCreateCommand": [],
 	"remoteUser": "root",
 	"customizations": {
 		"vscode": {
@@ -39,7 +39,7 @@
 			"sqlfluff.dialect": "",
 			"sqlfluff.linter.run": "onSave",
 			"sqlfluff.suppressNotifications": false,
-			"sqlfluff.executablePath": "/workspaces/data-platform/.venv/bin/sqlfluff",
+			"sqlfluff.executablePath": "/usr/local/lib/python3.12/site-packages",
 			"dbt.flag.state": "./state",
 			"dbt.beta.useQueryCache": true,
 			"python.terminal.useEnvFile": true,
@@ -55,17 +55,7 @@
 					"packageManager": "ms-python.python:pip"
 				},
 				{
-					"path": "packages/data_foundation",
-					"envManager": "ms-python.python:venv",
-					"packageManager": "ms-python.python:pip"
-				},
-				{
 					"path": "libs/data_platform_utils",
-					"envManager": "ms-python.python:venv",
-					"packageManager": "ms-python.python:pip"
-				},
-				{
-					"path": "packages/data_science",
 					"envManager": "ms-python.python:venv",
 					"packageManager": "ms-python.python:pip"
 				}
