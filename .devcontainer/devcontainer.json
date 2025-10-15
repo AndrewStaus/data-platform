@@ -31,7 +31,8 @@
 				"ptweir.python-string-sql",
 				"ms-python.vscode-python-envs",
 				"wholroyd.jinja",
-				"tumido.cron-explained"
+				"tumido.cron-explained",
+				"innoverio.vscode-dbt-power-user"
 			]
 		},
 		"settings": {
@@ -42,7 +43,22 @@
 			"sqlfluff.executablePath": "/usr/local/lib/python3.12/site-packages",
 			"dbt.flag.state": "./state",
 			"dbt.beta.useQueryCache": true,
+			"dbt.enableCollaboration": false,
+			"dbt.enableNotebooks": false,
+			"dbt.installDepsOnProjectInitialization": false,
+			"dbt.dbtIntegration": "fusion",
+			"dbt.fileNameTemplateGenerateModel": "{prefix}_{sourceName}__{tableName}",
+			"dbt.prefixGenerateModel": "stg",
 			"python.terminal.useEnvFile": true,
+			"dbt.enableNewLineagePanel": true,
+			"dbt.deferConfigPerProject": {
+				"packages/data_foundation/dbt": {
+					"manifestPathForDeferral": "/workspaces/data-platform/packages/data_foundation/dbt/state",
+					"manifestPathType": "local",
+					"favorState": false,
+					"deferToProduction": true
+				}
+			},
 			"python-envs.pythonProjects": [
 				{
 					"path": "libs/analytics_utils",
