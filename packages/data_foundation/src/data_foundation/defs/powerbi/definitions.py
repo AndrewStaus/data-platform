@@ -21,7 +21,7 @@ import dagster as dg
     group_name="bi",
     automation_condition=dg.AutomationCondition.eager(),
     description="This is the core semantic model that is used by business "
-    "leadership to self serve analtics",
+    "leadership to self serve analytics",
 )
 def bi_sm_core_semantic_model(context: dg.AssetExecutionContext) -> None:
     """Refresh the sample Power BI semantic model used by downstream dashboards.

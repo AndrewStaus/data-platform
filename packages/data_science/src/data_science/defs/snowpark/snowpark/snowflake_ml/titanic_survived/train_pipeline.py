@@ -5,7 +5,7 @@ from snowflake.snowpark.dataframe import DataFrame
 from snowflake.snowpark.session import Session
 
 
-def materialze(
+def materialize(
         context: dg.AssetExecutionContext,
         session: Session,
         retrain_threshold: float

@@ -16,7 +16,7 @@ class CustomAutomationCondition(AutomationCondition):
     @staticmethod
     def manual() -> None:
         """Returns no AutomationCondition that will require a user to manually trigger.
-        Used for overriding default automations for static assets.
+        Used for overriding default automation's for static assets.
         """
         return None
 

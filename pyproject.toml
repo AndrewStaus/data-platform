@@ -68,7 +68,7 @@ layout.type.alias_expression.align_within = "select_clause"
 rules.aliasing.table.aliasing = "implicit"
 rules.aliasing.column.aliasing = "implicit"
 
-# disabled for dbt fusion, enable when support is availible
+# disabled for dbt fusion, enable when support is available
 # # core.templater = "dbt"
 # # templater.dbt.project_dir = "./dbt"
 # # templater.dbt.profiles_dir = "./dbt"

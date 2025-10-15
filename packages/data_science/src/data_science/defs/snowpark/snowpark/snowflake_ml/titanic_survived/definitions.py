@@ -22,10 +22,10 @@ def asset(
         context: dg.AssetExecutionContext,
         snowpark: SnowparkResource,
         config: MLTrainConfig) -> dg.MaterializeResult:
-    from .train_pipeline import materialze
+    from .train_pipeline import materialize
 
     session = snowpark.get_session(schema="open_data")
-    metadata = materialze(context, session, config.retrain_threshold)
+    metadata = materialize(context, session, config.retrain_threshold)
     return dg.MaterializeResult(metadata=metadata)
 
 

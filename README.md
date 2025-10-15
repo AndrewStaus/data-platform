@@ -11,20 +11,20 @@ clear ownership boundaries.
 
 | Path | Owner Focus | Description | 
 | --- | --- | --- |
-| `.dagster_home/` | Platform | Persistant storage for development settings such as telemetry defaults. |
+| `.dagster_home/` | Platform | persistent storage for development settings such as telemetry defaults. |
 | `.devconatainer/` | Platform | Visual Studio Code Dev Container to share development environment for local development. |
 | `.github/` | Platform | CI/CD automation (publishing docs, running checks). |
-| `.helm` | Platform | Deployment values for helm chart to deploy to Kubernettes. |
+| `.helm` | Platform | Deployment values for helm chart to deploy to Kubernetes. |
 | `.mkdocs/` | Cross-functional | Markdown sources for the MkDocs site published via GitHub Pages. |
 | `.vscode/` | Cross-functional | Shared workspace settings, including code snippets for faster development. |   
 | `libs/` | Cross-functional | Shared libraries for common functions between packages. |
-| `packages/` | --- | Code locations which are deployed as seperate docker images providing environment isolation so that multiple teams can manage their own code. |
+| `packages/` | --- | Code locations which are deployed as separate docker images providing environment isolation so that multiple teams can manage their own code. |
 | `packages/data_analytics/` | Data & Analytics | Exploratory sql analyses and notebooks. |
 | `packages/data_science/` | Data & Analytics | Dagster definitions, resource configuration, and integration glue code. Includes Snowpark definitions for ML-Ops. |
-| `packages/data_foundation/` | --- | Foundational data assets that are used across the business.  Contains ingestions and the main dbt project |
+| `packages/data_foundation/` | --- | Foundational data assets that are used across the business.  Contains ingestion's and the main dbt project |
 | `.../.../src/data_foundation` | Platform | Dagster definitions, resource configuration, and integration glue code. Includes Sling source connection YAML that controls raw data ingestion   |
 | `.../.../dbt/` | Cross-functional | dbt project containing models, seeds, snapshots, and tests. YAML files document sources, staging models, and marts. |
-| `.env.example` | Cross-functional | Environment variables for local development . |
+| `.env.example` | Cross-functional | Environment variable template for local development.  Should be copied to `.env` and have values replaced with correct credentials. |
 | `Dockerfile.*`, `pyproject.toml`, `uv.lock` | Platform | Runtime dependencies for orchestrator workers. |
 | `workspace.yaml` | Platform | Dagster code location configuration for local development. |
 
@@ -40,7 +40,7 @@ clear ownership boundaries.
 performance.
 6. Copy `.env.example` to `.env` and set your development credentials.
 7. Press `CTRL SHIFT P` and run `>Dev Containers: Open in container`.
-8. Instll Docker for WSL if prompted (This is the free community edition of docker).
+8. install Docker for WSL if prompted (This is the free community edition of docker).
 9. Run `uv sync --all-packages` in the terminal.
 
 *Note:* Windows Subsystem for Linux with an installed distribution is required for
@@ -50,9 +50,9 @@ developers using a Windows based local machine.
 - dbt-Fusion and its extensions will be automatically installed in the container.
 You can run dbt models directly from VS Code.
 - Snowflake extension is also installed to execute non-dbt scripts from VS Code.
-- Environemtns for libs, and packages/data_analytics will not be automatically
+- environments for libs, and packages/data_analytics will not be automatically
 installed.  For a better development experience, you should run `uv sync` from within
-the project diretories to install the apropriate virtual environments.
+the project directories to install the appropriate virtual environments.
 
 ## Dagster (Platform Engineer View)
 
@@ -105,7 +105,7 @@ a GitHub Pages whenever changes land on `main`.
 
 - Environment-specific secrets are loaded from `.env` file which the user must create
 using `.env.example` as a template. The Dagster code location will still load—when the
-required secrets are missing, however assets will fail to materialize succesfully if
+required secrets are missing, however assets will fail to materialize successfully if
 their secrets are not present.
 
 - If the `.env` file is changed, the dev container must be reloaded before the change

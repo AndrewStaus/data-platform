@@ -22,10 +22,10 @@ To use these Helm charts:
 
 1. **Install Helm:** Ensure you have Helm installed and configured for your Kubernetes
 cluster.
-3. **Create a Tag:**  This will typicall be the id of commit for the merge into the
+3. **Create a Tag:**  This will typically be the id of commit for the merge into the
 deployment branch so that a image can be traced back to a code version.  With Dagster,
 it is best practice to specify a unique tag for each deployment so that Dagster can
-identify that a new user-code version is availible, otherwise it may not load the
+identify that a new user-code version is available, otherwise it may not load the
 change.
     ```bash
         $tag=615728ca1e37a5cab111b2b0b743f363ddfce7ae
