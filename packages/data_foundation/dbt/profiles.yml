@@ -7,13 +7,13 @@ dbt:
       # Production analytics role used by scheduled Dagster jobs.
       database: analytics
       schema: prod
-      account: cbzrqfv-ok21331
-      role: service_principle
-      user: data_platform
+      account: "{{ env_var('DESTINATION__HOST') }}"
+      role: "{{ env_var('DESTINATION__ROLE') }}"
+      user: "{{ env_var('DESTINATION__USER') }}"
       password: "{{ env_var('DESTINATION__PASSWORD') }}"
+      warehouse: "{{ env_var('DESTINATION__WAREHOUSE') }}"
       threads: 8
       type: snowflake
-      warehouse: compute_wh
     dev:
       # Developer sandbox settings for local iteration.
       database: _dev_analytics
