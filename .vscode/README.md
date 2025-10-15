@@ -13,17 +13,17 @@ environment by automatically suggesting essential tools and configurations.
 
 ## Contents
 
-- **`settings.json`**: Workspace-specific settings that override or extend user-level
+- `settings.json`: Workspace-specific settings that override or extend user-level
 VS Code settings. This can include formatting rules, editor behavior, and extension
 configurations.
-- **`extensions.json`**: Recommended extensions for this project. VS Code will prompt
+- `extensions.json`: Recommended extensions for this project. VS Code will prompt
 users to install these extensions upon opening the workspace, ensuring everyone has the
 necessary tools.
-- **`launch.json`**: Debugging configurations for various parts of the project. This
+- `launch.json`: Debugging configurations for various parts of the project. This
 file defines how to start and attach debuggers for different runtimes or test suites.
-- **`tasks.json`**: Custom build or utility tasks that can be run directly from VS Code.
+- `tasks.json`: Custom build or utility tasks that can be run directly from VS Code.
 This can include compiling code, running tests, or executing scripts.
-- **`.code-snippets`**: Code snippets that can be shared between developers to increase
+- `.code-snippets`: Code snippets that can be shared between developers to increase
 efficiency.
 
 ## Important Notes

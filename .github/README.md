@@ -13,15 +13,15 @@ pull requests.
 
 ## Contents
 
-- **ISSUE_TEMPLATE/**: Templates for creating new issues, guiding users to provide
-necessary information.
-- **PULL_REQUEST_TEMPLATE.md**: A template for pull request descriptions, ensuring
-consistent and informative submissions.
-- **CODE_OF_CONDUCT.md**: Guidelines for respectful and inclusive behavior within the
-project community.
-- **CONTRIBUTING.md**: Instructions for contributing to the project, including coding
-standards, testing procedures, and submission guidelines.
-- **FUNDING.yml**: Configuration for displaying funding options on GitHub.
-- **SECURITY.md**: Instructions on how to report security vulnerabilities.
-- **WORKFLOWS/**: GitHub Actions workflow definitions for continuous integration,
+- `workflows/`: GitHub Actions workflow definitions for continuous integration,
 deployment, or other automated tasks.
+- `issue_template/`: Templates for creating new issues, guiding users to provide
+necessary information.
+- `pull_request_template.md`: A template for pull request descriptions, ensuring
+consistent and informative submissions.
+- `code_of_conduct.md`: Guidelines for respectful and inclusive behavior within the
+project community.
+- `contributing.md`: Instructions for contributing to the project, including coding
+standards, testing procedures, and submission guidelines.
+- `funding.yml`: Configuration for displaying funding options on GitHub.
+- `security.md`: Instructions on how to report security vulnerabilities.

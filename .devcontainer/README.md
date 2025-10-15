@@ -18,10 +18,10 @@ It defines:
         - Ports to forward.
         - Post-create commands to run after the container is built.
         - Features to include (e.g., `git`, `docker`, specific language runtimes).
--   **`Dockerfile`**: If present, this file defines a custom Docker image used as the
-base for the Dev Container, allowing for more specific environment customization beyond
-what `devcontainer.json` offers.
--   **`docker-compose.yml` (optional)**: Used for multi-container setups, defining how
+- **`Dockerfile`**: Defines a custom Docker image used as the base for the Dev
+Container, allowing for more specific environment customization beyond what
+`devcontainer.json` offers.
+- **`docker-compose.yml` (optional)**: Used for multi-container setups, defining how
 multiple services interact within the development environment.
 
 ## Usage
