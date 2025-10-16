@@ -2,10 +2,10 @@ models:
   - name: int_int_marketing__int_attributions
     columns:
       - name: CAMPAIGN_SID
-        description: ''
         config:
           meta: {}
           tags: []
+        description: The unique identifier for the campaign, combination of campaign id and source
       - name: HIT_ID
         description: The identifier for the hit
         config:
@@ -40,27 +40,30 @@ models:
           meta: {}
           tags: []
       - name: ATTRIBUTION_START_AT
-        description: ''
         config:
           meta: {}
           tags: []
+        description: When the attribution window started
       - name: CAMPAIGN_SOURCE
-        description: ''
         config:
           meta: {}
           tags: []
+        description: What marketing platform the attribution originated from
       - name: CAMPAIGN_ID
-        description: The id of the campaign
+        description: The id of the campaign the attribution originated from
         config:
           meta: {}
           tags: []
       - name: ADVERTISED_PRODUCT_ID
-        description: ''
         config:
           meta: {}
           tags: []
+        description: The product that was adversided when the attribution started.
       - name: _LOADED_AT
         description: When the record was ingested
         config:
           meta: {}
           tags: []
+    description: >-
+      Base model for attribution.  This will track the start date for attributions and their sources to
+      be used in fine scoped attribution models with end dates.

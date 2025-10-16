@@ -2,7 +2,7 @@ models:
   - name: dim_marketing__dim_campaigns
     columns:
       - name: CAMPAIGN_SID
-        description: ''
+        description: The unique identifier for the campaign, combination of campaign id and source
         config:
           meta: {}
           tags: []
@@ -27,7 +27,8 @@ models:
           meta: {}
           tags: []
       - name: CAMPAIGN_SOURCE
-        description: ''
+        description: The source marketing platform the campaign is created on
         config:
           meta: {}
           tags: []
+    description: Dimensions describing the attributes of a marketing campaign

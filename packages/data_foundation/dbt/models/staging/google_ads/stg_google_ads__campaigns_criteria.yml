@@ -10,7 +10,7 @@ models:
           tags: []
       - name: _scd_id
         data_type: varchar
-        description: ''
+        description: 'The unique identifier for the record durring the period it was active for'
         config:
           meta: {}
           tags: []

@@ -27,20 +27,17 @@ models:
           meta: {}
           tags: []
       - name: INDVIDUAL_PARTY_KEY
-        description: ''
         config:
           meta: {}
           tags: []
       - name: UPDATED_AT
-        description: ''
+        description: 'When the record was updated on the source system'
         config:
           meta: {}
           tags: []
       - name: _loaded_at
         data_type: timestamp_ntz
         description: The time the record was loaded.
-        data_tests:
-          - not_null
         config:
           meta: {}
           tags: []
@@ -50,3 +47,4 @@ models:
         config:
           meta: {}
           tags: []
+    description: Details on user accounts

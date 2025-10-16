@@ -2,20 +2,20 @@ models:
   - name: int_int_marketing__int_attribution_last_click_30d_same_brand
     columns:
       - name: ATTRIBUTION_SID
-        description: ''
+        description: Unique identifier for the attribution.
         config:
           meta: {}
           tags: []
       - name: LOOKBACK_WINDOW
-        description: ''
         config:
           meta: {}
           tags: []
+        description: How long the attribution remains active
       - name: CRITERIA
-        description: ''
         config:
           meta: {}
           tags: []
+        description: The criteria for which the attribution applied to the conversion
       - name: HIT_ID
         description: The identifier for the hit
         config:
@@ -45,25 +45,25 @@ models:
           meta: {}
           tags: []
       - name: CAMPAIGN_SID
-        description: ''
         config:
           meta: {}
           tags: []
+        description: The unique identifier for the campaign, combination of campaign id and source
       - name: TRANSACTION_ID
         description: The primary key for the transaction
         config:
           meta: {}
           tags: []
       - name: ADVERTISED_PRODUCT_ID
-        description: ''
         config:
           meta: {}
           tags: []
+        description: The product that was adversided when the attribution started.
       - name: TRANSACTED_PRODUCT_ID
-        description: ''
         config:
           meta: {}
           tags: []
+        description: The product that was puchased
       - name: SALES_CHANNEL
         description: The sales channel that the item was sold through
         config:
@@ -75,17 +75,20 @@ models:
           meta: {}
           tags: []
       - name: ATTRIBUTION_START_AT
-        description: ''
         config:
           meta: {}
           tags: []
+        description: When the attribution window started
       - name: ATTRIBUTION_END_AT
-        description: ''
         config:
           meta: {}
           tags: []
+        description: When the attribution window ends
       - name: _LOADED_AT
         description: The day and time the record was ingested
         config:
           meta: {}
           tags: []
+    description: >-
+      Intermediate model for 30 day same brand attribution.  This will track the period of time in which
+      a ad should recieve attribution for a purchase.

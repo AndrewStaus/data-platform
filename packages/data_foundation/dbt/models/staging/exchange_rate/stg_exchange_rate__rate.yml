@@ -4,7 +4,7 @@ models:
     description: exchange rate from cad to different currencies
     columns:
       - name: EXHANGE_DATE_UTC
-        description: ''
+        description: 'When the exchange rate was effective'
         config:
           meta: {}
           tags: []

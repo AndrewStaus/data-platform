@@ -2,17 +2,17 @@ models:
   - name: fct_marketing__fct_attributions
     columns:
       - name: ATTRIBUTION_SID
-        description: ''
+        description: Unique identifier for the attribution.
         config:
           meta: {}
           tags: []
       - name: LOOKBACK_WINDOW
-        description: ''
+        description: How long the attribution remains active
         config:
           meta: {}
           tags: []
       - name: CRITERIA
-        description: ''
+        description: The criteria for which the attribution applied to the conversion
         config:
           meta: {}
           tags: []
@@ -45,7 +45,7 @@ models:
           meta: {}
           tags: []
       - name: CAMPAIGN_SID
-        description: ''
+        description: The unique identifier for the campaign, combination of campaign id and source
         config:
           meta: {}
           tags: []
@@ -55,12 +55,12 @@ models:
           meta: {}
           tags: []
       - name: ADVERTISED_PRODUCT_ID
-        description: ''
+        description: The product that was adversided when the attribution started.
         config:
           meta: {}
           tags: []
       - name: TRANSACTED_PRODUCT_ID
-        description: ''
+        description: The product that was puchased
         config:
           meta: {}
           tags: []
@@ -75,12 +75,12 @@ models:
           meta: {}
           tags: []
       - name: ATTRIBUTION_START_AT
-        description: ''
+        description: When the attribution window started
         config:
           meta: {}
           tags: []
       - name: ATTRIBUTION_END_AT
-        description: ''
+        description: When the attribution window ends
         config:
           meta: {}
           tags: []
@@ -89,3 +89,4 @@ models:
         config:
           meta: {}
           tags: []
+    description: Attributed sales related to marketing campaigns based on different scopes
