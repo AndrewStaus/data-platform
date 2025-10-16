@@ -3,7 +3,9 @@ version: 2
 
 sources:
 - name: transaction_db
-  database: "{{ generate_database_name('raw') }}"
-  schema: "{{ generate_schema_name('transaction_db') }}"
+  database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
+  schema: "transaction_db {{- '__'+target.user if not target.name == ('prod') }}"
+  # database: "{{ generate_database_name('raw') }}"
+  # schema: "{{ generate_schema_name('transaction_db') }}"
   tables:
   - name: transactions

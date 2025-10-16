@@ -3,8 +3,10 @@ version: 2
 
 sources:
   - name: adobe_experience
-    database: "{{ generate_database_name('raw') }}"
-    schema: "{{ generate_schema_name('adobe_experience') }}"
+    database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
+    schema: "adobe_experience {{- '__'+target.user if not target.name == ('prod') }}"
+    # database: "{{ generate_database_name('raw') }}"
+    # schema: "{{ generate_schema_name('adobe_experience') }}"
     tables:
       - name: web_hits
       - name: app_hits

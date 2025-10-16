@@ -3,8 +3,10 @@ version: 2
 
 sources:
   - name: exchange_rate
-    database: "{{ generate_database_name('raw') }}"
-    schema: "{{ generate_schema_name('exchange_rate') }}"
+    database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
+    schema: "exchange_rate {{- '__'+target.user if not target.name == ('prod') }}"
+    # database: "{{ generate_database_name('raw') }}"
+    # schema: "{{ generate_schema_name('exchange_rate') }}"
     tables:
       - name: cad
       - name: usd

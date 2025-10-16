@@ -3,8 +3,10 @@ version: 2
 
 sources:
   - name: google_ads
-    database: "{{ generate_database_name('raw') }}"
-    schema: "{{ generate_schema_name('google_ads') }}"
+    database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
+    schema: "google_ads {{- '__'+target.user if not target.name == ('prod') }}"
+    # database: "{{ generate_database_name('raw') }}"
+    # schema: "{{ generate_schema_name('google_ads') }}"
     tables:
       - name: campaigns
       - name: dlt_loads

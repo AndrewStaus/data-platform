@@ -13,6 +13,9 @@
 		"--env", "DAGSTER_HOME=/workspaces/data-platform/.dagster_home",
 		"--env", "PROJECT_DIR=/workspaces/data-platform/packages/data_foundation/dbt"
 	],
+	"mounts": [
+		"source=uv-cache-volume,target=/root/.cache/uv,type=volume"
+	],
 	"forwardPorts": [3000],
 	"postCreateCommand": [],
 	"remoteUser": "root",

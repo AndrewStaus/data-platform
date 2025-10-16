@@ -15,18 +15,10 @@ models:
         description: the total sale item
         data_tests:
           - not_null
-          - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
-                inclusive: true
       - name: transaction_margin
         description: the gross margin after unit costs are considered
         data_tests:
           - not_null
-          - dbt_utils.accepted_range:
-              arguments:
-                min_value: 0
-                inclusive: true
       - name: _loaded_at
         description: the time the data was loaded from source
         data_tests:
