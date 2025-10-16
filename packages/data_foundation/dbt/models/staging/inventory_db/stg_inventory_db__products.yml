@@ -4,9 +4,17 @@ models:
     columns:
       - name: product_id
         data_type: varchar
+        description: The internal id for the product
+        tests:
+          - not_null
+          - unique
       - name: product_name
         data_type: varchar
+        description: The name of the product
       - name: brand_name
         data_type: varchar
+        description: The brand of the product
       - name: updated_at
         data_type: timestamp_ntz
+        description: When the product details were updated
+    description: The list of products that are in the inventory for sale.

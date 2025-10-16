@@ -5,11 +5,20 @@ models:
     columns:
       - name: campaign_id
         data_type: number
+        description: The identifier for the campaign
+        tests:
+          - not_null
+          - unique
       - name: campaign_name
         data_type: varchar
+        description: The name of the campaign
       - name: campaign_start_date
         data_type: date
+        description: When the campaign started
       - name: campaign_update_date
         data_type: timestamp_ntz
+        description: When the campaign was last updated
       - name: _loaded_at
         data_type: timestamp_ntz
+        description: When the record was loaded from source
+    description: Marketing campaigns that have run on facebook ads.

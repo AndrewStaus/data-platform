@@ -4,26 +4,21 @@ models:
     columns:
       - name: account_id
         data_type: varchar
-        description: ''
-
+        description: 'The primary key identifier for the account.'
       - name: account_first_name
         data_type: varchar
-        description: ''
-
+        description: 'The first name that is registered on the account.'
       - name: account_last_name
         data_type: varchar
-        description: ''
-
+        description: 'The last name that is registered on the account.'
       - name: account_email
         data_type: varchar
-        description: ''
-
-      - name: indvidual_party_key
+        description: 'The email associated with the account.'
+      - name: individual_party_key
         data_type: varchar
-        description: ''
-
+        description: 'The mdm identifier for the account holder.'
       - name: _loaded_at
         data_type: timestamp_ntz
-        description: ''
+        description: 'The time the record was loaded.'
         data_tests:
         - not_null

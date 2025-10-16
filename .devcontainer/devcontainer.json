@@ -75,6 +75,41 @@
 					"envManager": "ms-python.python:venv",
 					"packageManager": "ms-python.python:pip"
 				}
+			],
+			"cSpell.words": [
+				"binutils",
+				"dataframe",
+				"dataframes",
+				"dbtlabsinc",
+				"devconatainer",
+				"devcontainers",
+				"dlthub",
+				"dotenv",
+				"ipykernel",
+				"ipython",
+				"isort",
+				"mkdocs",
+				"mkdocstrings",
+				"numpy",
+				"onehot",
+				"openml",
+				"powerbi",
+				"psutil",
+				"pyarrow",
+				"pycache",
+				"pycodestyle",
+				"Pyflakes",
+				"pygwalker",
+				"pyproject",
+				"pyupgrade",
+				"setuptools",
+				"Snowpark",
+				"sqlalchemy",
+				"sqlfluff",
+				"templater",
+				"usecwd",
+				"venv",
+				"xgboost"
 			]
 		}
 	}
