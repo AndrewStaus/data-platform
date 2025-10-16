@@ -38,7 +38,7 @@ FROM python:3.12-slim-bullseye AS data_foundation
     # install binaries
     COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
     COPY --from=sling_builder sling /usr/local/bin/sling
-    COPY --from=dbt_builder dbt /usr/local/bin/dbt
+    COPY --from=dbt_builder dbt /usr/local/bin/dbtf
     
     # copy libs and configs
     WORKDIR /opt/
