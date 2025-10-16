@@ -44,6 +44,8 @@
 			"sqlfluff.linter.run": "onSave",
 			"sqlfluff.suppressNotifications": false,
 			"sqlfluff.executablePath": "/usr/local/lib/python3.12/site-packages",
+			"dbt.dbtPath": "/root/.local/bin/dbt",
+			"dbt.dbtPythonPathOverride": "/root/.local/bin/dbt",
 			"dbt.flag.state": "./state",
 			"dbt.beta.useQueryCache": true,
 			"dbt.enableCollaboration": false,

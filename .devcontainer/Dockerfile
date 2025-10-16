@@ -24,8 +24,8 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye
 
     COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
     COPY --from=sling_builder sling $SLING_BINARY
-    COPY --from=dbt_builder dbt /root/.local/bin/dbt
-    RUN ln -s /root/.local/bin/dbtf
+    COPY --from=dbt_builder dbt /root/.local/bin/dbtf
+    RUN ln -s /root/.local/bin/dbtf /root/.local/bin/dbt
 
     ENV SNOWFLAKE_HOME=/root/.config/snowflake/
     RUN --mount=type=secret,id=env-file,target=/tmp/.env \
