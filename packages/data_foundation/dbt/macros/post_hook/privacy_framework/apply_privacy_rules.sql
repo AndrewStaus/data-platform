@@ -1,4 +1,4 @@
-{% macro apply_privacy_rules(apply_mask=True, delete_interval=None, anonymize_interval=None, reference_date_column=None, pii_columns=[], ) %}
+{% macro apply_privacy_rules(apply_mask=True, delete_interval=None, anonymize_interval=None, reference_date_column=None, pii_columns=[] ) %}
 
     {% if apply_mask %}
         {% do apply_dynamic_data_mask(pii_columns) %}
