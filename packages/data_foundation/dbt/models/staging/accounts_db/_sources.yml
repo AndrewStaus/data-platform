@@ -4,8 +4,44 @@ version: 2
 sources:
   - name: accounts_db
     database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
-    schema: "accounts_db {{- '__'+target.user if not target.name == ('prod') }}"
+    schema: accounts_db {{- '__'+target.user if not target.name == ('prod') }}
     # database: "{{ generate_database_name('raw') }}"
     # schema: "{{ generate_schema_name('accounts_db') }}"
     tables:
       - name: accounts
+        columns:
+          - name: ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: PARTY_KEY
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: FIRST_NAME
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: LAST_NAME
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: EMAIL
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: UPDATED_AT
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _SLING_LOADED_AT
+            description: ''
+            config:
+              meta: {}
+              tags: []

@@ -4,21 +4,49 @@ models:
     columns:
       - name: account_id
         data_type: varchar
-        description: 'The primary key identifier for the account.'
+        description: The primary key identifier for the account.
+        config:
+          meta: {}
+          tags: []
       - name: account_first_name
         data_type: varchar
-        description: 'The first name that is registered on the account.'
+        description: The first name that is registered on the account.
+        config:
+          meta: {}
+          tags: []
       - name: account_last_name
         data_type: varchar
-        description: 'The last name that is registered on the account.'
+        description: The last name that is registered on the account.
+        config:
+          meta: {}
+          tags: []
       - name: account_email
         data_type: varchar
-        description: 'The email associated with the account.'
-      - name: individual_party_key
-        data_type: varchar
-        description: 'The mdm identifier for the account holder.'
+        description: The email associated with the account.
+        config:
+          meta: {}
+          tags: []
+      - name: INDVIDUAL_PARTY_KEY
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: UPDATED_AT
+        description: ''
+        config:
+          meta: {}
+          tags: []
       - name: _loaded_at
         data_type: timestamp_ntz
-        description: 'The time the record was loaded.'
+        description: The time the record was loaded.
         data_tests:
-        - not_null
+          - not_null
+        config:
+          meta: {}
+          tags: []
+      - name: individual_party_key
+        data_type: varchar
+        description: The mdm identifier for the account holder.
+        config:
+          meta: {}
+          tags: []

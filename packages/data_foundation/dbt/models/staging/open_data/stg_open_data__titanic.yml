@@ -2,31 +2,73 @@ models:
   - name: stg_open_data__titanic
     description: Dataset showing information about the passengers of the titanic.
     columns:
-        - name: name
-          description: The name of the passenger
-        - name: pclass
-          description: The class of the passenger accommodations
-        - name: sex
-          description: The gender of the passenger
-        - name: age
-          description: The age of the passenger
-        - name: sibsp
-          description: How many siblings or spouses on board
-        - name: parch
-          description: How many parents or children on board
-        - name: ticket
-          description: The ticket number
-        - name: fare
-          description: The amount the customer paid
-        - name: cabin
-          description: The cabin number of the passengers accommodations
-        - name: embarked
-          description: Where the passenger boarded
-        - name: boat
-          description: What Boat the passenger evacuated on
-        - name: body
-          description: If the passengers body was found
-        - name: home_dest
-          description: Where the passengers home was
-        - name: survived
-          description: If the passenger survived
+      - name: pclass
+        description: The class of the passenger accommodations
+        config:
+          meta: {}
+          tags: []
+      - name: name
+        description: The name of the passenger
+        config:
+          meta: {}
+          tags: []
+      - name: sex
+        description: The gender of the passenger
+        config:
+          meta: {}
+          tags: []
+      - name: age
+        description: The age of the passenger
+        config:
+          meta: {}
+          tags: []
+      - name: sibsp
+        description: How many siblings or spouses on board
+        config:
+          meta: {}
+          tags: []
+      - name: parch
+        description: How many parents or children on board
+        config:
+          meta: {}
+          tags: []
+      - name: ticket
+        description: The ticket number
+        config:
+          meta: {}
+          tags: []
+      - name: fare
+        description: The amount the customer paid
+        config:
+          meta: {}
+          tags: []
+      - name: cabin
+        description: The cabin number of the passengers accommodations
+        config:
+          meta: {}
+          tags: []
+      - name: embarked
+        description: Where the passenger boarded
+        config:
+          meta: {}
+          tags: []
+      - name: boat
+        description: What Boat the passenger evacuated on
+        config:
+          meta: {}
+          tags: []
+      - name: body
+        description: If the passengers body was found
+        config:
+          meta: {}
+          tags: []
+      - name: home_dest
+        description: Where the passengers home was
+        config:
+          meta: {}
+          tags: []
+      - name: survived
+        description: If the passenger survived
+        config:
+          meta: {}
+          tags: []

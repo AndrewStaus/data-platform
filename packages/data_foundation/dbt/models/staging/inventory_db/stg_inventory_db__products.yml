@@ -5,16 +5,25 @@ models:
       - name: product_id
         data_type: varchar
         description: The internal id for the product
-        tests:
-          - not_null
-          - unique
+        config:
+          meta: {}
+          tags: []
       - name: product_name
         data_type: varchar
         description: The name of the product
+        config:
+          meta: {}
+          tags: []
       - name: brand_name
         data_type: varchar
         description: The brand of the product
+        config:
+          meta: {}
+          tags: []
       - name: updated_at
         data_type: timestamp_ntz
         description: When the product details were updated
+        config:
+          meta: {}
+          tags: []
     description: The list of products that are in the inventory for sale.

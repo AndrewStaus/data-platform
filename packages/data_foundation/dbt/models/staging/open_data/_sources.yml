@@ -1,10 +1,81 @@
 version: 2
 
 sources:
-- name: open_data
-  database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
-  schema: "open_data {{- '__'+target.user if not target.name == ('prod') }}"
+  - name: open_data
+    database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
+    schema: open_data {{- '__'+target.user if not target.name == ('prod') }}
   # database: "{{ generate_database_name('raw') }}"
   # schema: "{{ generate_schema_name('open_data') }}"
-  tables:
-  - name: titanic
+    tables:
+      - name: titanic
+        columns:
+          - name: PCLASS
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: NAME
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: SEX
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: AGE
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: SIBSP
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: PARCH
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: TICKET
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: FARE
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: CABIN
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: EMBARKED
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: BOAT
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: BODY
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: HOME_DEST
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: SURVIVED
+            description: ''
+            config:
+              meta: {}
+              tags: []

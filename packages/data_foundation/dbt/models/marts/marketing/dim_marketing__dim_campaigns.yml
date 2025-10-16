@@ -1,0 +1,33 @@
+models:
+  - name: dim_marketing__dim_campaigns
+    columns:
+      - name: CAMPAIGN_SID
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: CAMPAIGN_ID
+        description: The id of the campaign
+        config:
+          meta: {}
+          tags: []
+      - name: CAMPAIGN_NAME
+        description: The name of the campaign
+        config:
+          meta: {}
+          tags: []
+      - name: CAMPAIGN_START_DATE
+        description: When the campaign started
+        config:
+          meta: {}
+          tags: []
+      - name: _LOADED_AT
+        description: When the record was ingested
+        config:
+          meta: {}
+          tags: []
+      - name: CAMPAIGN_SOURCE
+        description: ''
+        config:
+          meta: {}
+          tags: []

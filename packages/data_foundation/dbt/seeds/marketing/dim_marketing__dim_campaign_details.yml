@@ -1,2 +1,5 @@
 # Column metadata for the marketing campaign seed table. Update when seed CSVs
 # gain new fields so documentation stays accurate.
+seeds:
+  - name: dim_marketing__dim_campaign_details
+    columns: []

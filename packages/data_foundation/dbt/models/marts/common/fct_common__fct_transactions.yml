@@ -7,22 +7,53 @@ models:
         description: The identifier of the transaction, unique when concatentated with product_id
         data_tests:
           - not_null
+        config:
+          meta: {}
+          tags: []
       - name: product_id
-        description: The id of the product sold on the transaction, unique when concatentated with transaction_id
+        description: >-
+          The id of the product sold on the transaction, unique when concatentated with transaction_id
         data_tests:
           - not_null
+        config:
+          meta: {}
+          tags: []
+      - name: SALES_CHANNEL
+        description: The sales channel that the item was sold through
+        config:
+          meta: {}
+          tags: []
+      - name: INDIVIDUAL_PARTY_KEY
+        description: The mdm identifier for the customer
+        config:
+          meta: {}
+          tags: []
       - name: transaction_revenue
         description: the total sale item
         data_tests:
           - not_null
+        config:
+          meta: {}
+          tags: []
       - name: transaction_margin
         description: the gross margin after unit costs are considered
         data_tests:
           - not_null
+        config:
+          meta: {}
+          tags: []
+      - name: TRANSACTED_AT
+        description: When the transaction was made
+        config:
+          meta: {}
+          tags: []
       - name: _loaded_at
         description: the time the data was loaded from source
         data_tests:
           - not_null
+        config:
+          meta: {}
+          tags: []
     config:
       meta:
         dagster:

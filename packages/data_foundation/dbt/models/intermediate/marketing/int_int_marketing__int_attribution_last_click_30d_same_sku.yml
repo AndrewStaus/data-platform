@@ -1,0 +1,91 @@
+models:
+  - name: int_int_marketing__int_attribution_last_click_30d_same_sku
+    columns:
+      - name: ATTRIBUTION_SID
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: LOOKBACK_WINDOW
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: CRITERIA
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: HIT_ID
+        description: The identifier for the hit
+        config:
+          meta: {}
+          tags: []
+      - name: INDIVIDUAL_ID
+        description: |-
+          Represents an individual as understood by the entity resolution system.
+          A single individual will have multiple party keys, however they will all resolve to the
+          same entity id.
+
+          *Example*:
+          ``` sql
+          select
+              e.individual_id,
+              sum(t.revenue) revenue,
+              count(distinct visit_id) visits 
+
+          from transactions t
+          left join individual_entity e
+              on t.individual_party_key = e.individual_party_key
+          left join site_visits v
+              on v.individual_party_key = e.individual_party_key
+          group by e.individual_entity_id
+          ```
+        config:
+          meta: {}
+          tags: []
+      - name: CAMPAIGN_SID
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: TRANSACTION_ID
+        description: The primary key for the transaction
+        config:
+          meta: {}
+          tags: []
+      - name: ADVERTISED_PRODUCT_ID
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: TRANSACTED_PRODUCT_ID
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: SALES_CHANNEL
+        description: The sales channel that the item was sold through
+        config:
+          meta: {}
+          tags: []
+      - name: TRANSACTED_AT
+        description: When the transaction was made
+        config:
+          meta: {}
+          tags: []
+      - name: ATTRIBUTION_START_AT
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: ATTRIBUTION_END_AT
+        description: ''
+        config:
+          meta: {}
+          tags: []
+      - name: _LOADED_AT
+        description: The day and time the record was ingested
+        config:
+          meta: {}
+          tags: []

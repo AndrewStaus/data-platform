@@ -4,8 +4,29 @@ version: 2
 sources:
   - name: entity_resolution
     database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
-    schema: "entity_resolution {{- '__'+target.user if not target.name == ('prod') }}"
+    schema: entity_resolution {{- '__'+target.user if not target.name == ('prod') }}
     # database: "{{ generate_database_name('raw') }}"
     # schema: "{{ generate_schema_name('entity_resolution') }}"
     tables:
       - name: individual_party_keys
+        columns:
+          - name: PARTY_KEY
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: ENTITY_ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: UPDATED
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _SLING_LOADED_AT
+            description: ''
+            config:
+              meta: {}
+              tags: []
