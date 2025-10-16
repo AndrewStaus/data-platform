@@ -23,13 +23,13 @@ unioned as (
 
 renamed as (
     select
-        date          exhange_date_utc,
+        date          exchange_date_utc,
         max(cad__usd) cad_usd,
         max(cad__eur) cad_eur,
         max(usd__cad) usd_cad,
         max({{- dlt_loaded_at() }}) _loaded_at --noqa:all
     from unioned
-    group by exhange_date_utc
+    group by exchange_date_utc
 )
 
 select * from renamed

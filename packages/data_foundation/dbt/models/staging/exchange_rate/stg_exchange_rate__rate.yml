@@ -3,8 +3,8 @@ models:
   - name: stg_exchange_rate__rate
     description: exchange rate from cad to different currencies
     columns:
-      - name: EXHANGE_DATE_UTC
-        description: 'When the exchange rate was effective'
+      - name: exchange_DATE_UTC
+        description: ''
         config:
           meta: {}
           tags: []
@@ -26,6 +26,11 @@ models:
       - name: _loaded_at
         description: timestamp utc loaded from source
         data_type: timestamp_ntz
+        config:
+          meta: {}
+          tags: []
+      - name: exchange_DATE_UTC
+        description: When the exchange rate was effective
         config:
           meta: {}
           tags: []

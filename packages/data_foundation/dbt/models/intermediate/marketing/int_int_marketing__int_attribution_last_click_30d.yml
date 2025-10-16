@@ -58,12 +58,12 @@ models:
         config:
           meta: {}
           tags: []
-        description: The product that was adversided when the attribution started.
+        description: The product that was advertised when the attribution started.
       - name: TRANSACTED_PRODUCT_ID
         config:
           meta: {}
           tags: []
-        description: The product that was puchased
+        description: The product that was purchased
       - name: SALES_CHANNEL
         description: The sales channel that the item was sold through
         config:
@@ -91,4 +91,4 @@ models:
           tags: []
     description: >-
       Intermediate model for 30 day un-scoped attribution.  This will track the period of time in which
-      a ad should recieve attribution for a purchase.
+      a ad should receive attribution for a purchase.

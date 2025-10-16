@@ -10,9 +10,9 @@ models:
           with an individual_id to connect across multiple systems to understand
           a single entity.
 
-          Records from seperate systems should use the non-unique party key to join to the
-          individual entity table, and then be agregated to on the entity id to understand
-          inteactions of the same customer.
+          Records from separate systems should use the non-unique party key to join to the
+          individual entity table, and then be aggregated to on the entity id to understand
+          interactions of the same customer.
 
           *Example*:
           ``` sql

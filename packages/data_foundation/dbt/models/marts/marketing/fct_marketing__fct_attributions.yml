@@ -55,12 +55,12 @@ models:
           meta: {}
           tags: []
       - name: ADVERTISED_PRODUCT_ID
-        description: The product that was adversided when the attribution started.
+        description: The product that was advertised when the attribution started.
         config:
           meta: {}
           tags: []
       - name: TRANSACTED_PRODUCT_ID
-        description: The product that was puchased
+        description: The product that was purchased
         config:
           meta: {}
           tags: []

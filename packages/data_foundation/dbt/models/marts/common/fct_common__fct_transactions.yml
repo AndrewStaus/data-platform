@@ -4,13 +4,13 @@ models:
   - name: fct_common__fct_transactions
     columns:
       - name: transaction_id
-        description: The identifier of the transaction, unique when concatentated with product_id
+        description: The identifier of the transaction, unique when concatenated with product_id
         config:
           meta: {}
           tags: []
       - name: product_id
         description: >-
-          The id of the product sold on the transaction, unique when concatentated with transaction_id
+          The id of the product sold on the transaction, unique when concatenated with transaction_id
         config:
           meta: {}
           tags: []

@@ -31,7 +31,7 @@ facebook_ads_campaigns as (
 united as (
     select
         *,
-        'gooogle_ads' campaign_source
+        'google_ads' campaign_source
     from google_ads_campaigns
     {% if is_incremental() -%}
         where _loaded_at >= coalesce((
