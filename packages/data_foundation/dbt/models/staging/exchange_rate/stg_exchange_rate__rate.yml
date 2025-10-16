@@ -1,16 +1,41 @@
 # Documentation for the normalized exchange rate reference table.
 models:
   - name: stg_exchange_rate__rate
-    description: exchange rate from cad to different currancies
+    description: exchange rate from cad to different currencies
     columns:
-      - name: exhange_date_utc
-        description: the date of the set exchange rate
+      - name: exchange_DATE_UTC
+        description: ''
+        config:
+          meta: {}
+          tags: []
       - name: cad_usd
-        description: exhange rate from cad to usd
+        description: exchange rate from cad to usd
+        config:
+          meta: {}
+          tags: []
       - name: cad_eur
-        description: exhange rate from cad to eur
+        description: exchange rate from cad to eur
+        config:
+          meta: {}
+          tags: []
       - name: usd_cad
-        description: exhange rate from usd to cad
+        description: exchange rate from usd to cad
+        config:
+          meta: {}
+          tags: []
       - name: _loaded_at
         description: timestamp utc loaded from source
         data_type: timestamp_ntz
+        config:
+          meta: {}
+          tags: []
+      - name: exchange_DATE_UTC
+        description: When the exchange rate was effective
+        config:
+          meta: {}
+          tags: []
+      - name: exchange_date_utc
+        description: the date of the set exchange rate
+        config:
+          meta: {}
+          tags: []

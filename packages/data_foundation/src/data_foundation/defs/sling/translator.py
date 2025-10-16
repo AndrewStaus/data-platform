@@ -203,7 +203,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
 
         Returns:
             dagster.PartitionsDefinition | None: Partition definition derived from
-            metadata or ``None`` if the stream is unpartitioned.
+            metadata or ``None`` if the stream is un-partitioned.
         """
         try:
             meta = stream_definition["config"]["meta"]["dagster"]

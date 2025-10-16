@@ -3,10 +3,71 @@ version: 2
 
 sources:
   - name: google_ads
-    database: "{{ generate_database_name('raw') }}"
-    schema: "{{ generate_schema_name('google_ads') }}"
+    database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
+    schema: google_ads {{- '__'+target.user if not target.name == ('prod') }}
+    # database: "{{ generate_database_name('raw') }}"
+    # schema: "{{ generate_schema_name('google_ads') }}"
     tables:
       - name: campaigns
+        columns:
+          - name: ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: NAME
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: START_DATE
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _DLT_LOAD_ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _DLT_ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: CRITERIA
+            description: ''
+            config:
+              meta: {}
+              tags: []
       - name: dlt_loads
+        columns: []
       - name: criteria
+        columns: []
       - name: campaigns__criteria
+        columns:
+          - name: ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _DLT_ROOT_ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _DLT_PARENT_ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _DLT_LIST_IDX
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _DLT_ID
+            description: ''
+            config:
+              meta: {}
+              tags: []

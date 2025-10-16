@@ -22,7 +22,7 @@ def _var(key) -> str:
     load_dotenv(env_path)
     return os.getenv(key) or ""
 
-def get_session(warehouse=None) -> snowpark.Session:
+def get_session(warehouse=None, verbose=True) -> snowpark.Session:
 
     if not warehouse:
         warehouse = _var("DESTINATION__WAREHOUSE")
@@ -42,11 +42,12 @@ def get_session(warehouse=None) -> snowpark.Session:
             .create()
         )
 
-    print("session_id:", session.session_id)
-    print("version:",    session.version)
-    print("database:",   session.get_current_database())
-    print("schema:",     session.get_current_schema())
-    print("user:",       session.get_current_user())
+    if verbose:
+        print("session_id:", session.session_id)
+        print("version:",    session.version)
+        print("database:",   session.get_current_database())
+        print("schema:",     session.get_current_schema())
+        print("user:",       session.get_current_user())
 
     return session
 
@@ -75,7 +76,7 @@ def _display_df(df: pd.DataFrame, spec:str|None = None) -> None:
         )
 
 def _display_snowpark(data: snowpark.DataFrame | str, spec:str|None = None) -> None:
-    session = get_session()
+    session = get_session(verbose=False)
     sql = data.queries["queries"][0] if isinstance(data, snowpark.DataFrame) else data
 
     account = session.get_current_account() or ''

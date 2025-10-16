@@ -13,6 +13,9 @@
 		"--env", "DAGSTER_HOME=/workspaces/data-platform/.dagster_home",
 		"--env", "PROJECT_DIR=/workspaces/data-platform/packages/data_foundation/dbt"
 	],
+	"mounts": [
+		"source=uv-cache-volume,target=/root/.cache/uv,type=volume"
+	],
 	"forwardPorts": [3000],
 	"postCreateCommand": [],
 	"remoteUser": "root",
@@ -31,7 +34,8 @@
 				"ptweir.python-string-sql",
 				"ms-python.vscode-python-envs",
 				"wholroyd.jinja",
-				"tumido.cron-explained"
+				"tumido.cron-explained",
+				"innoverio.vscode-dbt-power-user"
 			]
 		},
 		"settings": {
@@ -40,9 +44,26 @@
 			"sqlfluff.linter.run": "onSave",
 			"sqlfluff.suppressNotifications": false,
 			"sqlfluff.executablePath": "/usr/local/lib/python3.12/site-packages",
+			"dbt.dbtPath": "/root/.local/bin/dbt",
+			"dbt.dbtPythonPathOverride": "/root/.local/bin/dbt",
 			"dbt.flag.state": "./state",
 			"dbt.beta.useQueryCache": true,
+			"dbt.enableCollaboration": false,
+			"dbt.enableNotebooks": false,
+			"dbt.installDepsOnProjectInitialization": false,
+			"dbt.dbtIntegration": "fusion",
+			"dbt.fileNameTemplateGenerateModel": "{prefix}_{sourceName}__{tableName}",
+			"dbt.prefixGenerateModel": "stg",
 			"python.terminal.useEnvFile": true,
+			"dbt.enableNewLineagePanel": true,
+			"dbt.deferConfigPerProject": {
+				"packages/data_foundation/dbt": {
+					"manifestPathForDeferral": "/workspaces/data-platform/packages/data_foundation/dbt/state",
+					"manifestPathType": "local",
+					"favorState": false,
+					"deferToProduction": true
+				}
+			},
 			"python-envs.pythonProjects": [
 				{
 					"path": "libs/analytics_utils",
@@ -59,6 +80,41 @@
 					"envManager": "ms-python.python:venv",
 					"packageManager": "ms-python.python:pip"
 				}
+			],
+			"cSpell.words": [
+				"binutils",
+				"dataframe",
+				"dataframes",
+				"dbtlabsinc",
+				"devconatainer",
+				"devcontainers",
+				"dlthub",
+				"dotenv",
+				"ipykernel",
+				"ipython",
+				"isort",
+				"mkdocs",
+				"mkdocstrings",
+				"numpy",
+				"onehot",
+				"openml",
+				"powerbi",
+				"psutil",
+				"pyarrow",
+				"pycache",
+				"pycodestyle",
+				"Pyflakes",
+				"pygwalker",
+				"pyproject",
+				"pyupgrade",
+				"setuptools",
+				"Snowpark",
+				"sqlalchemy",
+				"sqlfluff",
+				"templater",
+				"usecwd",
+				"venv",
+				"xgboost"
 			]
 		}
 	}

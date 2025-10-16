@@ -25,7 +25,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
     Holds a set of methods that derive Dagster asset definition metadata given
     a representation of a dbt resource (models, tests, sources, etc).
-    Methods are overriden to customize the implementation.
+    Methods are overridden to customize the implementation.
 
     See parent class for details on the purpose of each override"""
 
@@ -104,7 +104,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
         Returns:
             dagster.PartitionsDefinition | None: A concrete partitions definition when
             metadata is provided, otherwise ``None`` so Dagster treats the asset as
-            unpartitioned.
+            un-partitioned.
         """
         if meta := get_nested(dbt_resource_props, ["config", "meta", "dagster"]):
             return get_partitions_def_from_meta(meta)

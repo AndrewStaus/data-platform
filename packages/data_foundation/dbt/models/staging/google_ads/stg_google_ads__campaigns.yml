@@ -4,9 +4,29 @@ models:
     columns:
       - name: campaign_id
         data_type: number
+        description: The id of the campaign
+        tests:
+          - not_null
+          - unique
+        config:
+          meta: {}
+          tags: []
       - name: campaign_name
         data_type: varchar
+        description: The name of the campaign
+        config:
+          meta: {}
+          tags: []
       - name: campaign_start_date
         data_type: date
+        description: When the campaign started
+        config:
+          meta: {}
+          tags: []
       - name: _loaded_at
         data_type: timestamp_ntz
+        description: When the record was ingested
+        config:
+          meta: {}
+          tags: []
+    description: Campaigns that have run on google ads

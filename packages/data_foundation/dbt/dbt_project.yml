@@ -23,10 +23,6 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-dispatch:
-  - macro_namespace: dbt_foundation
-    search_order: ['dbt_foundation', 'dbt_snowflake', 'dbt']
-
 clean-targets:
   - "target"
   - "dbt_packages"

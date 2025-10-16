@@ -3,8 +3,112 @@ version: 2
 
 sources:
   - name: adobe_experience
-    database: "{{ generate_database_name('raw') }}"
-    schema: "{{ generate_schema_name('adobe_experience') }}"
+    database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
+    schema: adobe_experience {{- '__'+target.user if not target.name == ('prod') }}
+    # database: "{{ generate_database_name('raw') }}"
+    # schema: "{{ generate_schema_name('adobe_experience') }}"
     tables:
       - name: web_hits
+        columns:
+          - name: DATE_TIME
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: MCVISID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: POST_VISID_HIGH
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: POST_VISID_LOW
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: HITID_HIGH
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: HITID_LOW
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: PAGE_URL
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: POST_EVAR133
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: ORDERID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _SLING_LOADED_AT
+            description: ''
+            config:
+              meta: {}
+              tags: []
       - name: app_hits
+        columns:
+          - name: DATE_TIME
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: MCVISID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: POST_VISID_HIGH
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: POST_VISID_LOW
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: HITID_HIGH
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: HITID_LOW
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: PAGE_URL
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: POST_EVAR133
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: ORDERID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _SLING_LOADED_AT
+            description: ''
+            config:
+              meta: {}
+              tags: []

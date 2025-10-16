@@ -5,17 +5,53 @@ models:
     columns:
       - name: transaction_id
         data_type: number
+        description: The primary key for the transaction
+        config:
+          meta: {}
+          tags: []
       - name: product_id
         data_type: varchar
+        description: The foreign key for the product sold on the transaction
+        config:
+          meta: {}
+          tags: []
       - name: sales_channel
         data_type: varchar
+        description: The sales channel that the item was sold through
+        config:
+          meta: {}
+          tags: []
       - name: individual_party_key
         data_type: varchar
-      - name: transacted_at
-        data_type: timestamp_ntz
+        description: The mdm identifier for the customer
+        config:
+          meta: {}
+          tags: []
       - name: transaction_revenue
         data_type: number
+        description: The revenue associated to the transaction
+        tests:
+          - not_null
+        config:
+          meta: {}
+          tags: []
       - name: transaction_margin
         data_type: number
+        description: The net margin for the transaction
+        tests:
+          - not_null
+        config:
+          meta: {}
+          tags: []
+      - name: transacted_at
+        data_type: timestamp_ntz
+        description: When the transaction was made
+        config:
+          meta: {}
+          tags: []
       - name: _loaded_at
         data_type: timestamp_ntz
+        description: The day and time the record was ingested
+        config:
+          meta: {}
+          tags: []

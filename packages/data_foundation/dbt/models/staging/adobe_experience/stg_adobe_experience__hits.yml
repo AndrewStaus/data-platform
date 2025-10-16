@@ -5,53 +5,71 @@ models:
       - name: hit_source
         description: the platform that captured the hit, web or app
         data_type: varchar
-        data_tests:
-          - accepted_values:
-              arguments:
-                values:
-                  - web
-                  - app
         config:
           meta: {}
           tags: []
       - name: hit_at
-        description: the time the hit was registerd
+        description: the time the hit was registered
         data_type: timestamp_ntz
         config:
           meta: {}
           tags: []
       - name: marketing_cloud_visitor_id
         data_type: varchar
-        description: ''
+        description: A persistent adobe identifier that can identify users across devices and 
+          sessions
         config:
           meta: {}
           tags: []
       - name: visit_id
         data_type: varchar
-        description: ''
+        description: The identifier for the current visit
         config:
           meta: {}
           tags: []
       - name: hit_id
         data_type: varchar
-        description: ''
+        description: The identifier for the hit
         config:
           meta: {}
           tags: []
       - name: hit_sid
         data_type: varchar
-        description: ''
+        description: unique identifier for the hit to avoid collisions between the properties
         config:
           meta: {}
           tags: []
       - name: hit_url
         data_type: varchar
-        description: ''
+        description: Where the hit took place
         config:
           meta: {}
           tags: []
       - name: individual_party_key
-        description: "{{ doc('individual_party_key') }}"
+        description: |-
+          Represents an individual as understood by the system of record as of the
+          time the interaction with the individual took place.  This is used in conjunction
+          with an individual_id to connect across multiple systems to understand
+          a single entity.
+
+          Records from separate systems should use the non-unique party key to join to the
+          individual entity table, and then be aggregated to on the entity id to understand
+          interactions of the same customer.
+
+          *Example*:
+          ``` sql
+          select
+              e.individual_id,
+              sum(t.revenue) revenue,
+              count(distinct visit_id) visits 
+
+          from transactions t
+          left join individual_entity e
+              on t.individual_party_key = e.individual_party_key
+          left join site_visits v
+              on v.individual_party_key = e.individual_party_key
+          group by e.individual_entity_id
+          ```
         data_type: varchar
         config:
           meta:
@@ -60,13 +78,14 @@ models:
           tags: []
       - name: order_id
         data_type: number
-        description: ''
+        description: The order id if an order was placed
         config:
           meta: {}
           tags: []
       - name: _loaded_at
         data_type: timestamp_tz
-        description: ''
+        description: When the record was ingested
         config:
           meta: {}
           tags: []
+    description: Activity tracked on the website and mobile app

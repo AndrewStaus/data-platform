@@ -1,5 +1,5 @@
 {#-
-Applys a dynamic mask to columns listed.
+Applies a dynamic mask to columns listed.
 
 Add a post hook to the model config, and masking rules will be applied to
 columns.

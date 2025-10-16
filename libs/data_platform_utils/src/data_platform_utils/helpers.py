@@ -42,7 +42,7 @@ def get_database_name(database: str) -> str:
 def get_automation_condition_from_meta(
     meta: dict[str, Any],
 ) -> dg.AutomationCondition | None:
-    """Return an AutomationCondition if valid configuartion is provided in the meta.
+    """Return an AutomationCondition if valid configuration is provided in the meta.
     Meta should be of format dict in the following structure:
     .. code-block:: python
         "meta":{
@@ -74,7 +74,7 @@ def get_automation_condition_from_meta(
 def get_partitions_def_from_meta(
     meta: dict[str, Any],
 ) -> dg.TimeWindowPartitionsDefinition | None:
-    """Return an TimeWindowPartitionsDefinition if valid configuartion is provided in
+    """Return an TimeWindowPartitionsDefinition if valid configuration is provided in
     the meta.
     - partition accepts the values: hourly, daily, weekly, monthly.
     - partition_start_date should be a iso format date, or timestamp.

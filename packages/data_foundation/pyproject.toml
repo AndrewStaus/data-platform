@@ -16,9 +16,6 @@ dependencies = [
     "psutil==7.1.0",
 ]
 
-[tool.uv]
-override-dependencies = ["dbt-core; sys_platform == 'never'"]
-
 [tool.uv.sources]
 data-platform-utils = { path = "../../libs/data_platform_utils" }
 

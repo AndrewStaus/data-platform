@@ -2,8 +2,51 @@
 version: 2
 
 sources:
-- name: transaction_db
-  database: "{{ generate_database_name('raw') }}"
-  schema: "{{ generate_schema_name('transaction_db') }}"
-  tables:
-  - name: transactions
+  - name: transaction_db
+    database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
+    schema: transaction_db {{- '__'+target.user if not target.name == ('prod') }}
+  # database: "{{ generate_database_name('raw') }}"
+  # schema: "{{ generate_schema_name('transaction_db') }}"
+    tables:
+      - name: transactions
+        columns:
+          - name: ORDER_ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: CHANNEL
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: PARTY_KEY
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: PRODUCT_ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: REVENUE
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: MARGIN
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: DATE_TIME
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _SLING_LOADED_AT
+            description: ''
+            config:
+              meta: {}
+              tags: []

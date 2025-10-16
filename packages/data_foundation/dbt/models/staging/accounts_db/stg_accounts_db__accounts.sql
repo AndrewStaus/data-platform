@@ -36,7 +36,7 @@ select
     trim(lower(first_name)) account_first_name,
     trim(lower(last_name))  account_last_name,
     trim(lower(email))      account_email,
-    party_key               indvidual_party_key,
+    party_key               individual_party_key,
     {{ pst_to_utc("updated_at") }} updated_at, -- noqa:TMP
     _sling_loaded_at        _loaded_at
 from accounts

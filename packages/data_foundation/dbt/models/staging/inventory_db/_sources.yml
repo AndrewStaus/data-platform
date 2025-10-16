@@ -2,8 +2,36 @@
 version: 2
 
 sources:
-- name: inventory_db
-  database: "{{ generate_database_name('raw') }}"
-  schema: "{{ generate_schema_name('inventory_db') }}"
-  tables:
-  - name: products
+  - name: inventory_db
+    database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
+    schema: inventory_db {{- '__'+target.user if not target.name == ('prod') }}
+  # database: "{{ generate_database_name('raw') }}"
+  # schema: "{{ generate_schema_name('inventory_db') }}"
+    tables:
+      - name: products
+        columns:
+          - name: ID
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: NAME
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: BRAND
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: UPDATED_AT
+            description: ''
+            config:
+              meta: {}
+              tags: []
+          - name: _SLING_LOADED_AT
+            description: ''
+            config:
+              meta: {}
+              tags: []
