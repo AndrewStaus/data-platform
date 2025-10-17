@@ -60,8 +60,8 @@ class DagsterDbtFactory:
 
         Returns:
             dagster.Definitions: Definitions composed of dbt assets, freshness checks,
-                and the dbt CLI resource configured with the project directory supplied by
-                the callable.
+                and the dbt CLI resource configured with the project directory supplied
+                by the callable.
         """
         
         assets = [
