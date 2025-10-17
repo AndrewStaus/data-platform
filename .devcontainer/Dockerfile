@@ -10,9 +10,9 @@ FROM python:3.12-bullseye AS dbt_builder
     # install the latest dbt fusion binary for use in other stages.
     # binary will be available in the builder root directory `/dbt`.
     RUN curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh \
-            | /bin/bash -s -- --version 2.0.0-preview.37 \
-            && mv /root/.local/bin/dbt /dbt
-            # | /bin/bash -s -- --update \
+        | /bin/bash -s -- --update \
+        && mv /root/.local/bin/dbt /dbt
+        # | /bin/bash -s -- --version 2.0.0-preview.37 \
 
 FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye
     ENV SLING_BINARY=/usr/local/bin/sling
