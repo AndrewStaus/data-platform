@@ -28,7 +28,8 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
 
         Returns:
             dagster.AssetSpec: Asset specification enriched with automation conditions,
-            partitions, tags, and group information derived from the stream metadata.
+                partitions, tags, and group information derived from the stream
+                metadata.
         """
         return dg.AssetSpec(
             automation_condition=self.get_automation_condition(stream_definition),
@@ -80,7 +81,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
 
         Returns:
             dagster.AssetKey: Asset key determined either from explicit metadata or the
-            sanitized stream name.
+                sanitized stream name.
         """
 
         if asset_key:
@@ -141,7 +142,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
 
         Returns:
             str: Group name supplied in metadata or the schema extracted from the stream
-            name when no override exists.
+                name when no override exists.
         """
         try:
             group = stream_definition["config"]["meta"]["dagster"]["group"]
@@ -163,7 +164,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
 
         Returns:
             Mapping[str, Any]: Dictionary of sanitized tags safe for Dagster asset
-            metadata.
+                metadata.
         """
         try:
             tags = stream_definition["config"]["meta"]["dagster"]["tags"]
@@ -183,7 +184,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
 
         Returns:
             dagster.AutomationCondition | None: Automation condition built from the
-            metadata or ``None`` when unspecified.
+                metadata or ``None`` when unspecified.
         """
         try:
             meta = stream_definition["config"]["meta"]["dagster"]
@@ -203,7 +204,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
 
         Returns:
             dagster.PartitionsDefinition | None: Partition definition derived from
-            metadata or ``None`` if the stream is un-partitioned.
+                metadata or ``None`` if the stream is un-partitioned.
         """
         try:
             meta = stream_definition["config"]["meta"]["dagster"]

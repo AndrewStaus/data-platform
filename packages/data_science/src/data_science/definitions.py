@@ -17,14 +17,14 @@ warnings.filterwarnings("ignore", category=UserWarning)
 
 @definitions
 def data_science() -> dg.Definitions:
-    """Construct Dagster definitions from the ``data_science/defs`` package.
+    """Construct Dagster definitions from the ``data_science/defs`` module.
 
     Returns:
         dagster.Definitions: A ``Definitions`` instance containing every asset,
-        resource, sensor, and schedule discovered under the ``defs`` folder relative
-        to the project root. The loader mirrors Dagster's CLI ``defs`` semantics so
-        end users receive the same set of assets whether they invoke the CLI or the
-        Python API.
+            resource, sensor, and schedule discovered under the ``defs`` folder relative
+            to the project root. The loader mirrors Dagster's CLI ``defs`` semantics so
+            end users receive the same set of assets whether they invoke the CLI or the
+            Python API.
     """
     project_root = Path(__file__).joinpath(*[".."] * 2).resolve()
     return dg.load_from_defs_folder(project_root=project_root)

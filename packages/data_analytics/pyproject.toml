@@ -8,8 +8,8 @@ dependencies = [
     "analytics-utils",
     "faker>=37.11.0",
     "ipykernel>=6.30.1",
-    "ruff",
     "snowflake-ml-python>=1.16.0",
+    "ruff",
     "sqlfluff"
 ]
 

@@ -10,9 +10,9 @@ def defs() -> Definitions:
 
     Returns:
         dagster.Definitions: Definitions exposing the ``dlt`` resource configured with
-        credentials sourced from the local key vault stub. The helper ensures
-        environment variables expected by dlt are populated before constructing the
-        resource.
+            credentials sourced from the local key vault stub. The helper ensures
+            environment variables expected by dlt are populated before constructing the
+            resource.
     """
     import os
 

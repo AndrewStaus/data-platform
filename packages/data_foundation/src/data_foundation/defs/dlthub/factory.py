@@ -44,7 +44,7 @@ class ConfigurableDltResource(DltResource):
 
         Returns:
             ConfigurableDltResource: The wrapped resource enriched with the provided
-            metadata.
+                metadata.
         """
         resource = ConfigurableDltResource._convert(resource, meta, tags, kinds)
         return resource  # type: ignore
@@ -76,7 +76,7 @@ class DagsterDltFactory:
 
         Returns:
             dagster.Definitions: Definitions containing Dagster assets representing the
-            supplied resources plus any derived asset checks.
+                supplied resources plus any derived asset checks.
         """
         assets_definitions = []
         freshness_checks = []
@@ -102,8 +102,8 @@ class DagsterDltFactory:
 
         Returns:
             list[dg.AssetsDefinition | dg.AssetSpec]: The Dagster asset definition that
-            executes the dlt pipeline alongside the dependency ``AssetSpec`` describing
-            upstream source data.
+                executes the dlt pipeline alongside the dependency ``AssetSpec``
+                describing upstream source data.
         """
         schema, table = resource.name.split(".")
         dataset_name = schema
@@ -141,8 +141,8 @@ class DagsterDltFactory:
 
             Yields:
                 dagster_dlt.dlt_event_iterator.DltEventType: Structured events emitted
-                from the dlt pipeline run which Dagster converts into asset materialize
-                events.
+                    from the dlt pipeline run which Dagster converts into asset
+                    materialize events.
             """
             yield from dlt.run(context=context)
 
@@ -164,8 +164,8 @@ class DagsterDltFactory:
 
         Returns:
             Sequence[dagster.AssetChecksDefinition] | None: Freshness checks when the
-            metadata includes ``freshness_lower_bound_delta_seconds``; otherwise
-            ``None`` to skip check generation.
+                metadata includes ``freshness_lower_bound_delta_seconds``; otherwise
+                ``None`` to skip check generation.
         """
         schema, table = resource.name.split(".")
 

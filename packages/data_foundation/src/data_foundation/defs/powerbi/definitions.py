@@ -32,7 +32,7 @@ def bi_sm_core_semantic_model(context: dg.AssetExecutionContext) -> None:
 
     Returns:
         None: The asset does not produce any materialization payload; Dagster tracks
-        completion based on the asset invocation finishing without raising an error.
+            completion based on the asset invocation finishing without raising an error.
     """
     context.log.info("refreshing powerbi semantic model")
     sleep(10)

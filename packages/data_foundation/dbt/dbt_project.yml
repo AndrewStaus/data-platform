@@ -27,6 +27,8 @@ clean-targets:
   - "target"
   - "dbt_packages"
 models:
+  dbt_project_evaluator:
+    +enabled: "{{ env_var('DBT_PROJECT_EVALUATOR_ENABLED', 'true') | lower == 'true' | as_bool }}"
   +persist_docs:
     relation: true
     columns: true
@@ -64,6 +66,10 @@ snapshots:
       columns: true
   dbt_foundation:
     +group: data_foundation
+
+# data_tests:
+#   dbt_project_evaluator:
+#     +severity: "{{ env_var('DBT_PROJECT_EVALUATOR_SEVERITY', 'warn') }}"
 
 flags:
   # Enforce explicit arguments on generic tests to avoid ambiguous macros.
