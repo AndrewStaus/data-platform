@@ -5,7 +5,7 @@
 # Stub for now, will need to hook up to snowflake, and add credentials in the
 # github action environment.
 
-name: dbt_Checks
+name: dbt Checks
 
 on:
   pull_request:
