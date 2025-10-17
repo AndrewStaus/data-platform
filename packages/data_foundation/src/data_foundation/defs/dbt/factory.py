@@ -60,8 +60,8 @@ class DagsterDbtFactory:
 
         Returns:
             dagster.Definitions: Definitions composed of dbt assets, freshness checks,
-            and the dbt CLI resource configured with the project directory supplied by
-            the callable.
+                and the dbt CLI resource configured with the project directory supplied by
+                the callable.
         """
         
         assets = [
@@ -111,7 +111,7 @@ class DagsterDbtFactory:
 
         Returns:
             dagster.AssetsDefinition: A Dagster assets definition that streams dbt CLI
-            events and respects the provided partitioning behavior.
+                events and respects the provided partitioning behavior.
         """
 
         dbt_project = dbt()
@@ -146,8 +146,9 @@ class DagsterDbtFactory:
 
             Yields:
                 dagster_dbt.core.dbt_event_iterator.DbtEventIterator: The stream of
-                structured dbt events produced during the CLI invocation. Yielding the
-                iterator allows Dagster to surface granular run status in the UI.
+                    structured dbt events produced during the CLI invocation. Yielding
+                    the iterator allows Dagster to surface granular run status in the
+                    UI.
             """
             args = ["build"]
 

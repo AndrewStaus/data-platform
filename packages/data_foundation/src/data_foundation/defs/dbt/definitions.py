@@ -17,12 +17,14 @@ from .factory import DagsterDbtFactory
 
 @definitions
 def defs() -> Definitions:
-    """Returns set of definitions explicitly available and loadable by Dagster tools.
-    Will be automatically dectectd and loaded by the load_defs function in the root
-    definitions file.
-
-    @definitions decorator will provides lazy loading so that the assets are only
-    instantiated when needed.
+    """@definitions decorator will provides lazy loading so that the assets are only
+    instantiated when needed. Will be automatically detected and loaded by the load_defs
+    function in the root definitions file.
+    
+    Returns:
+        dagster.Definitions: The definitions explicitly available and loadable by
+            Dagster tools.
+        
     """
     project_dir = Path(__file__).joinpath(*[".."] * 5, "dbt/").resolve()
     state_path = "state/"
@@ -33,9 +35,9 @@ def defs() -> Definitions:
 
         Returns:
             dagster_dbt.DbtProject: The fully configured dbt project instance that
-            Dagster will interact with when executing assets. The helper runs
-            ``prepare_if_dev`` to ensure the project is ready for local execution when
-            targeting a development profile.
+                Dagster will interact with when executing assets. The helper runs
+                ``prepare_if_dev`` to ensure the project is ready for local execution
+                when targeting a development profile.
         """
         project = DbtProject(
             project_dir=project_dir,

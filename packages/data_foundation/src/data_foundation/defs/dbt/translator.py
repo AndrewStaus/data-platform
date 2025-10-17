@@ -40,7 +40,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
         Returns:
             dagster.AssetKey: Asset key built either from explicit metadata or
-            inferred from the resource name, schema, and processing step.
+                inferred from the resource name, schema, and processing step.
         """
         meta = dbt_resource_props.get("config", {}).get(
             "meta", {}
@@ -79,7 +79,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
         Returns:
             str | None: The schema name used as the Dagster asset group or ``None``
-            when no schema-based grouping can be determined.
+                when no schema-based grouping can be determined.
         """
         prop_key = "name"
         if dbt_resource_props.get("version"):
@@ -103,8 +103,8 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
         Returns:
             dagster.PartitionsDefinition | None: A concrete partitions definition when
-            metadata is provided, otherwise ``None`` so Dagster treats the asset as
-            un-partitioned.
+                metadata is provided, otherwise ``None`` so Dagster treats the asset as
+                un-partitioned.
         """
         if meta := get_nested(dbt_resource_props, ["config", "meta", "dagster"]):
             return get_partitions_def_from_meta(meta)
@@ -121,7 +121,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
         Returns:
             dagster.AutomationCondition | None: The resolved automation condition, or
-            ``None`` when the default Dagster behavior should apply.
+                ``None`` when the default Dagster behavior should apply.
         """
         if meta := get_nested(dbt_resource_props, ["config", "meta", "dagster"]):
             automation_condition = get_automation_condition_from_meta(meta)
@@ -149,7 +149,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
 
         Returns:
             Mapping[str, str]: Tag dictionary that can be surfaced on Dagster assets
-            for discovery and documentation purposes.
+                for discovery and documentation purposes.
         """
         tags = super().get_tags(dbt_resource_props)
         return tags

@@ -22,10 +22,10 @@ def data_foundation() -> dg.Definitions:
 
     Returns:
         dagster.Definitions: A ``Definitions`` instance containing every asset,
-        resource, sensor, and schedule discovered under the ``defs`` folder relative
-        to the project root. The loader mirrors Dagster's CLI ``defs`` semantics so
-        end users receive the same set of assets whether they invoke the CLI or the
-        Python API.
+            resource, sensor, and schedule discovered under the ``defs`` folder relative
+            to the project root. The loader mirrors Dagster's CLI ``defs`` semantics so
+            end users receive the same set of assets whether they invoke the CLI or the
+            Python API.
     """
     project_root = Path(__file__).joinpath(*[".."] * 2).resolve()
     

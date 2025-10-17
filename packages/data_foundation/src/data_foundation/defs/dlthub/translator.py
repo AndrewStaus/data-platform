@@ -32,7 +32,7 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
 
         Returns:
             dagster.AssetSpec: Asset specification populated with automation conditions,
-            dependencies, tags, and partitioning inferred from the dlt resource.
+                dependencies, tags, and partitioning inferred from the dlt resource.
         """
         return dg.AssetSpec(
             key=self._resolve_back_compat_method(
@@ -77,7 +77,7 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
 
         Returns:
             Iterable[dagster.AssetKey]: External asset keys representing the raw source
-            tables feeding the resource.
+                tables feeding the resource.
         """
         name: str | None = None
         if resource.is_transformer:
@@ -131,7 +131,7 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
 
         Returns:
             dagster.PartitionsDefinition | None: Partitions definition derived from
-            metadata or ``None`` when no partitioning is configured.
+                metadata or ``None`` when no partitioning is configured.
         """
         try:
             meta = resource.meta.get("dagster")  # type: ignore
@@ -152,7 +152,7 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
 
         Returns:
             dagster.AutomationCondition | None: Automation condition to apply to the
-            Dagster asset or ``None`` when the default should be used.
+                Dagster asset or ``None`` when the default should be used.
         """
         try:
             meta = resource.meta.get("dagster")  # type: ignore
@@ -172,7 +172,7 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
 
         Returns:
             Mapping[str, Any]: Dictionary of Dagster-compliant tags derived from the dlt
-            resource metadata.
+                resource metadata.
         """
         try:
             tags = resource.tags  # type: ignore

@@ -31,7 +31,7 @@ class DagsterSlingFactory:
 
         Returns:
             dagster.Definitions: Definitions containing assets, resources, and
-            freshness checks derived from the provided configuration files.
+                freshness checks derived from the provided configuration files.
         """
         connections = []
         assets = []
@@ -82,7 +82,7 @@ class DagsterSlingFactory:
 
         Returns:
             tuple[list[SlingConnectionResource], dict[str, str]]: The updated
-            connections list and kind mapping including the newly processed entries.
+                connections list and kind mapping including the newly processed entries.
         """
         # Each connection block yields a resource definition and updates the map of
         # connection names to their declared kinds.  The kind map is used later when
@@ -105,8 +105,8 @@ class DagsterSlingFactory:
 
         Returns:
             SlingConnectionResource | None: Concrete connection resource populated with
-            secrets resolved from the key vault stub. Returns ``None`` when the config
-            does not produce a valid resource.
+                secrets resolved from the key vault stub. Returns ``None`` when the
+                config does not produce a valid resource.
         """
         for k, v in connection_config.items():
             if isinstance(v, dict):
@@ -135,8 +135,8 @@ class DagsterSlingFactory:
 
         Returns:
             tuple[list[dg.AssetsDefinition], list[dg.AssetChecksDefinition]]: Updated
-            assets and freshness checks lists containing entries for the processed
-            replications.
+                assets and freshness checks lists containing entries for the processed
+                replications.
         """
         # Iterate through each replication block and build Dagster assets, any
         # associated freshness checks, and companion external assets for dependencies.
@@ -173,7 +173,7 @@ class DagsterSlingFactory:
 
         Returns:
             dagster.AssetsDefinition: Assets definition that wraps the Sling
-            replication and streams structured events back to Dagster.
+                replication and streams structured events back to Dagster.
         """
 
         @sling_assets(
@@ -194,7 +194,7 @@ class DagsterSlingFactory:
 
             Yields:
                 dagster_sling.sling_event_iterator.SlingEventType: Structured logs and
-                progress events produced during the replication.
+                    progress events produced during the replication.
             """
 
             if "defaults" not in config:
@@ -233,7 +233,7 @@ class DagsterSlingFactory:
 
         Returns:
             dict: Updated replication configuration incorporating the rendered schema
-            suffix when the active environment requests user-level isolation.
+                suffix when the active environment requests user-level isolation.
         """
 
         user = os.environ["DESTINATION__SNOWFLAKE__CREDENTIALS__USERNAME"].upper()
@@ -265,7 +265,7 @@ class DagsterSlingFactory:
 
         Returns:
             list[dagster.AssetSpec] | None: Asset specs mirroring upstream data sources
-            or ``None`` when no dependencies are declared.
+                or ``None`` when no dependencies are declared.
         """
         kinds = {kind} if kind else None
 
@@ -290,7 +290,7 @@ class DagsterSlingFactory:
 
         Returns:
             list[dagster.AssetChecksDefinition]: Freshness checks constructed from the
-            merged configuration, one per stream with configured thresholds.
+                merged configuration, one per stream with configured thresholds.
         """
         freshness_checks = []
 
