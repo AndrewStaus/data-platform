@@ -10,17 +10,17 @@ def materialize(
         session: Session,
         retrain_threshold: float
         ) -> dict[str, Any]:
-    """Model retrain pipeline:
-    1. get current version of model from registry
-    2. score against validation data set
-    3. log metrics
-    4. if score above threshold skip retraining
-    5. else train new models using training dataset
-    6. select top scoring model
-    7. score against validation data set
-    8. if score below previous model score do not register model
-    9. else register and promote model as default version
-    10. if score is still below threshold, asset check will alert an issue in dagster
+    """Model retrain pipeline steps:
+        1. get current version of model from registry
+        2. score against validation data set
+        3. log metrics
+        4. if score above threshold skip retraining
+        5. else train new models using training dataset
+        6. select top scoring model
+        7. score against validation data set
+        8. if score below previous model score do not register model
+        9. else register and promote model as default version
+        10. if score is still below threshold, asset check will alert an issue in dagster
     """
     from snowflake.ml.model.type_hints import SupportedModelType
     from snowflake.ml.registry.registry import Registry
