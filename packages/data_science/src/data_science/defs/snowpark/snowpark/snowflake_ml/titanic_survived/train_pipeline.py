@@ -20,7 +20,8 @@ def materialize(
         7. score against validation data set
         8. if score below previous model score do not register model
         9. else register and promote model as default version
-        10. if score is still below threshold, asset check will alert an issue in dagster
+        10. if score is still below threshold, asset check will alert an issue in
+        dagster
     """
     from snowflake.ml.model.type_hints import SupportedModelType
     from snowflake.ml.registry.registry import Registry
