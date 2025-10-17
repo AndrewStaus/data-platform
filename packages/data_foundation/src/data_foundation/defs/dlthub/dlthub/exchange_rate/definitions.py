@@ -18,8 +18,8 @@ def defs() -> Definitions:
 
     Returns:
         dagster.Definitions: Definitions containing Dagster assets that wrap the dlt
-        resources defined in this module, complete with automation metadata and
-        freshness checks emitted by :class:`DagsterDltFactory`.
+            resources defined in this module, complete with automation metadata and
+            freshness checks emitted by :class:`DagsterDltFactory`.
     """
     from ...factory import ConfigurableDltResource, DagsterDltFactory
     from .data import get_exchange_rate

@@ -20,8 +20,8 @@ def get_exchange_rate(currency: str) -> Callable[[], Any]:
 
     Returns:
         Callable[[], Generator[Any, Any, None]]: A zero-argument callable that yields
-        successive API responses encoded as Python dictionaries. The callable matches
-        dlt's expectation for data loader functions.
+            successive API responses encoded as Python dictionaries. The callable
+            matches dlt's expectation for data loader functions.
     """
 
     uri = (
@@ -36,8 +36,8 @@ def get_exchange_rate(currency: str) -> Callable[[], Any]:
 
         Yields:
             dict[str, Any]: Parsed JSON responses containing currency conversion rates
-            plus pagination metadata. The generator stops when the API no longer
-            provides a ``next_page`` URL.
+                plus pagination metadata. The generator stops when the API no longer
+                provides a ``next_page`` URL.
         """
         response = requests.get(uri)
         yield response.json()

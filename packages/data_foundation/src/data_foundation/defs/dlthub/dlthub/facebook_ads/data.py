@@ -13,8 +13,8 @@ def get_campaigns() -> Generator[list[dict[str, Any]], Any]:
 
     Yields:
         list[dict[str, Any]]: Batches of campaign data objects that mimic responses
-        from the Facebook Ads API. Each dictionary contains ``id``, ``name``,
-        ``start_date``, and ``updated`` fields.
+            from the Facebook Ads API. Each dictionary contains ``id``, ``name``,
+            ``start_date``, and ``updated`` fields.
     """
 
     response = [

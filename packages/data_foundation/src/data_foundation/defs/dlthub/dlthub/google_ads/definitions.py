@@ -12,8 +12,8 @@ def defs() -> Definitions:
 
     Returns:
         dagster.Definitions: Definitions representing the Google Ads campaign and
-        criterion resources with scheduling metadata applied through
-        :class:`DagsterDltFactory`.
+            criterion resources with scheduling metadata applied through
+            :class:`DagsterDltFactory`.
     """
     from ...factory import ConfigurableDltResource, DagsterDltFactory
     from .data import google_ads

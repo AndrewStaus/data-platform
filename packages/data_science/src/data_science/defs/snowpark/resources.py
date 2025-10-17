@@ -12,7 +12,7 @@ class SnowparkResource(dg.ConfigurableResource):
         super().__init__(**kwargs)
         self._session = None
 
-    def get_session(self, database="analytics",
+    def get_session(self, database: str ="analytics",
                     schema: str | None = None,
                     warehouse: str|None = None) -> "snowflake.snowpark.Session":  # type: ignore # noqa
         """Create a session with snowpark to allow for control of the remote execution
@@ -28,7 +28,7 @@ class SnowparkResource(dg.ConfigurableResource):
 
         Returns:
             snowflake.snowpark.Session: A session which will allow for remote code
-            execution on a snowflake warehouse.
+                execution on a snowflake warehouse.
         """
         import sys
 

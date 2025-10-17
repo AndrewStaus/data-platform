@@ -12,7 +12,7 @@ def defs() -> Definitions:
 
     Returns:
         dagster.Definitions: Definitions that wrap the dlt resource used to ingest
-        campaign data, including automation metadata surfaced through the factory.
+            campaign data, including automation metadata surfaced through the factory.
     """
     from ...factory import ConfigurableDltResource, DagsterDltFactory
     from .data import get_campaigns
