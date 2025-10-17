@@ -4,13 +4,13 @@ version = "0.1.0"
 description = "Code location for dagster that exposes dbt, sling, and dlt resources for Analytics Engineering"
 requires-python = ">=3.12, <3.13"
 dependencies = [
-    "dagster-cloud==1.11.12",
-    "dagster-dbt==0.27.12",
-    "dagster-dlt==0.27.12",
-    "dagster-k8s==0.27.12",
-    "dagster-postgres==0.27.12",
-    "dagster-sling==0.27.12",
-    "dagster-snowflake==0.27.12",
+    "dagster-cloud==1.11.15",
+    "dagster-dbt==0.27.15",
+    "dagster-dlt==0.27.15",
+    "dagster-k8s==0.27.15",
+    "dagster-postgres==0.27.15",
+    "dagster-sling==0.27.15",
+    "dagster-snowflake==0.27.15",
     "psutil==7.1.0",
     "data-platform-utils",
 ]
