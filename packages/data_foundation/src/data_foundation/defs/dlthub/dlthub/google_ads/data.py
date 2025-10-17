@@ -11,8 +11,8 @@ def google_ads(endpoint: str) -> Callable[[], Generator[list[dict[str, Any]], An
 
     Returns:
         Callable[[], Generator[list[dict[str, Any]], Any, None]]: Zero-argument callable
-        that yields batches of dictionaries representing API responses for the
-        requested endpoint.
+            that yields batches of dictionaries representing API responses for the
+            requested endpoint.
 
     Raises:
         KeyError: If the provided endpoint is not supported by the stub implementation.

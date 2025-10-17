@@ -33,7 +33,9 @@ replications:
           automation_condition_config: {"cron_schedule":"@hourly", "cron_timezone":"utc"}
           # freshness_check: {"deadline_cron": "30 * * * *"}
     streams:
-      # Separate streams allow us to assign different Dagster partitions later if
-      # web and app latency diverge.
+      # Each stream entry defines a table to be ingested, the defaults above will be 
+      # applied unless otherwise specified in the stream.  Meta captures table-level
+      # metadata that controls scheduling as well as tagging that Dagster surfaces in
+      # the UI. Keep these tags in sync with data governance expectations.
       adobe_experience.web_hits:
       adobe_experience.app_hits:
