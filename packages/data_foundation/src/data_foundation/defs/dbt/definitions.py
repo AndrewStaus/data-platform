@@ -28,11 +28,6 @@ def defs() -> Definitions:
     state_path = "state/"
 
 
-    # .\.venv\Lib\site-packages\dagster_dbt\asset_utils.py
-    # added: if unique_id in child_map.keys():
-    # on line 816.  As of dbt fusion 2.09 the child map
-    # does not poulate keys for assets if the asset has no children
-    # resulting in key error when loading definitions.
     def dbt() -> DbtProject:
         """Instantiate a :class:`DbtProject` with environment-aware configuration.
 
