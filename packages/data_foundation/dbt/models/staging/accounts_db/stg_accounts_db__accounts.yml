@@ -27,6 +27,7 @@ models:
           meta: {}
           tags: []
       - name: INDIVIDUAL_PARTY_KEY
+        data_type: VARCHAR
         description: ''
         config:
           meta: {}
@@ -43,8 +44,7 @@ models:
           meta: {}
           tags: []
       - name: INDIVIDUAL_PARTY_KEY
-        data_type: varchar
-        description: ''
+        description: 'The MDM id for the account holder'
         config:
           meta: {}
           tags: []
