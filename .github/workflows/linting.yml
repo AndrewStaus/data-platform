@@ -1,4 +1,4 @@
-# Workflow for running dbt checks on data foundation package
+# Workflow for running linting checks on data foundation package
 name: Linting
 
 on:

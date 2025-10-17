@@ -1,0 +1,32 @@
+# Workflow for running dbt checks on data foundation package to ensure all models are
+# able to compile, and code quality standards are met (documentation completness, 
+# data quality coverage, modeling practices).
+# see: https://dbt-labs.github.io/dbt-project-evaluator/latest/
+# Stub for now, will need to hook up to snowflake, and add credentials in the
+# github action environment.
+
+name: dbt Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - "main"
+      - "dev"
+
+permissions:
+  checks: write
+  contents: read
+
+jobs:
+  dbt Checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+      - name: dbt Checks
+        run: echo uv run dbt test --select state:modified+
