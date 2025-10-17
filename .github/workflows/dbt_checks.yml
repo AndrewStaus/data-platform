@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 jobs:
-  dbt Checks:
+  dbt_Checks:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
