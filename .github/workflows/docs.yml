@@ -36,7 +36,7 @@ jobs:
 
       - name: Create Stubs
         working-directory: ./.mkdocs
-        run: uv run --only-group docs ./make_stubs.py
+        run: uv run --only-group docs ./gen_pages.py
 
       - name: Build docs
         working-directory: ./.mkdocs

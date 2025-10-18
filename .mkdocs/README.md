@@ -14,13 +14,11 @@ house custom overrides to tailor the look and feel of the documentation site.
 
 - `mkdocs.yml`: The main configuration file for MkDocs, defining site settings, 
 navigation structure, theme, and extensions.
-- `docs/`: A directory containing md files that are converted to static pages on the doc
-site.
-- `make_stubs.py` A script that will iterate through the project source code and
+- `gen_pages.py` A script that will iterate through the project source code and
 create documentation stubs that will be rendered in the page.
 
 ## Usage
 
-Running `mkdocs serve` will create a local copy of the site documents for review.
-Published documentation will automatically be generated when code is merged to the main
-git branch.
+Running `mkdocs serve --config-fil .mkdocs/mkdocs.yml` will create a local copy of the
+site documents for review. Published documentation will automatically be generated when
+code is merged to the main git branch.

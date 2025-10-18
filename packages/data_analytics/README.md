@@ -41,7 +41,7 @@ of the workspace in order to support pygwalker.
         string should be interpreted as sql code for highlighting.
     3. sql magic:
 
-        ```python
+        ```sql
         %%sql
         select * from database.schema.table
         ```
@@ -54,7 +54,7 @@ of the workspace in order to support pygwalker.
 
         Alternatively, a sql statement can be placed in a variable directly:
 
-        ```python
+        ```sql
         %%sql df
         select * from database.schema.table
         ```
