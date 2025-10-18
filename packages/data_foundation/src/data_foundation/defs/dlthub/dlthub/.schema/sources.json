@@ -9,21 +9,114 @@
       "description": "Connection definitions for data sources and targets",
       "patternProperties": {
         "^[a-zA-Z0-9_]*\\.[a-zA-Z0-9_-]*$": {
-          "oneOf": [
-            {
-              "type": "string",
-              "description": "Connection URL string"
-            },
-            {
-              "$ref": "#/definitions/Resource"
-            }
-          ]
+          "$ref": "#/definitions/Resource"
+        }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "description": "Connection definitions for data sources and targets",
+      "patternProperties": {
+        "^[a-zA-Z0-9_][a-zA-Z0-9_-]*$": {
+          "$ref": "#/definitions/Source"
         }
       },
       "additionalProperties": false
     }
   },
   "definitions": {
+    "meta": {
+      "type": "object",
+      "description": "Meta data to pass to external tools",
+      "properties": {
+        "dagster": {
+          "type": "object",
+          "description": "Meta data to pass to dagster to control scheduleing and checks",
+          "properties": {
+            "freshness_lower_bound_delta_seconds": {
+              "type": "integer",
+              "description": "The time in seconds since the last materialization to wait before declaring the asset in violation of SLA"
+            },
+            "automation_condition": {
+              "type": "string",
+              "description": "The automation condition to use to decided when to materizalize the asset."
+            },
+            "automation_condition_config": {
+              "type": "object",
+              "description": "Configuarion arguments if the automation condition requires.",
+              "properties": {
+                "cron_schedule": {
+                  "type": "string",
+                  "description": "A cronstring defining the schedule."
+                },
+                "cron_timezone": {
+                  "type": "string",
+                  "description": "The three character ISO identifier for the timezone."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parallelized": {
+      "type": "boolean",
+      "description": "If `True`, the resource generator will be extracted in parallel with other resources."
+    },
+    "spec": {
+      "type": "object",
+      "description": " A specification of configuration and secret values required by the source."
+    },
+    "schema_contract": {
+      "type": "object",
+      "description": "Schema contract settings that will be applied to all resources of this source",
+      "properties": {
+        "tables":{
+          "description": "The contract is applied when a new table is created.\n- `evolve`: No constraints on schema changes. \n- `freeze`: This will raise an exception if data is encountered that does not fit the existing schema, so no data will be loaded to the destination.\n- `discard_row`: This will discard any extracted row if it does not adhere to the existing schema, and this row will not be loaded to the destination.\n- `discard_value`: This will discard data in an extracted row that does not adhere to the existing schema, and the row will be loaded without this data.",
+          "type":"string",
+          "enum": ["evolve", "freeze", "discard_row", "discard_value"]
+        },
+        "columns":{
+          "description": "The contract is applied when a new column is created on an existing table\n- `evolve`: No constraints on schema changes. \n- `freeze`: This will raise an exception if data is encountered that does not fit the existing schema, so no data will be loaded to the destination.\n- `discard_row`: This will discard any extracted row if it does not adhere to the existing schema, and this row will not be loaded to the destination.\n- `discard_value`: This will discard data in an extracted row that does not adhere to the existing schema, and the row will be loaded without this data.",
+          "type":"string",
+          "enum": ["evolve", "freeze", "discard_row", "discard_value"]
+        },
+        "data_type":{
+          "description": "The contract is applied when data cannot be coerced into a data type associated with an existing column\n- `evolve`: No constraints on schema changes. \n- `freeze`: This will raise an exception if data is encountered that does not fit the existing schema, so no data will be loaded to the destination.\n- `discard_row`: This will discard any extracted row if it does not adhere to the existing schema, and this row will not be loaded to the destination.\n- `discard_value`: This will discard data in an extracted row that does not adhere to the existing schema, and the row will be loaded without this data.",
+          "type":"string",
+          "enum": ["evolve", "freeze", "discard_row", "discard_value"]
+        }
+      }
+    },
+    "max_table_nesting": {
+      "type": "integer",
+      "description": "A schema hint that sets the maximum depth of nested table above which the remaining nodes are loaded as structs or JSON"
+    },
+      "section": {
+        "type": "boolean",
+        "description": "Configuration section that comes right after 'sources` in default layout. If not present, the current python module name will be used.  Default layout is `sources.<section>.<name>.<key_name>`. Note that resource section is used only when a single resource is passed to the pipeline."
+      },
+    "Source": {
+      "type": "object",
+      "description": "A dlt source is a logical grouping of resources that are often extracted and loaded together. A source is associated with a schema, which describes the structure of the loaded data and provides instructions how to load it. Such schema contains table schemas that describe the structure of the data coming from the resources.",
+      "properties": {
+        "resources": {
+          "type": "array",
+          "description": "A list of resource names that will be grouped with the source."
+        },
+        "root_key": {
+          "type": "boolean",
+          "description": "Enables merging on all resources by propagating row key from root to all nested tables. This option is most useful if you plan to change write disposition of a resource to disable/enable merge. Defaults to False."
+        },
+        "section": {"$ref": "#/definitions/section"},
+        "max_table_nesting": {"$ref": "#/definitions/max_table_nesting"},
+        "schema_contract": {"$ref": "#/definitions/schema_contract"},
+        "spec": {"$ref": "#/definitions/spec"},
+        "parallelized": {"$ref": "#/definitions/parallelized"},
+        "meta": {"$ref": "#/definitions/meta"}
+
+      }
+    },
     "Resource": {
       "type": "object",
       "description": "Resource configuration object",
@@ -43,10 +136,6 @@
         "kinds": {
           "type": "object",
           "description": "A set detailing the kinds resources that the asset utilizes"
-        },
-        "max_table_nesting": {
-          "type": "integer",
-          "description": "A schema hint that sets the maximum depth of nested table above which the remaining nodes are loaded as structs or JSON"
         },
         "write_disposition": {
           "oneOf": [
@@ -90,27 +179,6 @@
           ],
           "description": "A column name or a list of column names that define a merge key. Typically used with `merge` write disposition to remove overlapping data ranges ie. to keep a single record for a given day."
         },
-        "schema_contract": {
-          "type": "object",
-          "description": "Schema contract settings that will be applied to all resources of this source",
-          "properties": {
-            "tables":{
-              "description": "The contract is applied when a new table is created.\n- `evolve`: No constraints on schema changes. \n- `freeze`: This will raise an exception if data is encountered that does not fit the existing schema, so no data will be loaded to the destination.\n- `discard_row`: This will discard any extracted row if it does not adhere to the existing schema, and this row will not be loaded to the destination.\n- `discard_value`: This will discard data in an extracted row that does not adhere to the existing schema, and the row will be loaded without this data.",
-              "type":"string",
-              "enum": ["evolve", "freeze", "discard_row", "discard_value"]
-            },
-            "columns":{
-              "description": "The contract is applied when a new column is created on an existing table\n- `evolve`: No constraints on schema changes. \n- `freeze`: This will raise an exception if data is encountered that does not fit the existing schema, so no data will be loaded to the destination.\n- `discard_row`: This will discard any extracted row if it does not adhere to the existing schema, and this row will not be loaded to the destination.\n- `discard_value`: This will discard data in an extracted row that does not adhere to the existing schema, and the row will be loaded without this data.",
-              "type":"string",
-              "enum": ["evolve", "freeze", "discard_row", "discard_value"]
-            },
-            "data_type":{
-              "description": "The contract is applied when data cannot be coerced into a data type associated with an existing column\n- `evolve`: No constraints on schema changes. \n- `freeze`: This will raise an exception if data is encountered that does not fit the existing schema, so no data will be loaded to the destination.\n- `discard_row`: This will discard any extracted row if it does not adhere to the existing schema, and this row will not be loaded to the destination.\n- `discard_value`: This will discard data in an extracted row that does not adhere to the existing schema, and the row will be loaded without this data.",
-              "type":"string",
-              "enum": ["evolve", "freeze", "discard_row", "discard_value"]
-            }
-          }
-        },
         "table_format": {
           "type": "string",
           "description": "Defines the storage format of the table. Currently only `iceberg` is supported on Athena, and `delta` on the filesystem. Other destinations ignore this hint.",
@@ -133,59 +201,20 @@
           "type": "boolean",
           "description": "When `True` `dlt pipeline` will extract and load this resource, if `False`, the resource will be ignored."
         },
-        "spec": {
-          "type": "object",
-          "description": " A specification of configuration and secret values required by the source."
-        },
-        "parallelized": {
-          "type": "boolean",
-          "description": "If `True`, the resource generator will be extracted in parallel with other resources."
-        },
         "incremental": {
           "type": "boolean",
           "description": "An incremental configuration for the resource."
-        },
-        "section": {
-          "type": "boolean",
-          "description": "Configuration section that comes right after 'sources` in default layout. If not present, the current python module name will be used.  Default layout is `sources.<section>.<name>.<key_name>`. Note that resource section is used only when a single resource is passed to the pipeline."
         },
         "data_from": {
           "type": "string",
           "description": "Allows to pipe data from one resource to another to build multi-step pipelines."
         },
-        "meta": {
-          "type": "object",
-          "description": "Meta data to pass to dagster to control scheduleing and checks",
-          "properties": {
-            "dagster": {
-              "type": "object",
-              "properties": {
-                "freshness_lower_bound_delta_seconds": {
-                  "type": "integer",
-                  "description": "The time in seconds since the last materialization to wait before declaring the asset in violation of SLA"
-                },
-                "automation_condition": {
-                  "type": "string",
-                  "description": "The automation condition to use to decided when to materizalize the asset."
-                },
-                "automation_condition_config": {
-                  "type": "object",
-                  "description": "Configuarion arguments if the automation condition requires.",
-                  "properties": {
-                    "cron_schedule": {
-                      "type": "string",
-                      "description": "A cronstring defining the schedule."
-                    },
-                    "cron_timezone": {
-                      "type": "string",
-                      "description": "The three character ISO identifier for the timezone."
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+        "section": {"$ref": "#/definitions/section"},
+        "max_table_nesting": {"$ref": "#/definitions/max_table_nesting"},
+        "schema_contract": {"$ref": "#/definitions/schema_contract"},
+        "spec": {"$ref": "#/definitions/spec"},
+        "parallelized": {"$ref": "#/definitions/parallelized"},
+        "meta": {"$ref": "#/definitions/meta"}
       }
     }
   }

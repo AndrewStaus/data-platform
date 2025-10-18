@@ -35,3 +35,22 @@ resources:
                     cron_schedule: "@daily"
                     cron_timezone: utc
                 freshness_lower_bound_delta_seconds: 108000
+
+sources:
+    exchange_rate:
+        resources: [exchange_rate.usd]
+        max_table_nesting: 0
+        root_key: false
+        schema: Schema = None
+        schema_contract:
+            tables: evolve
+            columns: freeze
+            data_type: discard_row
+        parallelized: False
+        meta:
+            dagster:
+                automation_condition: on_schedule
+                automation_condition_config:
+                    cron_schedule: "@daily"
+                    cron_timezone: utc
+                freshness_lower_bound_delta_seconds: 108000
