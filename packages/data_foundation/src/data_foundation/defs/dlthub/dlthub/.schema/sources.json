@@ -187,7 +187,7 @@
         "file_format": {
           "type": "string",
           "description": "Format of the file in which resource data is stored. Useful when importing external files. Use `preferred` to force a file format that is preferred by the destination used",
-          "enum": ["jasonl", "parquet", "csv", "insert"]
+          "enum": ["preferred", "jasonl", "parquet", "csv", "insert"]
         },
         "references": {
           "type": "array",
