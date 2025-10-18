@@ -1,8 +1,6 @@
 resources:
     facebook_ads.campaigns:
         entry: data.get_campaigns
-        arguments:
-        keyword_arguments:
         primary_key: id
         write_disposition: merge
         kinds: {api}

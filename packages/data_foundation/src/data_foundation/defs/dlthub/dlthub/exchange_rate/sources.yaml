@@ -1,9 +1,8 @@
-# yaml-language-server: $schema=../.schema/sources.json
 resources:
     exchange_rate.usd:
         entry: data.get_exchange_rate
         arguments: [usd]
-        keyword_arguments:
+        keyword_arguments: {}
         primary_key: date
         write_disposition: merge
         kinds: {api}
@@ -18,7 +17,7 @@ resources:
     exchange_rate.cad:
         entry: data.get_exchange_rate
         arguments: [cad]
-        keyword_arguments:
+        keyword_arguments: {}
         primary_key: date
         write_disposition: merge
         kinds: {api}

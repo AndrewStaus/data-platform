@@ -1,7 +1,6 @@
 # Connction details for the snowflake warehouse that can be referenced by name
 # in replication.yaml files.
 
-# yaml-language-server: $schema=../.schema/connections.json
 connections:
   snowflake:
     type: snowflake

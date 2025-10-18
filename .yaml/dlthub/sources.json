@@ -129,7 +129,7 @@
           "type": "array",
           "description": "A list of arguments to pass to the entry point in the case that it is a second order function"
         },
-        "keword_arguments": {
+        "keyword_arguments": {
           "type": "object",
           "description": "Arguments to pass to the entry point in the case that it is a second order function"
         },

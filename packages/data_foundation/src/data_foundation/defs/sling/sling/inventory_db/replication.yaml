@@ -1,7 +1,6 @@
 # Standard incremental sync that keeps product attributes fresh for dbt models.
 # https://docs.slingdata.io/concepts/replication
 
-# yaml-language-server: $schema=../.schema/replication.json
 name: inventory_db->snowflake
 env: {SLING_LOADED_AT_COLUMN: timestamp}
 source: inventory_db

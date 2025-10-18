@@ -40,6 +40,11 @@
 			]
 		},
 		"settings": {
+			"yaml.schemas": {
+				"/workspaces/data-platform/.yaml/dlthub/sources.json": "**/dlthub/**/*.yaml",
+				"/workspaces/data-platform/.yaml/sling/connections.json": "**/sling/**/*.yaml",
+				"/workspaces/data-platform/.yaml/sling/replication.json": "**/sling/**/*.yaml"
+			},
 			"sqlfluff.dbtInterface.enabled": false,
 			"sqlfluff.dialect": "",
 			"sqlfluff.linter.run": "onSave",

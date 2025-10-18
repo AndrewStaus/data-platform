@@ -1,8 +1,7 @@
 resources:
     google_ads.campaigns:
         entry: data.google_ads
-        arguments: get_campaigns
-        keyword_arguments:
+        arguments: [get_campaigns]
         primary_key: id
         write_disposition: merge
         kinds: {api}
@@ -16,8 +15,7 @@ resources:
 
     google_ads.criterion:
         entry: data.google_ads
-        arguments: get_campaigns
-        keyword_arguments:
+        arguments: [get_campaigns]
         primary_key: id
         write_disposition: merge
         kinds: {api}

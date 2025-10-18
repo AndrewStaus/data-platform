@@ -2,7 +2,6 @@
 # and app hits drive marketing attribution models downstream.
 # https://docs.slingdata.io/concepts/replication
 
-# yaml-language-server: $schema=../.schema/replication.json
 name: adobe_experience->snowflake
 # Hourly backfills accommodate late-arriving events from Adobe. Adjust the
 # schedule/partition metadata as SLAs evolve.
