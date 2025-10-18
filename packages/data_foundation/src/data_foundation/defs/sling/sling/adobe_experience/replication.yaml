@@ -24,7 +24,7 @@ defaults:
             partition_start_date: "2025-07-01"
             automation_condition: "on_schedule"
             automation_condition_config: {"cron_schedule":"@hourly", "cron_timezone":"utc"}
-            # freshness_check: {"deadline_cron": "30 * * * *"}
+            freshness_check: {"deadline_cron": "30 * * * *"}
 streams:
     # Each stream entry defines a table to be ingested, the defaults above will be 
     # applied unless otherwise specified in the stream.  Meta captures table-level
