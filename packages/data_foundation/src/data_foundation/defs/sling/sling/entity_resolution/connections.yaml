@@ -1,0 +1,12 @@
+# Connction details for the entity_resolution datbabase that can be referenced by name
+# in replication.yaml files.
+
+# yaml-language-server: $schema=../.schema/connections.json
+connections:
+    entity_resolution:
+        type: postgres
+        database: env.SOURCE__ENTITY_RESOLUTION__DATABASE
+        host: env.SOURCE__ENTITY_RESOLUTION__HOST
+        port: secret.SOURCE__ENTITY_RESOLUTION__PORT
+        user: secret.SOURCE__ENTITY_RESOLUTION__USER
+        password: secret.SOURCE__ENTITY_RESOLUTION__PASSWORD

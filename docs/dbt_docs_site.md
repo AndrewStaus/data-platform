@@ -1,4 +1,4 @@
-# dbt Docs Site
+<!-- # dbt Docs Site
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,4 +8,4 @@
 </head>
 <body>
     <a href="https://andrewstaus.github.io/data-platform/dbt/target/">click here if you are not redirected.</a>
-</body>
+</body> -->

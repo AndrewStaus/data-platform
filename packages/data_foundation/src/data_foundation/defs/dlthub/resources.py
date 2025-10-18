@@ -1,7 +1,13 @@
 """Resource definitions for dltHub integrations."""
 
+import os
+from pathlib import Path
+
 from dagster import Definitions
 from dagster.components import definitions
+from data_platform_utils.keyvault_stub import SecretClient
+
+from .factory import DagsterDltFactory
 
 
 @definitions
@@ -14,12 +20,6 @@ def defs() -> Definitions:
             environment variables expected by dlt are populated before constructing the
             resource.
     """
-    import os
-
-    import dagster as dg
-    from dagster_dlt import DagsterDltResource
-    from data_platform_utils.keyvault_stub import SecretClient
-
     kv = SecretClient(
         vault_url=os.getenv("AZURE_KEYVAULT_URL"),
         credential=os.getenv("AZURE_KEYVAULT_CREDENTIAL"),
@@ -45,5 +45,8 @@ def defs() -> Definitions:
     )
 
     os.environ["ENABLE_DATASET_NAME_NORMALIZATION"] = "false"
+    
+    # Resolve the root folder containing dlt configuration files and scripts.
+    config_dir = Path(__file__).joinpath(*[".."], "dlthub").resolve()
 
-    return dg.Definitions(resources={"dlt": DagsterDltResource()})
+    return DagsterDltFactory.build_definitions(config_dir)

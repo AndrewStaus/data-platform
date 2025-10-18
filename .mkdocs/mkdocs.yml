@@ -16,6 +16,9 @@ theme:
 
 plugins:
   - search # Standard full-text search across generated pages.
+  - gen-files:
+      scripts:
+        - gen_pages.py
   - mkdocstrings: # Autodoc support for Python objects referenced in the docs/ tree.
       handlers:
         python:

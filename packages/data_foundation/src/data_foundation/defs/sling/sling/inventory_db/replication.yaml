@@ -1,0 +1,26 @@
+# Standard incremental sync that keeps product attributes fresh for dbt models.
+# https://docs.slingdata.io/concepts/replication
+
+# yaml-language-server: $schema=../.schema/replication.json
+name: inventory_db->snowflake
+env: {SLING_LOADED_AT_COLUMN: timestamp}
+source: inventory_db
+target: snowflake
+defaults: 
+    mode: incremental
+    object: '{stream_schema_upper}.{stream_table_upper}'
+    primary_key: [id]
+    update_key: updated_at
+    target_options:
+        column_casing: snake
+        add_new_columns: true
+        adjust_column_type: true
+streams:
+    # The products table is tagged for Dagster automation so the scheduler keeps
+    # the dimensional data up to date. Uncomment freshness checks as SLOs mature.
+    inventory_db.products:
+        meta:
+            dagster:
+                automation_condition: "on_schedule"
+                automation_condition_config: {"cron_schedule":"@daily", "cron_timezone":"utc"}
+                freshness_check: {"lower_bound_delta_seconds": 129600}

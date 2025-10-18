@@ -11,22 +11,23 @@ clear ownership boundaries.
 
 | Path | Owner Focus | Description | 
 | --- | --- | --- |
-| `.dagster_home/` | Platform | persistent storage for development settings such as telemetry defaults. |
-| `.devconatainer/` | Platform | Visual Studio Code Dev Container to share development environment for local development. |
-| `.github/` | Platform | CI/CD automation (publishing docs, running checks). |
-| `.helm` | Platform | Deployment values for helm chart to deploy to Kubernetes. |
-| `.mkdocs/` | Cross-functional | Markdown sources for the MkDocs site published via GitHub Pages. |
-| `.vscode/` | Cross-functional | Shared workspace settings, including code snippets for faster development. |   
-| `libs/` | Cross-functional | Shared libraries for common functions between packages. |
-| `packages/` | --- | Code locations which are deployed as separate docker images providing environment isolation so that multiple teams can manage their own code. |
-| `packages/data_analytics/` | Data & Analytics | Exploratory sql analyses and notebooks. |
-| `packages/data_science/` | Data & Analytics | Dagster definitions, resource configuration, and integration glue code. Includes Snowpark definitions for ML-Ops. |
-| `packages/data_foundation/` | --- | Foundational data assets that are used across the business.  Contains ingestion's and the main dbt project |
-| `.../.../src/data_foundation` | Platform | Dagster definitions, resource configuration, and integration glue code. Includes Sling source connection YAML that controls raw data ingestion   |
-| `.../.../dbt/` | Cross-functional | dbt project containing models, seeds, snapshots, and tests. YAML files document sources, staging models, and marts. |
-| `.env.example` | Cross-functional | Environment variable template for local development.  Should be copied to `.env` and have values replaced with correct credentials. |
-| `Dockerfile.*`, `pyproject.toml`, `uv.lock` | Platform | Runtime dependencies for orchestrator workers. |
-| `workspace.yaml` | Platform | Dagster code location configuration for local development. |
+| **.dagster_home/** | Platform | persistent storage for development settings such as telemetry defaults. |
+| **.devconatainer/** | Platform | Visual Studio Code Dev Container to share development environment for local development. |
+| **.github/** | Platform | CI/CD automation (publishing docs, running checks). |
+| **.helm** | Platform | Deployment values for helm chart to deploy to Kubernetes. |
+| **.mkdocs/** | Cross-functional | Markdown sources for the MkDocs site published via GitHub Pages. |
+| **.vscode/** | Cross-functional | Shared workspace settings, including code snippets for faster development. |
+| **docs/** | Cross-functional | Static documentation pages. Prioritize placing documentation in the relevant area of the project, however this space can be used for documentation does not otherwise have an appropriate location. |
+| **libs/** | Cross-functional | Shared libraries for common functions between packages. |
+| **packages/** | --- | Code locations which are deployed as separate docker images providing environment isolation so that multiple teams can manage their own code. |
+| **packages/data_analytics/** | Data & Analytics | Exploratory sql analyses and notebooks. |
+| **packages/data_science/** | Data & Analytics | Dagster definitions, resource configuration, and integration glue code. Includes Snowpark definitions for ML-Ops. |
+| **packages/data_foundation/** | --- | Foundational data assets that are used across the business.  Contains ingestion's and the main dbt project |
+| **../../src/data_foundation** | Platform | Dagster definitions, resource configuration, and integration glue code. Includes Sling source connection YAML that controls raw data ingestion   |
+| **../../dbt/** | Cross-functional | dbt project containing models, seeds, snapshots, and tests. YAML files document sources, staging models, and marts. |
+| **.env.example** | Cross-functional | Environment variable template for local development.  Should be copied to `.env` and have values replaced with correct credentials. |
+| **Dockerfile**, **pyproject.toml**, **uv.lock** | Platform | Runtime dependencies for orchestrator workers. |
+| **workspaces** | Platform | Dagster code location configuration for local development. |
 
 ## Local Development
 

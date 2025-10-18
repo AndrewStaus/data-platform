@@ -38,23 +38,25 @@ class DagsterSlingFactory:
         freshness_checks = []
         kind_map = {}
 
-        for config_path in os.listdir(config_dir):
-            if config_path.endswith(".yaml") or config_path.endswith(".yml"):
-                config_path = config_dir.joinpath(config_path).resolve()
-                with open(config_path) as file:
-                    config = yaml.load(file, Loader=yaml.FullLoader)
-                if not config:
-                    continue
+        config_paths = set()
+        patterns = ["**/*.yaml", "**/*.yml"]
+        for pattern in patterns:
+            config_paths = config_paths.union(config_dir.resolve().glob(pattern))
 
-                if connection_configs := config.get("connections"):
-                    connections, kind_map = DagsterSlingFactory._get_connections(
-                        connection_configs, connections, kind_map
-                    )
+        for config_path in config_paths:
+            config_path = config_dir.joinpath(config_path).resolve()
+            with open(config_path) as file:
+                config = yaml.load(file, Loader=yaml.FullLoader)
 
-                if replication_configs := config.get("replications"):
-                    assets, freshness_checks = DagsterSlingFactory._get_replications(
-                        replication_configs, freshness_checks, kind_map, assets
-                    )
+            if connection_configs := config.get("connections"):
+                connections, kind_map = DagsterSlingFactory._parse_connections(
+                    connection_configs, connections, kind_map
+                )
+
+            if config.get("streams"):
+                assets, freshness_checks = DagsterSlingFactory._parse_replication(
+                    config, freshness_checks, kind_map, assets
+                )
 
         return dg.Definitions(
             resources={"sling": SlingResource(connections=connections)},
@@ -69,8 +71,8 @@ class DagsterSlingFactory:
         )
 
     @staticmethod
-    def _get_connections(
-        connection_configs, connections, kind_map
+    def _parse_connections(
+        connection_configs: dict, connections: list, kind_map: dict
     ) -> tuple[list[SlingConnectionResource], dict[str, str]]:
         """Parse connection blocks and produce Sling connection resources.
 
@@ -87,9 +89,9 @@ class DagsterSlingFactory:
         # Each connection block yields a resource definition and updates the map of
         # connection names to their declared kinds.  The kind map is used later when
         # building external assets for dependencies.
-        for connection_config in connection_configs:
-            if connection := DagsterSlingFactory._get_connection(connection_config):
-                source = connection_config.get("name")
+        for source, connection_config in connection_configs.items():
+            connection_config["name"] = source
+            if connection := DagsterSlingFactory._create_resource(connection_config):
                 kind = connection_config.get("type")
                 kind_map[source] = kind
                 connections.append(connection)
@@ -97,7 +99,7 @@ class DagsterSlingFactory:
         return connections, kind_map
 
     @staticmethod
-    def _get_connection(connection_config: dict) -> SlingConnectionResource | None:
+    def _create_resource(connection_config: dict) -> SlingConnectionResource | None:
         """Materialize a Sling connection resource from a configuration dictionary.
 
         Args:
@@ -108,27 +110,27 @@ class DagsterSlingFactory:
                 secrets resolved from the key vault stub. Returns ``None`` when the
                 config does not produce a valid resource.
         """
-        for k, v in connection_config.items():
-            if isinstance(v, dict):
-                secret_name = list(v.keys())[0]
-                display_type = list(v.values())[0]
-
-                if display_type == "show":
-                    connection_config[k] = get_secret(secret_name).get_value()
-                else:
-                    connection_config[k] = get_secret(secret_name)
+        for attribute, original_value in connection_config.items():
+            parts = original_value.split(".")
+            prefix = parts[0].lower()
+            if prefix == "env": # ex: env.DESTINATION__SNOWFLAKE__HOST
+                connection_config[attribute] = get_secret(parts[1]).get_value()
+            elif prefix == "secret": # ex: secret.DESTINATION__SNOWFLAKE__PASSWORD
+                connection_config[attribute] = get_secret(parts[1])
+            else: # ex: postgres
+                connection_config[attribute]  = original_value
 
         connection = SlingConnectionResource(**connection_config)
         return connection
 
     @staticmethod
-    def _get_replications(
-        replication_configs, freshness_checks, kind_map, assets
+    def _parse_replication(
+        replication_config, freshness_checks, kind_map, assets
     ) -> tuple[list[dg.AssetsDefinition], list[dg.AssetChecksDefinition]]:
         """Construct Dagster assets and freshness checks for Sling replications.
 
         Args:
-            replication_configs: Iterable of replication configuration dictionaries.
+            replication_config: A replication configuration dictionaries.
             freshness_checks: Mutable list accumulating generated freshness checks.
             kind_map: Mapping of source names to their declared resource kind.
             assets: Mutable list accumulating Dagster asset definitions.
@@ -140,32 +142,31 @@ class DagsterSlingFactory:
         """
         # Iterate through each replication block and build Dagster assets, any
         # associated freshness checks, and companion external assets for dependencies.
-        for replication_config in replication_configs:
-            if bool(os.getenv("ENV")) == "dev":
-                replication_config = DagsterSlingFactory._set_dev_schema(
-                    replication_config
-                )
-            assets_definition = DagsterSlingFactory._get_replication(replication_config)
-
-            kind = kind_map.get(replication_config.get("source", None), None)
-            dep_asset_specs = DagsterSlingFactory._get_sling_deps(
-                replication_config, kind
-            )
-            asset_freshness_checks = DagsterSlingFactory._get_freshness_checks(
+        if bool(os.getenv("ENV")) == "dev":
+            replication_config = DagsterSlingFactory._set_dev_schema(
                 replication_config
             )
+        assets_definition = DagsterSlingFactory._create_asset(replication_config)
 
-            if asset_freshness_checks:
-                freshness_checks.extend(asset_freshness_checks)
-            if assets_definition:
-                assets.append(assets_definition)
-            if dep_asset_specs:
-                assets.extend(dep_asset_specs)
+        kind = kind_map.get(replication_config.get("source", None), None)
+        dep_asset_specs = DagsterSlingFactory._get_sling_deps(
+            replication_config, kind
+        )
+        asset_freshness_checks = DagsterSlingFactory._get_freshness_checks(
+            replication_config
+        )
+
+        if asset_freshness_checks:
+            freshness_checks.extend(asset_freshness_checks)
+        if assets_definition:
+            assets.append(assets_definition)
+        if dep_asset_specs:
+            assets.extend(dep_asset_specs)
 
         return assets, freshness_checks
 
     @staticmethod
-    def _get_replication(config: dict) -> dg.AssetsDefinition:
+    def _create_asset(config: dict) -> dg.AssetsDefinition:
         """Create a Dagster assets definition for a single Sling replication.
 
         Args:
