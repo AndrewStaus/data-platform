@@ -12,15 +12,17 @@ import dagster as dg
 from dagster._utils.tags import is_valid_tag_key
 from dagster_dlt import DagsterDltTranslator
 from dagster_dlt.translator import DltResourceTranslatorData
-from data_platform_utils.helpers import (
-    get_automation_condition_from_meta,
-    get_partitions_def_from_meta,
-)
+from data_platform_utils.helpers import get_partitions_def_from_meta
 from dlt.extract.resource import DltResource
 
 
 class CustomDagsterDltTranslator(DagsterDltTranslator):
     """Translate dlt resource metadata into Dagster asset definitions."""
+
+    def __init__(self,
+                 automation_condition:dg.AutomationCondition[Any]|None=None) -> None:
+        super().__init__() 
+        self.automation_condition = automation_condition
 
     @override
     def get_asset_spec(self, data: DltResourceTranslatorData) -> dg.AssetSpec:
@@ -38,11 +40,7 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
             key=self._resolve_back_compat_method(
                 "get_asset_key", self._default_asset_key_fn, data.resource
             ),
-            automation_condition=self._resolve_back_compat_method(
-                "get_automation_condition",
-                self._default_automation_condition_fn,
-                data.resource,
-            ),
+            automation_condition=self.get_automation_condition(data.resource),
             deps=self._resolve_back_compat_method(
                 "get_deps_asset_keys", self._default_deps_fn, data.resource
             ),
@@ -154,13 +152,8 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
             dagster.AutomationCondition | None: Automation condition to apply to the
                 Dagster asset or ``None`` when the default should be used.
         """
-        try:
-            meta = resource.meta.get("dagster")  # type: ignore
-            automation_condition = get_automation_condition_from_meta(meta)
-            if automation_condition:
-                return automation_condition
-        except Exception:
-            ...
+        if self.automation_condition:
+            return self.automation_condition
         return super().get_automation_condition(resource)
 
     @override

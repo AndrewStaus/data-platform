@@ -1,6 +1,6 @@
 resources:
     google_ads.campaigns:
-        source: data.google_ads
+        entry: data.google_ads
         arguments: get_campaigns
         keyword_arguments:
         primary_key: id
@@ -15,7 +15,7 @@ resources:
                 freshness_lower_bound_delta_seconds: 108000
 
     google_ads.criterion:
-        source: data.google_ads
+        entry: data.google_ads
         arguments: get_campaigns
         keyword_arguments:
         primary_key: id

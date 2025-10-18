@@ -1,6 +1,6 @@
 resources:
     facebook_ads.campaigns:
-        source: data.get_campaigns
+        entry: data.get_campaigns
         arguments:
         keyword_arguments:
         primary_key: id

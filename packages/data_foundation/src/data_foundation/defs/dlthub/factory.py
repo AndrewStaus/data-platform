@@ -12,7 +12,11 @@ import dlt
 import yaml
 from dagster_dlt import DagsterDltResource, dlt_assets
 from dagster_dlt.dlt_event_iterator import DltEventType
-from data_platform_utils.helpers import get_nested, get_schema_name
+from data_platform_utils.helpers import (
+    get_automation_condition_from_meta,
+    get_nested,
+    get_schema_name,
+)
 from dlt.extract.resource import DltResource
 
 from .translator import CustomDagsterDltTranslator
@@ -69,16 +73,18 @@ class DagsterDltFactory:
         
         for config_path in config_paths:
             with open(config_path) as file:
-                config = yaml.load(file, Loader=yaml.FullLoader)
-                for name, values in config.items():
+                data = yaml.load(file, Loader=yaml.FullLoader)
+                config = data.get("resources", {})
+                for name, attributes in config.items():
                     parent = config_path.parent.name
-                    values["entry"] = parent+"."+values["entry"]
-                    configs[name] = values
+                    attributes["entry"] = parent+"."+attributes["entry"]
+                    configs[name] = attributes
+
         return configs
 
     @staticmethod
     def _build_assets(resource: DltResource, schema: str,
-                    table: str, tags: set) -> dg.AssetsDefinition:
+                    table: str, tags: set, meta: dict) -> dg.AssetsDefinition:
         """Build Dagster assets from a dlt resource, along with metadata from the YAML
         config.
 
@@ -96,12 +102,15 @@ class DagsterDltFactory:
         def source(resource=resource) -> Generator[DltResource, Any]:
             yield resource
 
+        condition = get_automation_condition_from_meta(meta["dagster"])
         @dlt_assets(
             name=f"{schema}__{table}",
             op_tags={"tags": tags},
             dlt_source=source(),
             backfill_policy=dg.BackfillPolicy.single_run(),
-            dagster_dlt_translator=CustomDagsterDltTranslator(),
+            dagster_dlt_translator=CustomDagsterDltTranslator(
+                automation_condition=condition
+            ),
             pool="dlthub",
             dlt_pipeline=dlt.pipeline(
                 pipeline_name=f"{schema}__{table}",
@@ -125,6 +134,7 @@ class DagsterDltFactory:
                     materialize events.
             """
             yield from dlt.run(context=context)
+
         return assets
 
     @staticmethod
@@ -175,12 +185,15 @@ class DagsterDltFactory:
 
         data: Generator[Any, Any, None]
         module = importlib.import_module(
-            "data_foundation.defs.dlthub.dlthub"+module_path
+            "data_foundation.defs.dlthub.dlthub."+module_path
         )
         generator = getattr(module, function_name)
 
         data = generator
+
         if args or kwargs:
+            if not isinstance(args, list):
+                args = [args]
             data = generator(*args, **kwargs)
         return data
 
@@ -198,23 +211,25 @@ class DagsterDltFactory:
         Returns:
             A tuple containing the assets, dependancies, and freshness checks.
         """
+
         schema, table = name.split(".")
+        config["name"] = name
 
         # remove non-dlt keys so that it matches dlt.resource function signature
-        meta: dict = config.pop("meta", {})
-        kinds: set = config.pop("kinds")
-        tags: set = config.pop("tags")
+        meta: dict = config.pop("meta", dict())
+        kinds: set = config.pop("kinds", set())
+        tags: set = config.pop("tags", None)
         entry: str = config.pop("entry")
-        args: list = config.pop("arguments", [])
-        kwargs: dict = config.pop("keyword_arguments", {})
+        args: list = config.pop("arguments") or []
+        kwargs: dict = config.pop("keyword_arguments") or {}
 
         # set table name if not defined
-        config["table"] = config.get("table") or table
+        # config["table"] = config.get("table") or table
 
         # build assets and checks
         data = DagsterDltFactory._build_generator(entry, args, kwargs)
         resource: DltResource = dlt.resource(data, **config)
-        assets = DagsterDltFactory._build_assets(resource, schema, table, tags)
+        assets = DagsterDltFactory._build_assets(resource, schema, table, tags, meta)
         dep = dg.AssetSpec(
             [schema, "src", table], kinds=kinds, group_name=schema
         )

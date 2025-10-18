@@ -3,6 +3,7 @@
 import os
 from pathlib import Path
 
+import dagster as dg
 from dagster import Definitions
 from dagster.components import definitions
 from data_platform_utils.keyvault_stub import SecretClient
@@ -47,5 +48,6 @@ def defs() -> Definitions:
     os.environ["ENABLE_DATASET_NAME_NORMALIZATION"] = "false"
     
     # Resolve the root folder containing dlt configuration files and scripts.
-    config_dir = Path(__file__).joinpath(*[".."], "sling").resolve()
+    config_dir = Path(__file__).joinpath(*[".."], "dlthub").resolve()
+
     return DagsterDltFactory.build_definitions(config_dir)
