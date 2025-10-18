@@ -1,0 +1,31 @@
+# Daily incremental sync keeps the curated identity graph aligned with source
+# updates without reprocessing the full history.
+# https://docs.slingdata.io/concepts/replication
+
+# yaml-language-server: $schema=../.schema/replication.json
+name: entity_resolution->snowflake
+env: {SLING_LOADED_AT_COLUMN: timestamp}
+source: entity_resolution
+target: snowflake
+defaults: 
+    mode: incremental
+    object: '{stream_schema_upper}.{stream_table_upper}'
+    primary_key: [id]
+    update_key: date_time
+    target_options:
+        column_casing: snake
+        add_new_columns: true
+        adjust_column_type: true
+streams:
+    # Downstream dbt sources expect this table name and keys; update both here
+    # and in dbt/models/staging/entity_resolution if schemas change.
+    entity_resolution.individual_party_keys:
+        object: ENTITY_RESOLUTION.INDIVIDUAL_PARTY_KEYS
+        mode: incremental
+        primary_key: [party_key]
+        update_key: updated
+        meta:
+            dagster:
+                automation_condition: "on_schedule"
+                automation_condition_config: {"cron_schedule":"@daily", "cron_timezone":"utc"}
+                # freshness_check: {"lower_bound_delta_seconds": 129600}

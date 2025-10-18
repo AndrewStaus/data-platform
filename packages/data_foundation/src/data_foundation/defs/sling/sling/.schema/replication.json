@@ -1,0 +1,843 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sling Replication Configuration",
+  "description": "Schema for Sling replication YAML/JSON configuration files.",
+  "type": "object",
+  "properties": {
+    "source": {
+      "type": "string",
+      "description": "Source connection name or URL."
+    },
+    "target": {
+      "type": "string",
+      "description": "Target connection name or URL."
+    },
+    "hooks": {
+      "$ref": "#/definitions/HookMapReplication",
+      "description": "Hooks executed at the start/end of the entire replication."
+    },
+    "defaults": {
+      "$ref": "#/definitions/ReplicationStreamConfig",
+      "description": "Default configuration applied to all streams."
+    },
+    "streams": {
+      "type": "object",
+      "description": "Map of stream names (or patterns) to their specific configurations. Stream names can be table names, file paths, API endpoint names, or wildcards.",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/ReplicationStreamConfig"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "env": {
+      "type": "object",
+      "description": "Environment variables available during replication.",
+      "properties": {
+        "SLING_HOME_DIR": {
+          "type": "string",
+          "description": "The sling home directory, which contains env.yaml. Will use default if not provided."
+        },
+        "SLING_LOADED_AT_COLUMN": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false", "unix", "timestamp"]}
+          ],
+          "description": "Whether to add an audit timestamp column named _sling_loaded_at in target object. Accepts values true, false, unix (for epoch integer values) or timestamp. true defaults to unix."
+        },
+        "SLING_STREAM_URL_COLUMN": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "If source is file, whether to add a column _sling_stream_url with the source file path / url in target object. To enable, set to true."
+        },
+        "SLING_TIMEOUT": {
+          "oneOf": [
+            {"type": "number"},
+            {"type": "string"}
+          ],
+          "description": "The maximum number of minutes the sling replication should run. Once reached, it will kill the process. To enable, set a number (SLING_TIMEOUT=10.5)"
+        },
+        "SLING_RECURSIVE_LIMIT": {
+          "oneOf": [
+            {"type": "integer"},
+            {"type": "string"}
+          ],
+          "description": "The number limit of file names to pull, when listing from cloud file systems such as S3, GCP and Azure Storage."
+        },
+        "SLING_ROW_ID_COLUMN": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "Whether to add a column named _sling_row_id in the target object, which will have a random UUIDv7 value. This will be unique. To enable, set to true."
+        },
+        "SLING_ROW_NUM_COLUMN": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "If source is file, whether to add a column named _sling_row_num in the target object, which will be the row number of the stream (incremented by record processed). To enable, set to true."
+        },
+        "SLING_EXEC_ID_COLUMN": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "Whether to add a column named _sling_exec_id in the target object, which will have the run / execution string (a random UUIDv7 value). This will be unique per run. To enable, set to true."
+        },
+        "SLING_STATE": {
+          "type": "string",
+          "description": "The location to read/write information such as incremental values. Proper input format is CONN_NAME/key. For example: AWS_S3/my/folder or MY_SFTP/my/folder. Only storage connections are currently supported."
+        },
+        "SLING_ALLOW_EMPTY": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "This is useful to create tables / files using the stream columns structure, even if there is no data. To enable, set to true."
+        },
+        "SLING_DUCKDB_COMPUTE": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "Whether to use DuckDB for writing to parquet files and partitioned parquet/CSV files. DuckDB provides optimized performance for these formats. To disable DuckDB compute, set to false. Default is true."
+        },
+        "SLING_DIRECT_INSERT": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "Tells sling to insert directly into the final table (not create a temp table before). To enable, set to true."
+        },
+        "SLING_THREADS": {
+          "oneOf": [
+            {"type": "integer"},
+            {"type": "string"}
+          ],
+          "description": "Sets the maximum number of concurrent stream runs. Accepts an integer value, default is 1."
+        },
+        "SLING_RETRIES": {
+          "oneOf": [
+            {"type": "integer"},
+            {"type": "string"}
+          ],
+          "description": "Sets the maximum number of retries for a failed stream run. Accepts an integer value, default is 0."
+        },
+        "SLING_KEEP_TEMP": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "Tells sling to keep any temporary files or tables created in the load process. To enable, set to true"
+        },
+        "SLING_ENV_YAML": {
+          "type": "string",
+          "description": "Provide the body of the env.yaml file as an environment variable."
+        },
+        "SLING_DISABLE_TELEMETRY": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "This disables any anonymous usage reporting. These are used to improve sling. To disable, set this to true."
+        },
+        "SLING_SHOW_PROGRESS": {
+          "oneOf": [
+            {"type": "boolean"},
+            {"type": "string", "enum": ["true", "false"]}
+          ],
+          "description": "Whether the progress of the stream should be displayed (true or false)."
+        },
+        "SLING_LOGGING": {
+          "type": "string",
+          "enum": ["JSON", "NO_COLOR", "CONSOLE"],
+          "description": "How sling formats the log lines. Accepts values JSON, NO_COLOR or CONSOLE (default)."
+        },
+        "SLING_SAMPLE_SIZE": {
+          "oneOf": [
+            {"type": "integer"},
+            {"type": "string"}
+          ],
+          "description": "The number of records to process in order to infer column types (especially for file sources). Default is 900."
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "required": [
+    "source",
+    "target",
+    "streams"
+  ],
+  "definitions": {
+    "DynamicString": {
+      "type": "string",
+      "pattern": "^\\{.*\\}$"
+    },
+    "Mode": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "truncate",
+            "full-refresh",
+            "incremental",
+            "snapshot",
+            "backfill"
+          ]
+        },
+        {
+          "$ref": "#/definitions/DynamicString"
+        }
+      ],
+      "description": "Replication mode."
+    },
+    "CompressorType": {
+        "type": "string",
+      "enum": ["auto", "gzip", "zstd", "snappy", "none"],
+      "description": "Compression type."
+    },
+    "Encoding": {
+      "type": "string",
+      "enum": ["latin1", "latin5", "latin9", "utf8", "utf8_bom", "utf16", "windows1250", "windows1252"],
+      "description": "Text encoding type."
+    },
+    "IsolationLevel": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "default",
+            "read_uncommitted",
+            "read_committed", 
+            "write_committed",
+            "repeatable_read",
+            "snapshot",
+            "serializable",
+            "linearizable"
+          ]
+        },
+        {
+          "$ref": "#/definitions/DynamicString"
+        }
+      ],
+      "description": "Database transaction isolation level."
+    },
+    "FileType": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": ["json", "jsonl", "csv", "parquet", "xlsx", "xml", "avro", "arrow", "delta"]
+        },
+        {
+          "$ref": "#/definitions/DynamicString"
+        }
+      ],
+      "description": "File format type."
+    },
+    "ColumnCasing": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": ["normalize", "source", "target", "lower", "upper", "snake"]
+          },
+          {
+            "$ref": "#/definitions/DynamicString"
+          }
+        ],
+        "description": "Target column name casing."
+    },
+    "ColumnTyping": {
+        "type": "object",
+        "properties": {
+            "string": {
+                "type": "object",
+                "properties": {
+                    "length_factor": {
+                        "type": "integer",
+                        "description": "Multiplier for string length calculation."
+                    },
+                    "min_length": {
+                        "type": "integer",
+                        "description": "Minimum string length."
+                    },
+                    "max_length": {
+                        "type": "integer", 
+                        "description": "Maximum string length."
+                    },
+                    "use_max": {
+                        "type": "boolean",
+                        "description": "Whether to use maximum length for all strings."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "String column type mapping configuration."
+            },
+            "decimal": {
+                "type": "object", 
+                "properties": {
+                    "min_precision": {
+                        "type": "integer",
+                        "description": "Minimum precision (total digits)."
+                    },
+                    "max_precision": {
+                        "type": "integer",
+                        "description": "Maximum precision (total digits)."
+                    },
+                    "min_scale": {
+                        "type": "integer",
+                        "description": "Minimum scale (digits after decimal point)."
+                    },
+                    "max_scale": {
+                        "type": "integer", 
+                        "description": "Maximum scale (digits after decimal point)."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "Decimal column type mapping configuration."
+            },
+            "json": {
+                "type": "object",
+                "properties": {
+                    "as_text": {
+                        "type": "boolean",
+                        "description": "Whether to treat JSON columns as text type."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "JSON column type mapping configuration."
+            }
+        },
+        "additionalProperties": false,
+        "description": "Column type conversion configurations for different data types."
+    },
+    "OnFailType": {
+        "type": "string",
+        "enum": ["abort", "warn", "skip", "quiet", "break"],
+        "description": "Action to take if the hook fails.",
+        "default": "abort"
+    },
+    "AnyValue": {
+      "description": "Represents any valid JSON value."
+    },
+    "HookBase": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Optional custom identifier for this hook."
+        },
+        "if": {
+          "type": "string",
+          "description": "Conditional expression (using goval syntax with state variables) to determine if the hook should run."
+        },
+        "on_failure": {
+          "$ref": "#/definitions/OnFailType"
+        }
+      }
+    },
+    "HookQuery": {
+      "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "query" },
+            "connection": { "type": "string", "description": "Database connection name or URL." },
+            "transaction": { "type": "string", "description": "Whether to use transaction, and optionally set isolation level. Ideal for multiple statements. Supported values: `default`, `true` ( same as `default`), `read_uncommitted`, `read_committed`, `repeatable_read`, `serializable`" },
+            "transient": { "type": "boolean", "description": "If true, use a temporary connection pool." },
+            "query": { "type": "string", "description": "SQL query or path to SQL file (file://...)." },
+            "operation": { "type": "string", "description": "The query operation to execute." },
+            "params": { "type": "object", "description": "The parameters to pass to the query." }
+          },
+          "required": ["type", "connection"],
+          "anyOf": [
+            {
+              "required": ["query"]
+            },
+            {
+              "required": ["operation"]
+            }
+          ]
+        }
+      ]
+    },
+    "HookHTTP": {
+      "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "http" },
+            "timeout": { "type": "integer", "description": "Timeout in seconds. Default is 30 seconds.", "minimum": 0 },
+            "url": { "type": "string", "description": "URL for the HTTP request." },
+            "method": { "type": "string", "enum": ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"] },
+            "payload": { "type": "string", "description": "Request body payload." },
+            "headers": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Request headers." }
+          },
+          "required": ["type", "url"]
+        }
+      ]
+    },
+     "HookCheck": {
+      "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "check" },
+            "check": { "type": "string", "description": "Conditional expression (using goval syntax) to evaluate." },
+            "success_goto": { "type": "string", "description": "Jump to ID step if check conditions are met." },
+            "success_message": { "type": "string", "description": "Print message on success." },
+            "failure_message": { "type": "string", "description": "Print message on failure." },
+            "vars": { "type": "object", "additionalProperties": true, "description": "Additional variables for the check expression scope." }
+          },
+          "required": ["type", "check"]
+        }
+      ]
+    },
+     "HookDownload": {
+      "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "download" },
+            "connection": { "type": "string", "description": "File/storage connection name." },
+            "remote_path": { "type": "string", "description": "Path on the remote storage." },
+            "local_path": { "type": "string", "description": "Optional local path to download to (defaults to temp)." }
+          },
+          "required": ["type", "connection", "remote_path"]
+        }
+      ]
+    },
+    "HookUpload": {
+      "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "upload" },
+            "connection": { "type": "string", "description": "File/storage connection name." },
+            "local_path": { "type": "string", "description": "Path on the local filesystem." },
+            "remote_path": { "type": "string", "description": "Path on the remote storage." }
+          },
+          "required": ["type", "connection", "local_path", "remote_path"]
+        }
+      ]
+    },
+    "HookCopy": {
+      "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "copy" },
+            "from": { "type": "string", "description": "Source location (e.g., 'conn_name/path/to/file')." },
+            "to": { "type": "string", "description": "Destination location (e.g., 'conn_name/path/to/file')." },
+            "single_file": { "type": "boolean", "description": "Specify that object is a single file." }
+          },
+          "required": ["type", "from", "to"]
+        }
+      ]
+    },
+    "HookDelete": {
+       "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "delete" },
+            "location": { "type": "string", "description": "Location to delete (e.g., 'conn_name/path/to/delete'). Alternative to connection/path." },
+            "connection": { "type": "string", "description": "File/storage connection name (used if location is not set)." },
+            "path": { "type": "string", "description": "Path on the storage to delete (used if location is not set)." },
+            "recursive": { "type": "boolean", "description": "Delete directories recursively." }
+          },
+          "required": ["type"],
+          "description": "Requires either 'location' or both 'connection' and 'path'."
+        }
+      ]
+    },
+    "HookLog": {
+       "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "log" },
+            "level": { "type": "string", "enum": ["info", "warn", "debug"], "default": "info" },
+            "message": { "type": "string", "description": "Message to log. Can contain state variables like {run.status}." }
+          },
+          "required": ["type", "message"]
+        }
+      ]
+    },
+    "HookInspect": {
+       "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "inspect" },
+            "location": { "type": "string", "description": "Database or Storage object location (e.g., 's3_conn/path/', 'postgres/my_schema.table', 'local//tmp/')." },
+            "recursive": { "type": "boolean", "description": "Inspect directories recursively (affects size, counts)." }
+          },
+          "required": ["type"],
+          "description": "Requires either 'location' or 'connection' with 'path' or 'object'."
+        }
+      ]
+    },
+    "HookList": {
+       "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "list" },
+            "location": { "type": "string", "description": "Location to list files/folders from (e.g., 'conn_name/path/to/list'). Alternative to connection/path." },
+            "connection": { "type": "string", "description": "File/storage connection name (used if location is not set)." },
+            "path": { "type": "string", "description": "Path on the storage to list (used if location is not set)." },
+            "recursive": { "type": "boolean", "description": "List recursively." },
+            "only": { "type": "string", "enum": ["files", "folders"], "description": "Filter results to only files or folders." }
+          },
+          "required": ["type"],
+          "description": "Requires either 'location' or both 'connection' and 'path'."
+        }
+      ]
+    },
+    "HookReplication": {
+       "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "replication" },
+            "path": { "type": "string", "description": "Path to the replication config file (YAML/JSON)." },
+            "range": { "type": "string", "description": "Override range for backfill mode." },
+            "mode": { "$ref": "#/definitions/Mode" },
+            "streams": { "type": "array", "items": { "type": "string" }, "description": "Select specific streams to run." },
+            "env": { "type": "object", "additionalProperties": true, "description": "Override environment variables for the sub-replication." }
+          },
+          "required": ["type", "path"]
+        }
+      ]
+    },
+    "HookCommand": {
+       "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "command" },
+            "command": { "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }], "description": "Command and arguments to execute." },
+            "print": { "type": "boolean", "description": "Print command output to console." },
+            "capture": { "type": "boolean", "description": "Capture command output in hook state." },
+            "timeout": { "type": "integer", "description": "Command timeout in seconds. If 0 or not specified, no timeout is applied.", "minimum": 0 },
+            "working_dir": { "type": "string", "description": "Working directory for the command." },
+            "env": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Environment variables for the command." }
+          },
+          "required": ["type", "command"]
+        }
+      ]
+    },
+    "HookGroup": {
+      "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "group" },
+            "steps": { "type": "array", "items": { "$ref": "#/definitions/Hook" }, "description": "List of hooks to execute sequentially within the group." },
+            "loop": {
+              "oneOf": [
+                { "type": "string", "description": "JMESPath expression resolving to an array to loop over." },
+                { "type": "array", "description": "An array literal to loop over." }
+              ],
+              "description": "Optional loop definition. Steps run once per item. Loop item available as {loop_value}, index as {loop_index}."
+            },
+            "env": { "type": "object", "additionalProperties": { "type": "string" }, "description": "Environment variables specific to this group and its steps." }
+          },
+          "required": ["type", "steps"]
+        }
+      ]
+    },
+    "HookStore": {
+       "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "store" },
+            "key": { "type": "string", "description": "Key (JMESPath allowed for nesting, e.g., 'my_data.value') to store data under in the runtime store." },
+            "value": { "$ref": "#/definitions/AnyValue", "description": "Value to store. Can be any valid JSON type. Variables like {run.total_rows} are resolved." },
+            "delete": { "type": "boolean", "description": "If true, delete the key from the store instead of setting a value." }
+          },
+          "required": ["type", "key"]
+        }
+      ]
+    },
+    "HookRead": {
+       "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "read" },
+            "from": { "type": "string", "description": "The source location to read from." },
+            "into": { "type": "string", "description": "Optional store key to write content to." }
+          },
+          "required": ["type", "from"]
+        }
+      ]
+    },
+    "HookWrite": {
+       "allOf": [
+        { "$ref": "#/definitions/HookBase" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "write" },
+            "to": { "type": "string", "description": "The target location to write to." },
+            "content": { "type": "string", "description": "The content to write." }
+          },
+          "required": ["type", "to", "content"]
+        }
+      ]
+    },
+    "Hook": {
+      "oneOf": [
+        { "$ref": "#/definitions/HookQuery" },
+        { "$ref": "#/definitions/HookHTTP" },
+        { "$ref": "#/definitions/HookCheck" },
+        { "$ref": "#/definitions/HookDownload" },
+        { "$ref": "#/definitions/HookUpload" },
+        { "$ref": "#/definitions/HookCopy" },
+        { "$ref": "#/definitions/HookDelete" },
+        { "$ref": "#/definitions/HookLog" },
+        { "$ref": "#/definitions/HookInspect" },
+        { "$ref": "#/definitions/HookList" },
+        { "$ref": "#/definitions/HookReplication" },
+        { "$ref": "#/definitions/HookCommand" },
+        { "$ref": "#/definitions/HookGroup" },
+        { "$ref": "#/definitions/HookStore" },
+        { "$ref": "#/definitions/HookRead" },
+        { "$ref": "#/definitions/HookWrite" }
+      ],
+       "description": "A hook definition. Can be a simple command string or a structured object with a 'type' property identifying the hook action."
+    },
+    "HookMapReplication": {
+      "type": ["object"],
+      "properties": {
+        "start": {
+          "type": ["array"],
+          "items": { "$ref": "#/definitions/Hook" },
+          "description": "Hooks executed at the start of the replication."
+        },
+        "end": {
+          "type": ["array"],
+          "items": { "$ref": "#/definitions/Hook" },
+          "description": "Hooks executed at the end of the replication."
+        }
+      },
+      "additionalProperties": false
+    },
+    "HookMapStream": {
+      "type": ["object"],
+      "properties": {
+        "pre": {
+          "type": ["array"],
+          "items": { "$ref": "#/definitions/Hook" },
+          "description": "Hooks executed before a stream starts (within stream config)."
+        },
+        "post": {
+          "type": ["array"],
+          "items": { "$ref": "#/definitions/Hook" },
+          "description": "Hooks executed after a stream finishes (within stream config)."
+        },
+        "pre_merge": {
+          "type": ["array"],
+          "items": { "$ref": "#/definitions/Hook" },
+          "description": "Hooks executed before the merge into the final table (within transaction, after BEGIN)."
+        },
+        "post_merge": {
+          "type": ["array"],
+          "items": { "$ref": "#/definitions/Hook" },
+          "description": "Hooks executed after the merge into the final table (within transaction, before COMMIT)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "PrimaryKey": {
+        "oneOf": [
+          {"type": "string"},
+          {"type": "array", "items": {"type": "string"}}
+        ],
+        "description": "Primary key(s) for the stream."
+    },
+    "TableKey": {
+        "oneOf": [
+          {"type": "array", "items": {"type": "string"}}
+        ],
+        "description": "Table key(s) for the target table."
+    },
+    "Transforms": {
+        "oneOf": [
+          {"type": "array", "items": {"type": "string"}, "description": "Global transforms applied to all columns."},
+          {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}, "description": "Transforms applied per column name."},
+          {"type": "array", "items": {"type": "object"}, "description": "Array of transform stages."}
+        ],
+        "description": "Data transformations to apply."
+    },
+    "Columns": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": {"type": "string"},
+          "description": "Simple map of column name to target data type."
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "type": {"type": "string"},
+              "length": {"type": ["integer"]},
+              "precision": {"type": ["integer"]},
+              "scale": {"type": ["integer"]},
+              "constraint": {"type": ["string"]}
+            },
+            "required": ["name", "type"],
+            "additionalProperties": true
+          },
+          "description": "Detailed list of column definitions."
+        }
+      ],
+      "description": "Target column definitions."
+    },
+    "TableKeys": {
+        "type": ["object"],
+        "properties": {
+            "aggregate": { "$ref": "#/definitions/TableKey" },
+            "cluster": { "$ref": "#/definitions/TableKey" },
+            "distribution": { "$ref": "#/definitions/TableKey" },
+            "duplicate": { "$ref": "#/definitions/TableKey" },
+            "hash": { "$ref": "#/definitions/TableKey" },
+            "index": { "$ref": "#/definitions/TableKey" },
+            "partition": { "$ref": "#/definitions/TableKey" },
+            "primary": { "$ref": "#/definitions/TableKey" },
+            "sort": { "$ref": "#/definitions/TableKey" },
+            "unique": { "$ref": "#/definitions/TableKey" },
+            "update": { "$ref": "#/definitions/TableKey" }
+        },
+        "additionalProperties": false,
+        "description": "Defines keys (primary, unique, index) for the target table."
+    },
+    "SourceOptions": {
+      "type": ["object"],
+      "properties": {
+        "empty_as_null": {"type": ["boolean"], "description": "Treat empty source values as NULL."},
+        "header": {"type": ["boolean"], "description": "Indicates if the source data has a header row."},
+        "flatten": {
+            "oneOf": [
+                {"type": ["boolean"]},
+                {"type": ["integer"]},
+                {"type": "string", "pattern": "^(true|false)$"}
+            ],
+            "description": "Flatten nested JSON data. true=infinite depth, integer=specific depth, false=disabled."
+        },
+        "fields_per_rec": {"type": ["integer"], "description": "Expected number of fields per record for validation."},
+        "compression": { "$ref": "#/definitions/CompressorType" },
+        "format": { "$ref": "#/definitions/FileType" },
+        "null_if": {"type": ["string"], "description": "String value to be interpreted as NULL."},
+        "datetime_format": {"type": ["string"], "description": "Format for parsing date/time values."},
+        "skip_blank_lines": {"type": ["boolean"], "description": "Skip blank lines in the source data."},
+        "delimiter": {"type": ["string"], "description": "Delimiter for field-separated files (e.g., CSV)."},
+        "escape": {"type": ["string"], "description": "Character used for escaping in the source data."},
+        "quote": {"type": ["string"], "description": "Character used for quoting in the source data."},
+        "max_decimals": {"type": ["integer"], "description": "Maximum number of decimal places for numeric types."},
+        "jmespath": {"type": ["string"], "description": "JMESPath expression to transform source data."},
+        "sheet": {"type": ["string"], "description": "Name of the sheet to read from in a spreadsheet."},
+        "range": {"type": ["string"], "description": "Range for backfill mode (e.g., 'start,end') or sheet range."},
+        "limit": {"type": ["integer"], "description": "Maximum number of records to read from the source."},
+        "offset": {"type": ["integer"], "description": "Number of records to skip from the beginning of the source."},
+        "chunk_count": {"type": ["integer"], "description": "Number of chunks to split the source data into."},
+        "chunk_expr": {"type": ["string"], "description": "The modulo chunk expression (e.g. `mod(abs(hashtext(coalesce(mycol, ''))), {chunk_count})`)"},
+        "chunk_size": {
+            "oneOf": [
+                {"type": ["string"]},
+                {"type": ["integer"]}
+            ],
+             "description": "Size for chunking (e.g., 7d, 1m, 10000)."
+        },
+        "encoding": { "$ref": "#/definitions/Encoding" }
+      },
+      "additionalProperties": false
+    },
+    "TargetOptions": {
+      "type": ["object"],
+      "properties": {
+        "header": {"type": ["boolean"], "description": "Write a header row to the target file."},
+        "compression": { "$ref": "#/definitions/CompressorType" },
+        "concurrency": {"type": ["integer"], "description": "Number of concurrent workers for writing data."},
+        "batch_limit": {"type": ["integer"], "description": "Maximum number of records per batch/chunk."},
+        "datetime_format": {"type": ["string"], "description": "Format for writing date/time values."},
+        "delimiter": {"type": ["string"], "description": "Delimiter for field-separated target files."},
+        "file_max_rows": {"type": ["integer"], "description": "Maximum number of rows per target file."},
+        "file_max_bytes": {"type": ["integer"], "description": "Maximum size in bytes per target file."},
+        "format": { "$ref": "#/definitions/FileType" },
+        "max_decimals": {"type": ["integer"], "description": "Maximum number of decimal places for numeric types."},
+        "use_bulk": {"type": ["boolean"], "description": "Use bulk loading capabilities of the target database."},
+        "ignore_existing": {"type": ["boolean"], "description": "If true, ignores existing target table/file."},
+        "delete_missing": {"type": ["string"], "description": "Condition to delete rows in target not present in source (snapshot mode)."},
+        "add_new_columns": {"type": ["boolean"], "description": "Allow adding new columns to the target table."},
+        "adjust_column_type": {"type": ["boolean"], "description": "Allow adjusting data types of existing columns."},
+        "column_casing": { "$ref": "#/definitions/ColumnCasing" },
+        "column_typing": { "$ref": "#/definitions/ColumnTyping" },
+        "encoding": { "$ref": "#/definitions/Encoding" },
+        "direct_insert": { "type": ["boolean"], "description": "Bypass temporary table and insert directly into the target." },
+        "table_keys": { "$ref": "#/definitions/TableKeys" },
+        "table_tmp": {"type": ["string"], "description": "Temporary table name pattern."},
+        "table_ddl": {"type": ["string"], "description": "Path to a file containing custom DDL for table creation."},
+        "pre_sql": {"type": ["string"], "description": "SQL or path to SQL file executed before the load."},
+        "post_sql": {"type": ["string"], "description": "SQL or path to SQL file executed after the load."},
+        "isolation_level": { "$ref": "#/definitions/IsolationLevel" },
+        "meta": {"type": ["object"], "description": "Metadata for dagster"}
+      },
+       "additionalProperties": false
+    },
+    "ReplicationStreamConfig": {
+      "type": ["object"],
+      "properties": {
+        "id": {"type": ["string"]},
+        "description": {"type": ["string"]},
+        "mode": { "$ref": "#/definitions/Mode" },
+        "object": {"type": ["string"]},
+        "select": {"type": ["array"], "items": {"type": "string"}},
+        "files": {"type": ["array"], "items": {"type": "string"}},
+        "where": {"type": ["string"]},
+        "primary_key": { "$ref": "#/definitions/PrimaryKey" },
+        "update_key": {"type": ["string"]},
+        "sql": {"type": ["string"]},
+        "tags": {"type": ["array"], "items": {"type": "string"}},
+        "source_options": { "$ref": "#/definitions/SourceOptions" },
+        "target_options": { "$ref": "#/definitions/TargetOptions" },
+        "schedule": {"type": ["string"]},
+        "disabled": {"type": ["boolean"]},
+        "single": {"type": ["boolean"]},
+        "transforms": { "$ref": "#/definitions/Transforms" },
+        "columns": { "$ref": "#/definitions/Columns" },
+        "hooks": { "$ref": "#/definitions/HookMapStream" },
+        "meta": {"type": "object"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

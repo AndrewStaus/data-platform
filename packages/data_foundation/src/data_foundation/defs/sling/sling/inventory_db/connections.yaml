@@ -1,0 +1,12 @@
+# Connction details for the inventory_db datbabase that can be referenced by name
+# in replication.yaml files.
+
+# yaml-language-server: $schema=../.schema/connections.json
+connections:
+    inventory_db:
+        type: postgres
+        database: env.SOURCE__INVENTORY_DB__DATABASE
+        host: env.SOURCE__INVENTORY_DB__HOST
+        port: secret.SOURCE__INVENTORY_DB__PORT
+        user: secret.SOURCE__INVENTORY_DB__USER
+        password: secret.SOURCE__INVENTORY_DB__PASSWORD

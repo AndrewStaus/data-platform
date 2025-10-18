@@ -1,0 +1,13 @@
+# Connction details for the adobe_experience that can be referenced by name
+# in replication.yaml files.
+
+
+# yaml-language-server: $schema=../.schema/connections.json
+connections:
+  adobe_experience:
+    type: postgres
+    database: env.SOURCE__ADOBE_EXPERIENCE__DATABASE
+    host: env.SOURCE__ADOBE_EXPERIENCE__HOST
+    port: secret.SOURCE__ADOBE_EXPERIENCE__PORT
+    user: secret.SOURCE__ADOBE_EXPERIENCE__USER
+    password: secret.SOURCE__ADOBE_EXPERIENCE__PASSWORD

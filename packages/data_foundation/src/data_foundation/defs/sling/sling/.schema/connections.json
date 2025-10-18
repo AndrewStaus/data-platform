@@ -1,0 +1,365 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sling Environment Configuration",
+  "description": "Schema for Sling connections.yaml configuration files containing connection definitions.",
+  "type": "object",
+  "properties": {
+    "connections": {
+      "type": "object",
+      "description": "Connection definitions for data sources and targets",
+      "patternProperties": {
+        "^[a-zA-Z0-9_][a-zA-Z0-9_-]*$": {
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "Connection URL string"
+            },
+            {
+              "$ref": "#/definitions/Connection"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "definitions": {
+    "Connection": {
+      "type": "object",
+      "description": "Connection configuration object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Connection type",
+          "enum": [
+            "postgres", "mysql", "mariadb", "sqlite", "duckdb", "motherduck",
+            "oracle", "sqlserver", "redshift", "snowflake", "bigquery", "clickhouse",
+            "databricks", "trino", "elasticsearch", "mongodb", "prometheus", "proton",
+            "exasol", "starrocks", "d1", "bigtable", "azuretable", "azuresql", "azuredwh",
+            "athena", "ducklake", "iceberg", "fabric",
+            "file", "hdfs", "s3", "r2", "azure", "gs", "gdrive", "ftp", "sftp", "http", "abfs",
+            "api"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "description": "Connection URL string"
+        },
+        "ssh_tunnel": {
+          "type": "string",
+          "description": "SSH tunnel URL for secure connections (format: ssh://user@host:port)"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "postgres" }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "host": {
+                "type": "string",
+                "description": "Hostname or IP address of the PostgreSQL server"
+              },
+              "port": {
+                "type": ["integer", "string"],
+                "description": "Port number (default: 5432)"
+              },
+              "user": {
+                "type": "string",
+                "description": "Username for authentication"
+              },
+              "password": {
+                "type": "string",
+                "description": "Password for authentication"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database name"
+              },
+              "schema": {
+                "type": "string",
+                "description": "Default schema name"
+              },
+              "sslmode": {
+                "type": "string",
+                "enum": ["disable", "allow", "prefer", "require", "verify-ca", "verify-full"],
+                "description": "SSL connection mode (default: disable)"
+              },
+              "role": {
+                "type": "string",
+                "description": "Role to assume after connection"
+              },
+              "ssh_private_key": {
+                "type": "string",
+                "description": "Path to SSH private key file"
+              },
+              "ssh_passphrase": {
+                "type": "string",
+                "description": "SSH key passphrase"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "duckdb" }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "instance": {
+                "type": "string",
+                "description": "Local file path of the database file"
+              },
+              "schema": {
+                "type": "string",
+                "description": "Default schema name"
+              },
+              "duckdb_version": {
+                "type": "string",
+                "description": "DuckDB CLI version to use"
+              },
+              "read_only": {
+                "type": "boolean",
+                "description": "Open connection in readonly mode (default: false)"
+              },
+              "interactive": {
+                "type": "boolean",
+                "description": "Use interactive mode instead of reopening connection (default: false)"
+              },
+              "copy_method": {
+                "type": "string",
+                "enum": ["csv_files", "csv_http", "arrow_http", "named_pipes"],
+                "description": "Method for copying data into DuckDB (default: csv_http)"
+              }
+            },
+            "required": ["instance"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "bigquery" }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "project": {
+                "type": "string",
+                "description": "GCP project ID"
+              },
+              "dataset": {
+                "type": "string",
+                "description": "Default dataset name"
+              },
+              "keyfile": {
+                "type": "string",
+                "description": "Path to Service Account JSON file"
+              },
+              "method": {
+                "type": "string",
+                "enum": ["service-account"],
+                "description": "Authentication method"
+              },
+              "location": {
+                "type": "string",
+                "description": "Location of the account (default: US)"
+              },
+              "gc_bucket": {
+                "type": "string",
+                "description": "Google Cloud Storage bucket for loading (recommended)"
+              },
+              "extra_scopes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Additional authorization scopes"
+              }
+            },
+            "required": ["project", "dataset"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "mysql" }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "host": {
+                "type": "string",
+                "description": "Hostname or IP address of the MySQL server"
+              },
+              "port": {
+                "type": ["integer", "string"],
+                "description": "Port number (default: 3306)"
+              },
+              "user": {
+                "type": "string",
+                "description": "Username for authentication"
+              },
+              "password": {
+                "type": "string",
+                "description": "Password for authentication"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database name"
+              },
+              "charset": {
+                "type": "string",
+                "description": "Character set to use"
+              },
+              "tls": {
+                "type": "boolean",
+                "description": "Enable TLS encryption"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "snowflake" }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "account": {
+                "type": "string",
+                "description": "Snowflake account identifier"
+              },
+              "user": {
+                "type": "string",
+                "description": "Username for authentication"
+              },
+              "password": {
+                "type": "string",
+                "description": "Password for authentication"
+              },
+              "database": {
+                "type": "string",
+                "description": "Database name"
+              },
+              "schema": {
+                "type": "string",
+                "description": "Schema name"
+              },
+              "warehouse": {
+                "type": "string",
+                "description": "Warehouse name"
+              },
+              "role": {
+                "type": "string",
+                "description": "Role to assume"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "s3" }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "bucket": {
+                "type": "string",
+                "description": "S3 bucket name"
+              },
+              "region": {
+                "type": "string",
+                "description": "AWS region"
+              },
+              "access_key_id": {
+                "type": "string",
+                "description": "AWS access key ID"
+              },
+              "secret_access_key": {
+                "type": "string",
+                "description": "AWS secret access key"
+              },
+              "session_token": {
+                "type": "string",
+                "description": "AWS session token for temporary credentials"
+              },
+              "endpoint": {
+                "type": "string",
+                "description": "Custom S3 endpoint URL"
+              },
+              "force_path_style": {
+                "type": "boolean",
+                "description": "Force path-style requests"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "gs" }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "bucket": {
+                "type": "string",
+                "description": "Google Cloud Storage bucket name"
+              },
+              "keyfile": {
+                "type": "string",
+                "description": "Path to Service Account JSON file"
+              },
+              "project": {
+                "type": "string",
+                "description": "GCP project ID"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": { "const": "azure" }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "account": {
+                "type": "string",
+                "description": "Azure storage account name"
+              },
+              "container": {
+                "type": "string",
+                "description": "Azure container name"
+              },
+              "sas_token": {
+                "type": "string",
+                "description": "Shared Access Signature token"
+              },
+              "account_key": {
+                "type": "string",
+                "description": "Azure storage account key"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
