@@ -3,7 +3,6 @@
 import os
 from pathlib import Path
 
-import dagster as dg
 from dagster import Definitions
 from dagster.components import definitions
 from data_platform_utils.keyvault_stub import SecretClient

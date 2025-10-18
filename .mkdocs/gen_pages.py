@@ -37,7 +37,7 @@ def remove_old(project_dir, docs_folder) -> None:
     if docs_root.exists():
         shutil.rmtree(docs_root)
     os.makedirs(docs_root, exist_ok=True)
-    with open(join(docs_root, ".gitkeep"), "w") as f:
+    with open(join(docs_root, ".gitkeep"), "w"):
         ...    
 
 def process_markdown(project_dir, docs_folder) -> None:
