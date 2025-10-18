@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=sources.json
+# Sample yaml with all properties for reference
 resources:
     exchange_rate.usd:
         entry: data.get_exchange_rate
