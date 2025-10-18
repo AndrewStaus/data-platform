@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../.schema/sources.json
 resources:
     exchange_rate.usd:
         entry: data.get_exchange_rate
