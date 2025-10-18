@@ -1,0 +1,30 @@
+resources:
+    exchange_rate.usd:
+        entry: data.get_exchange_rate
+        arguments: usd
+        keyword_arguments:
+        primary_key: date
+        write_disposition: merge
+        kinds: {api}
+        meta:
+            dagster:
+                automation_condition: on_cron_no_deps
+                automation_condition_config:
+                    cron_schedule: "@daily"
+                    cron_timezone: utc
+                freshness_lower_bound_delta_seconds: 108000
+
+    exchange_rate.cad:
+        entry: data.get_exchange_rate
+        arguments: cad
+        keyword_arguments:
+        primary_key: date
+        write_disposition: merge
+        kinds: {api}
+        meta:
+            dagster:
+                automation_condition: on_cron_no_deps
+                automation_condition_config:
+                    cron_schedule: "@daily"
+                    cron_timezone: utc
+                freshness_lower_bound_delta_seconds: 108000
