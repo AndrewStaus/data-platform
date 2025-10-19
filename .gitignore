@@ -2,6 +2,7 @@
 **/.env*
 **/.user.yml
 **/.ruff_cache
+**/.pytest_cache
 **/*.code-workspace
 **/*.vscode/settings.json
 
