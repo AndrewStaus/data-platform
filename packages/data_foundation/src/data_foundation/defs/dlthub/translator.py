@@ -9,10 +9,8 @@ from collections.abc import Iterable, Mapping
 from typing import Any, override
 
 import dagster as dg
-from dagster._utils.tags import is_valid_tag_key
 from dagster_dlt import DagsterDltTranslator
 from dagster_dlt.translator import DltResourceTranslatorData
-from data_platform_utils.helpers import get_partitions_def_from_meta
 from dlt.extract.resource import DltResource
 
 
@@ -20,9 +18,14 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
     """Translate dlt resource metadata into Dagster asset definitions."""
 
     def __init__(self,
-                 automation_condition:dg.AutomationCondition[Any]|None=None) -> None:
+                 automation_condition: dg.AutomationCondition[Any]|None=None,
+                 tags: Mapping[str, Any]|None = None,
+                 partitions_def: dg.PartitionsDefinition[str]|None = None) -> None:
+
         super().__init__() 
         self.automation_condition = automation_condition
+        self.tags = tags
+        self.partitions_def = partitions_def
 
     @override
     def get_asset_spec(self, data: DltResourceTranslatorData) -> dg.AssetSpec:
@@ -90,9 +93,11 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
         else:
             name = resource.name
         if name:
-            schema, table = name.split(".")
-            asset_key = [schema, "src", table]
-            return [dg.AssetKey(asset_key)]
+            name_parts = name.split(".")
+            if len(name_parts) == 2:
+                schema, table = name_parts
+                asset_key = [schema, "src", table]
+                return [dg.AssetKey(asset_key)]
         return super().get_deps_asset_keys(resource)
 
     @override
@@ -105,9 +110,12 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
         Returns:
             dagster.AssetKey: Asset key structured as ``[schema, "raw", table]``.
         """
-        schema, table = resource.name.split(".")
-        asset_key = [schema, "raw", table]
-        return dg.AssetKey(asset_key)
+        name_parts = resource.name.split(".")
+        if len(name_parts) == 2:
+            schema, table = resource.name.split(".")
+            asset_key = [schema, "raw", table]
+            return dg.AssetKey(asset_key)
+        return super().get_asset_key(resource)
 
     @override
     def get_group_name(self, resource: DltResource) -> str:
@@ -125,7 +133,9 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
     def get_partitions_def(
         self, resource: DltResource
     ) -> dg.PartitionsDefinition | None:
-        """Interpret partition metadata and build the matching Dagster definition.
+        """Return a partitions definition if one exists.  dlt does not support
+        adding metadata, so this can not be parsed from the resouce itself, and must
+        be defined when the translator is instantiated.
 
         Args:
             resource: dlt resource whose ``meta`` field may specify partition
@@ -135,18 +145,15 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
             dagster.PartitionsDefinition | None: Partitions definition derived from
                 metadata or ``None`` when no partitioning is configured.
         """
-        try:
-            meta = resource.meta.get("dagster")  # type: ignore
-            return get_partitions_def_from_meta(meta)
-        except Exception:
-            ...
-        return None
+        if self.tags:
+            return self.partitions_def
 
     @override
     def get_automation_condition(
-        self, resource: DltResource
-    ) -> dg.AutomationCondition[Any] | None:
-        """Translate dlt automation configuration into Dagster automation conditions.
+                self, resource: DltResource) -> dg.AutomationCondition[Any] | None:
+        """Return an automation condition definition if one exists.  dlt does not
+        support adding metadata, so this can not be parsed from the resouce itself, and
+        must be defined when the translator is instantiated.
 
         Args:
             resource: dlt resource whose ``meta`` configuration may describe automation
@@ -162,7 +169,9 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
 
     @override
     def get_tags(self, resource: DltResource) -> Mapping[str, Any]:
-        """Validate and forward any tags defined on the dlt resource.
+        """Return tags if they exists.  dlt does not support adding metadata, so this
+        can not be parsed from the resouce itself, and must be defined when the
+        translator is instantiated.
 
         Args:
             resource: dlt resource potentially containing tag metadata.
@@ -171,9 +180,6 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
             Mapping[str, Any]: Dictionary of Dagster-compliant tags derived from the dlt
                 resource metadata.
         """
-        try:
-            tags = resource.tags  # type: ignore
-            return {tag: "" for tag in tags if is_valid_tag_key(tag)}
-        except Exception:
-            ...
-        return {}
+        if self.tags:
+            return self.tags
+        return super().get_tags(resource)

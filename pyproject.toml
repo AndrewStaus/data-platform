@@ -13,6 +13,9 @@ dependencies = [
     "dbt-common==1.29.0",
     "dbt-adapters==1.16.6",
     "dbt-core==1.10.11",
+    "pytest>=8.4.2",
+    "pytest-xdist>=3.8.0",
+    "pytest-cov>=7.0.0",
 ]
 
 [dependency-groups]
@@ -36,17 +39,26 @@ exclude = ["packages/data_analytics"]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
+[tool.coverage.report]
+omit = [
+    "tests/*",
+    "*/test_*.py",
+    "*/conftest.py",
+]
 
-# [tool.dg]
-# directory_type = "workspace"
+[tool.pytest.ini_options]
+testpaths = [
+    "packages/data_foundation/tests",
+    "packages/data_science/tests",
+    "libs/data_platform_utils/tests",
+]
 
-# [[tool.dg.workspace.projects]]
-# path = "packages/data_foundation"
-# [[tool.dg.workspace.projects]]
-# path = "packages/data_science"
-
-[tool.ruff]
-exclude = ["packages/data_analytics"]
+# [tool.ruff]
+# exclude = [
+#     "packages/data_analytics",
+#     "**/tests/**/*",
+#     "**/test_*"
+# ]
 line-length = 88
 
 [tool.ruff.format]
@@ -55,6 +67,7 @@ docstring-code-line-length = 20
 quote-style = "double"
 indent-style = "space"
 [tool.ruff.lint]
+
 select = [
     "E", # pycodestyle
     "F", # Pyflakes
@@ -63,6 +76,9 @@ select = [
     "SIM", # flake8-simplify
     "I", # isort
 ]
+
+[tool.pyright]
+ignore = ["**/tests/**/*", "**/test_*"]
 
 [tool.sqlfluff]
 core.exclude_rules = ["AL07", "RF02", "ST06"]

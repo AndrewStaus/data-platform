@@ -158,12 +158,11 @@ class Factory:
         configuration
 
         Args:
-            meta: the meta property from the YAML configuration
-            schema: The schema of the target table
-            table: The table name of the target table
+            config: The resource or source config which may contain a meta property
 
         Returns:
-            A sequence of asset checks definitions to monitor for SLA violations.
+            A sequence of asset checks definitions to allow dagster to monitor for SLA
+                violations.
         """
         if delta := get_nested(
             config, ["meta", "dagster", "freshness_lower_bound_delta_seconds"]
@@ -221,7 +220,7 @@ class Factory:
 
     @staticmethod
     def _build_assets_from_resource(
-            resource, config: dict) -> dg.AssetsDefinition:
+            resource: DltResource, config: dict) -> dg.AssetsDefinition:
         """
         Builds a Dagster AssetsDefinition from a single dlt resource.
 
@@ -287,7 +286,7 @@ class Factory:
                    .relative_to(Path(__file__).parent).parent.parent)
 
         module_name = "."+".".join(*module_dir.parts, *entry_parts[:-1])
-        module = importlib.import_module( module_name, __package__)
+        module = importlib.import_module(module_name, __package__)
 
         data_generator = getattr(module, entry_parts[-1])
 
