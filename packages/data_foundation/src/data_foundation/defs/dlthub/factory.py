@@ -351,9 +351,9 @@ class Factory:
                     dlt: Dagster resource for executing the dlt pipeline.
 
                 Yields:
-                    dagster_dlt.dlt_event_iterator.DltEventType: Structured events emitted
-                        from the dlt pipeline run which Dagster converts into asset
-                        materialize events.
+                    dagster_dlt.dlt_event_iterator.DltEventType: Structured events
+                        emitted from the dlt pipeline run which Dagster converts into
+                        asset materialize events.
             """
             yield from dlt.run(context=context)
 
