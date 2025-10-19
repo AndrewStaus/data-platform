@@ -82,7 +82,11 @@ class CustomDagsterDltTranslator(DagsterDltTranslator):
             pipe = resource._pipe
             while pipe.has_parent:
                 pipe = pipe.parent
-                name = pipe.schema.name  # type: ignore
+                name = pipe.name
+            if name:
+                schema, table = name.split(".")
+                asset_key = [schema, "raw", table]
+                return [dg.AssetKey(asset_key)]
         else:
             name = resource.name
         if name:

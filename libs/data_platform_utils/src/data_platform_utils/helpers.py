@@ -126,6 +126,7 @@ def sanitize_input_signature(func: Callable, kwargs: dict) -> dict:
         dict: Filtered keyword arguments containing only parameters accepted by
         ``func``.
     """
+    kwargs = kwargs.copy()
     sig = signature(func)
     key_words = list(kwargs.keys())
     expected_arguments = {argument for argument, _ in sig.parameters.items()}

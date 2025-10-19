@@ -16,6 +16,7 @@ from data_platform_utils.helpers import (
     get_automation_condition_from_meta,
     get_nested,
     get_schema_name,
+    sanitize_input_signature,
 )
 from dlt.extract.resource import DltResource
 
@@ -38,34 +39,59 @@ class DagsterDltFactory:
             Definitions containing assets, resources, and freshness checks derived from
                 the provided configuration files.
         """
-        asset_checks = []
-        assets = []
-        configs = DagsterDltFactory._get_configs(config_dir)
-        for name, config in configs.items():
-            parsed_config = DagsterDltFactory._parse_config(name, config)
-            assets_definition, dep, checks = parsed_config
+        resources = {}
+        freshness_checks = []
+        resource_configs, source_configs = DagsterDltFactory._get_configs(config_dir)
 
+        for config in resource_configs.values():
+            if resource := (DagsterDltFactory
+                            ._build_resource_from_config(config, resources)):
+                resource_name = config["name"]
+                resources[resource_name] = resource
+
+            if freshness_check := (DagsterDltFactory
+                                   ._build_freshness_checks(config)):
+                freshness_checks.extend(freshness_check)
+
+        assets = []
+
+        # bundle resources into sources
+        for source_config in source_configs.values():
+            assets_definition, resources = (DagsterDltFactory
+                                ._build_assets_from_source(resources, source_config))
             assets.append(assets_definition)
-            assets.append(dep)
-            asset_checks.extend(checks or [])
-        
+
+        # any left over resource will be put into its own stand alone source
+        for resource_name, resource in resources.items():
+            resource_config = resource_configs[resource_name]
+            assets_definition = (DagsterDltFactory
+                                ._build_source_from_resource(resource, resource_config))
+            assets.append(assets_definition)
+
+        # build stub external assets to allow for external materialization triggers
+        for config in resource_configs.values():
+            if external_assets_definition := (DagsterDltFactory
+                                ._build_external_asset_from_config(config)):
+                assets.append(external_assets_definition)
+
         return dg.Definitions(
             resources={"dlt": DagsterDltResource()},
             assets=assets,
-            asset_checks=asset_checks
+            asset_checks=freshness_checks
         )
 
     @staticmethod
-    def _get_configs(config_dir: Path) -> dict:
+    def _get_configs(config_dir: Path) -> tuple[dict[Any, Any], dict[Any, Any]]:
         """Invoke the dlt pipeline and stream structured event data.
 
         Args:
             config_dir: The path to the root folder where dlt configs are located.
 
         Yields:
-            A dictonary containing all of the YAML configs.
+            Tuple of two dictionaries, containing the resource, and source YAML configs.
         """
-        configs = {}
+        resource_configs = {}
+        source_configs = {}
         config_paths = set()
         patterns = ["**/*.yaml", "**/*.yml"]
         for pattern in patterns:
@@ -73,54 +99,149 @@ class DagsterDltFactory:
         
         for config_path in config_paths:
             with open(config_path) as file:
-                data = yaml.load(file, Loader=yaml.FullLoader)
-                config = data.get("resources", {})
-                for name, attributes in config.items():
-                    parent = config_path.parent.name
+                data = yaml.load(file, Loader=yaml.FullLoader) or {}
+            resource_config = data.get("resources", {})
+            for name, attributes in resource_config.items():
+                parent = config_path.parent.name
+                if attributes:
                     attributes["entry"] = parent+"."+attributes["entry"]
-                    configs[name] = attributes
+                    attributes["name"] = name
+                    resource_configs[name] = attributes
+            
+            source_config = data.get("sources", {})
+            for name, attributes in source_config.items():
+                if attributes:
+                    attributes["name"] = name
+                    source_configs[name] = attributes
 
-        return configs
+        return resource_configs, source_configs
 
     @staticmethod
-    def _build_assets(resource: DltResource, schema: str,
-                    table: str, tags: set, meta: dict) -> dg.AssetsDefinition:
-        """Build Dagster assets from a dlt resource, along with metadata from the YAML
-        config.
+    def _build_resource_from_config(config: dict, resources):
+        """TODO"""
+        data = DagsterDltFactory._build_data_generator(config)
+        sanitized_config = sanitize_input_signature(dlt.resource, config)
+
+        # swap string reference with hard reference to the instantiated resource
+        if config.get("data_from"):
+            table_name = config.get("name", "").split(".")[0]
+            sanitized_config["data_from"] = resources[config["data_from"]]
+            sanitized_config["table_name"] = table_name or config["table_name"]
+        return dlt.resource(data, **sanitized_config)    
+
+    @staticmethod
+    def _build_freshness_checks(
+            config: dict) -> Sequence[dg.AssetChecksDefinition] | None:
+        """Build asset freshness checks based on the meta property in the YAML 
+        configuration
 
         Args:
-            resource: A dlt resource that can be invoked at run time.
-            schema: The target schema, used to generate a unique asset key.
-            table: The target table, used to generate a unique asset key.
-            tags: Metadata tags for discoverability in the dagster asset catalog.
+            meta: the meta property from the YAML configuration
+            schema: The schema of the target table
+            table: The table name of the target table
 
         Returns:
-            A dagster asset definition.
+            A sequence of asset checks definitions to monitor for SLA violations.
         """
+        if delta := get_nested(
+            config, ["meta", "dagster", "freshness_lower_bound_delta_seconds"]
+        ):
+            schema, table = config["name"].split(".")
+            asset_key = dg.AssetKey([schema, "raw", table])
+            last_update_freshness_check = dg.build_last_update_freshness_checks(
+                assets=[asset_key],
+                lower_bound_delta=timedelta(seconds=float(delta)),
+            )
+            return last_update_freshness_check
 
-        @dlt.source()
+    @staticmethod
+    def _build_assets_from_source(resources: dict, config: dict):
+        remaining_resources = resources
+        selected_resources = ()
+        for bundled_resource in config.get("resources", []):
+            selected_resources += (remaining_resources.pop(bundled_resource),)
+
+        sanitized_config = sanitize_input_signature(dlt.source, config)
+        @dlt.source(**sanitized_config)
+        def source(
+                selected_resources=selected_resources) -> Generator[DltResource, Any]:
+            """TODO
+            """
+            yield from selected_resources
+
+        assets_definition = DagsterDltFactory._build_assets_definition(source, config)
+
+        return assets_definition, remaining_resources
+
+    @staticmethod
+    def _build_source_from_resource(
+            resource, config: dict) -> dg.AssetsDefinition:
+        """TODO
+        """
+        sanitized_config = sanitize_input_signature(dlt.source, config)
+        sanitized_config["name"] = config["name"].split(".")[0]
+        @dlt.source(**sanitized_config)
         def source(resource=resource) -> Generator[DltResource, Any]:
             yield resource
 
-        condition = get_automation_condition_from_meta(meta["dagster"])
+        assets_definition = DagsterDltFactory._build_assets_definition(source, config)
+
+        return assets_definition
+
+    @staticmethod
+    def _build_data_generator(resource_config: dict) -> Generator[Any, Any, None]:
+        """TODO
+        """
+        entry_parts = resource_config["entry"].split(".")
+        module_path = ".".join(entry_parts[:-1])
+        function_name = entry_parts[-1]
+
+        module = importlib.import_module(
+            # TODO better relative import using pathlib
+            "data_foundation.defs.dlthub.dlthub." + module_path
+        )
+
+        data_generator = getattr(module, function_name)
+        args = resource_config.get("arguments", [])
+        kwargs = resource_config.get("keyword_arguments", {})
+
+        # if second order function, pass arguments to get the wrapped generator
+        if args or kwargs:
+            if not isinstance(args, list):
+                args = [args]
+            data_generator = data_generator(*args, **kwargs)
+        return data_generator
+
+    @staticmethod
+    def _build_assets_definition(source, config) -> dg.AssetsDefinition:
+        """TODO
+        """
+
+        condition = None
+        if meta := get_nested(config.get("meta", {}), ["dagster"]):
+            condition = get_automation_condition_from_meta(meta)
+
+        sanitized_name = config["name"].replace(".", "__")
+        schema_name = get_schema_name(config["name"].split(".")[0])
         @dlt_assets(
-            name=f"{schema}__{table}",
-            op_tags={"tags": tags},
+            name=sanitized_name,
+            op_tags={"tags": config.get("tags")},
             dlt_source=source(),
             backfill_policy=dg.BackfillPolicy.single_run(),
+            pool="dlthub",
             dagster_dlt_translator=CustomDagsterDltTranslator(
                 automation_condition=condition
             ),
-            pool="dlthub",
             dlt_pipeline=dlt.pipeline(
-                pipeline_name=f"{schema}__{table}",
+                pipeline_name=sanitized_name,
                 destination="snowflake",
-                dataset_name=get_schema_name(schema),
+                dataset_name=schema_name,
                 progress="log",
             ),
         )
         def assets(
-            context: dg.AssetExecutionContext, dlt: DagsterDltResource
+            context: dg.AssetExecutionContext,
+            dlt: DagsterDltResource
         ) -> Generator[DltEventType, Any]:
             """Invoke the dlt pipeline and stream structured event data.
 
@@ -138,101 +259,12 @@ class DagsterDltFactory:
         return assets
 
     @staticmethod
-    def _build_freshness_checks(meta: dict, schema: str, table: str
-                                ) -> Sequence[dg.AssetChecksDefinition] | None:
-        """Build asset freshness checks based on the meta property in the YAML 
-        configuration
-
-        Args:
-            meta: the meta property from the YAML configuration
-            schema: The schema of the target table
-            table: The table name of the target table
-
-        Returns:
-            A sequence of asset checks definitions to monitor for SLA violations.
-        """
-        if delta := get_nested(
-            meta, ["dagster", "freshness_lower_bound_delta_seconds"]
-        ):
-            asset_key = dg.AssetKey([schema, "raw", table])
-            last_update_freshness_check = dg.build_last_update_freshness_checks(
-                assets=[asset_key],
-                lower_bound_delta=timedelta(seconds=float(delta)),
+    def _build_external_asset_from_config(config) -> dg.AssetSpec | None:
+        schema, table = config["name"].split(".")
+        if not config.get("data_from"):
+            external_asset = dg.AssetSpec(
+                key=[schema, "src", table],
+                kinds=config.get("kinds", {}),
+                group_name=schema,
             )
-            return last_update_freshness_check
-
-    @staticmethod
-    def _build_generator(entry: str,
-                         args: list,
-                         kwargs: dict) -> Generator[Any, Any, None]:
-        """Instantiate a generator that yeilds data from the data source.
-
-        Args:
-            entry: The import path of the generator realative to
-                data_foundation.defs.dlthub.dlthub
-            args: If the entry is a second order funtion, the arguments to return the
-                generator.
-            kwargs: If the entry is a second order funtion, the key word arguments to
-                return the generator.
-
-        Returns:
-            A generator object that dlt will use to retreive paginated data for
-            ingestion.
-        """
-        entry_parts = entry.split(".")
-        module_path = ".".join(entry_parts[:-1])
-        function_name = entry_parts[-1]
-
-        data: Generator[Any, Any, None]
-        module = importlib.import_module(
-            "data_foundation.defs.dlthub.dlthub."+module_path
-        )
-        generator = getattr(module, function_name)
-
-        data = generator
-
-        if args or kwargs:
-            if not isinstance(args, list):
-                args = [args]
-            data = generator(*args, **kwargs)
-        return data
-
-    @staticmethod
-    def _parse_config(name: str, config: dict
-                      ) -> tuple[dg.AssetsDefinition,
-                                 dg.AssetSpec,
-                                 Sequence[dg.AssetChecksDefinition] | None]:
-        """Parse a YAML file contents to create dagster resources.
-
-        Args:
-            name: The name of the resouce in format {schema}.{table}.
-            connection_configs: Raw configuration dictionaries from YAML.
-
-        Returns:
-            A tuple containing the assets, dependancies, and freshness checks.
-        """
-
-        schema, table = name.split(".")
-        config["name"] = name
-
-        # remove non-dlt keys so that it matches dlt.resource function signature
-        meta: dict = config.pop("meta", dict())
-        kinds: set = config.pop("kinds", set())
-        tags: set = config.pop("tags", None)
-        entry: str = config.pop("entry")
-        args: list = config.pop("arguments") or []
-        kwargs: dict = config.pop("keyword_arguments") or {}
-
-        # set table name if not defined
-        # config["table"] = config.get("table") or table
-
-        # build assets and checks
-        data = DagsterDltFactory._build_generator(entry, args, kwargs)
-        resource: DltResource = dlt.resource(data, **config)
-        assets = DagsterDltFactory._build_assets(resource, schema, table, tags, meta)
-        dep = dg.AssetSpec(
-            [schema, "src", table], kinds=kinds, group_name=schema
-        )
-        freshness_check = DagsterDltFactory._build_freshness_checks(meta, schema, table)
-        
-        return assets, dep, freshness_check
+            return external_asset

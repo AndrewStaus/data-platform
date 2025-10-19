@@ -1,0 +1,8 @@
+connections:
+  database_name:
+    type: postgres
+    database: env.SOURCE__ACCOUNTS_DB__DATABASE
+    host: env.SOURCE__ACCOUNTS_DB__HOST
+    port: secret.SOURCE__ACCOUNTS_DB__PORT
+    user: secret.SOURCE__ACCOUNTS_DB__USER
+    password: secret.SOURCE__ACCOUNTS_DB__PASSWORD

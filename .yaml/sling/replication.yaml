@@ -1,0 +1,19 @@
+name: accounts_db->snowflake
+env: {SLING_LOADED_AT_COLUMN: timestamp}
+source: accounts_db
+target: snowflake
+streams:
+    accounts_db.accounts:
+        mode: incremental
+        object: '{stream_schema_upper}.{stream_table_upper}'
+        primary_key: [id]
+        update_key: updated_at
+        target_options:
+            column_casing: snake
+            add_new_columns: true
+            adjust_column_type: true
+        meta:
+            dagster:
+                automation_condition: "on_schedule"
+                tags: ["contains_pii"]
+                automation_condition_config: {"cron_schedule":"@daily", "cron_timezone":"utc"}

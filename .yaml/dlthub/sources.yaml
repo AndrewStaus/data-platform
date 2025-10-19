@@ -41,7 +41,7 @@ sources:
         resources: [exchange_rate.usd]
         max_table_nesting: 0
         root_key: false
-        schema: Schema = None
+        schema: s
         schema_contract:
             tables: evolve
             columns: freeze
