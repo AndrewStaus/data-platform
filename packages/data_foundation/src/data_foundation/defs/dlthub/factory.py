@@ -16,56 +16,91 @@ from data_platform_utils.helpers import (
     get_automation_condition_from_meta,
     get_nested,
     get_schema_name,
+    sanitize_input_signature,
 )
+from dlt.extract.decorators import ResourceFactory
+from dlt.extract.reference import SourceFactory
 from dlt.extract.resource import DltResource
 
 from .translator import CustomDagsterDltTranslator
 
 
-class DagsterDltFactory:
+class Factory:
     """Utility class for building Dagster ``Definitions`` from dlt resources."""
     @cache
     @staticmethod
     def build_definitions(config_dir: Path) -> dg.Definitions:
-        """Create Dagster definitions from a directory of dlt YAML configs and python
-        scripts.
+        """ Build Dagster definitions from a directory containing dlt YAML
+        configurations and Python scripts.
+
+        This method parses dlt resource and source configurations from the specifie
+        directory, constructs corresponding Dagster assets and resources, adds any
+        defined freshness checks,  and returns a `Definitions` object for use in a
+        Dagster project.
 
         Args:
-            config_dir: Absolute path to the folder containing dlt configuration
-                files.
+            config_dir:
+                Absolute path to the directory containing dlt configuration files,
+                including YAML resource/source definitions and any accompanying Python
+                scripts.
 
         Returns:
-            Definitions containing assets, resources, and freshness checks derived from
-                the provided configuration files.
+            A Definitions object containing a resouce, assets, and asset checks.
         """
-        asset_checks = []
-        assets = []
-        configs = DagsterDltFactory._get_configs(config_dir)
-        for name, config in configs.items():
-            parsed_config = DagsterDltFactory._parse_config(name, config)
-            assets_definition, dep, checks = parsed_config
+        resources = {}
+        freshness_checks = []
+        resource_configs, source_configs = Factory._get_configs(config_dir)
 
+        for config in resource_configs.values():
+            if resource := (Factory
+                            ._build_resource_from_config(config, resources)):
+                resource_name = config["name"]
+                resources[resource_name] = resource
+
+            if freshness_check := (Factory
+                                   ._build_freshness_checks(config)):
+                freshness_checks.extend(freshness_check)
+
+        assets = []
+
+        # bundle resources into sources
+        for source_config in source_configs.values():
+            assets_definition, resources = (Factory
+                                ._build_assets_from_source(resources, source_config))
             assets.append(assets_definition)
-            assets.append(dep)
-            asset_checks.extend(checks or [])
-        
+
+        # any left over resource will be put into its own stand alone source
+        for resource_name, resource in resources.items():
+            resource_config = resource_configs[resource_name]
+            assets_definition = (Factory
+                                ._build_assets_from_resource(resource, resource_config))
+            assets.append(assets_definition)
+
+        # build stub external assets to allow for external materialization triggers
+        for config in resource_configs.values():
+            if external_assets_definition := (Factory
+                                ._build_external_asset(config)):
+                assets.append(external_assets_definition)
+
         return dg.Definitions(
             resources={"dlt": DagsterDltResource()},
             assets=assets,
-            asset_checks=asset_checks
+            asset_checks=freshness_checks
         )
 
     @staticmethod
-    def _get_configs(config_dir: Path) -> dict:
+    def _get_configs(config_dir: Path) -> tuple[dict[Any, Any], dict[Any, Any]]:
         """Invoke the dlt pipeline and stream structured event data.
 
         Args:
             config_dir: The path to the root folder where dlt configs are located.
 
         Yields:
-            A dictonary containing all of the YAML configs.
+            Tuple of two dictionaries, containing the resource, and source YAML
+                configs.
         """
-        configs = {}
+        resource_configs = {}
+        source_configs = {}
         config_paths = set()
         patterns = ["**/*.yaml", "**/*.yml"]
         for pattern in patterns:
@@ -73,73 +108,52 @@ class DagsterDltFactory:
         
         for config_path in config_paths:
             with open(config_path) as file:
-                data = yaml.load(file, Loader=yaml.FullLoader)
-                config = data.get("resources", {})
-                for name, attributes in config.items():
-                    parent = config_path.parent.name
+                data = yaml.load(file, Loader=yaml.FullLoader) or {}
+            resource_config = data.get("resources", {})
+            for name, attributes in resource_config.items():
+                parent = config_path.parent.name
+                if attributes:
                     attributes["entry"] = parent+"."+attributes["entry"]
-                    configs[name] = attributes
+                    attributes["name"] = name
+                    attributes["config_path"] = config_path
+                    resource_configs[name] = attributes
+            
+            source_config = data.get("sources", {})
+            for name, attributes in source_config.items():
+                if attributes:
+                    attributes["name"] = name
+                    source_configs[name] = attributes
 
-        return configs
+        return resource_configs, source_configs
 
     @staticmethod
-    def _build_assets(resource: DltResource, schema: str,
-                    table: str, tags: set, meta: dict) -> dg.AssetsDefinition:
-        """Build Dagster assets from a dlt resource, along with metadata from the YAML
-        config.
+    def _build_resource_from_config(config: dict,
+                                resources: dict[str, DltResource]) -> ResourceFactory:
+        """Build dlt resource from values from the resource section of the config.
+        If a resource has reference to another resource by key, the key is replaced
+        with the instantiated object.
 
         Args:
-            resource: A dlt resource that can be invoked at run time.
-            schema: The target schema, used to generate a unique asset key.
-            table: The target table, used to generate a unique asset key.
-            tags: Metadata tags for discoverability in the dagster asset catalog.
+            config: a resource config
+            resources: the list of built resources already built for replacing
+                key references.
 
-        Returns:
-            A dagster asset definition.
+        Retruns:
+            Instantiated dlt resource object.
         """
+        data = Factory._build_data_generator(config)
+        sanitized_config = sanitize_input_signature(dlt.resource, config)
 
-        @dlt.source()
-        def source(resource=resource) -> Generator[DltResource, Any]:
-            yield resource
-
-        condition = get_automation_condition_from_meta(meta["dagster"])
-        @dlt_assets(
-            name=f"{schema}__{table}",
-            op_tags={"tags": tags},
-            dlt_source=source(),
-            backfill_policy=dg.BackfillPolicy.single_run(),
-            dagster_dlt_translator=CustomDagsterDltTranslator(
-                automation_condition=condition
-            ),
-            pool="dlthub",
-            dlt_pipeline=dlt.pipeline(
-                pipeline_name=f"{schema}__{table}",
-                destination="snowflake",
-                dataset_name=get_schema_name(schema),
-                progress="log",
-            ),
-        )
-        def assets(
-            context: dg.AssetExecutionContext, dlt: DagsterDltResource
-        ) -> Generator[DltEventType, Any]:
-            """Invoke the dlt pipeline and stream structured event data.
-
-            Args:
-                context: Dagster execution context supplying runtime configuration.
-                dlt: Dagster resource for executing the dlt pipeline.
-
-            Yields:
-                dagster_dlt.dlt_event_iterator.DltEventType: Structured events emitted
-                    from the dlt pipeline run which Dagster converts into asset
-                    materialize events.
-            """
-            yield from dlt.run(context=context)
-
-        return assets
+        # swap string reference with hard reference to the instantiated resource
+        if config.get("data_from"):
+            table_name = config.get("name", "").split(".")[0]
+            sanitized_config["data_from"] = resources[config["data_from"]]
+            sanitized_config["table_name"] = table_name or config["table_name"]
+        return dlt.resource(data, **sanitized_config)    
 
     @staticmethod
-    def _build_freshness_checks(meta: dict, schema: str, table: str
-                                ) -> Sequence[dg.AssetChecksDefinition] | None:
+    def _build_freshness_checks(
+            config: dict) -> Sequence[dg.AssetChecksDefinition] | None:
         """Build asset freshness checks based on the meta property in the YAML 
         configuration
 
@@ -152,8 +166,9 @@ class DagsterDltFactory:
             A sequence of asset checks definitions to monitor for SLA violations.
         """
         if delta := get_nested(
-            meta, ["dagster", "freshness_lower_bound_delta_seconds"]
+            config, ["meta", "dagster", "freshness_lower_bound_delta_seconds"]
         ):
+            schema, table = config["name"].split(".")
             asset_key = dg.AssetKey([schema, "raw", table])
             last_update_freshness_check = dg.build_last_update_freshness_checks(
                 assets=[asset_key],
@@ -162,77 +177,218 @@ class DagsterDltFactory:
             return last_update_freshness_check
 
     @staticmethod
-    def _build_generator(entry: str,
-                         args: list,
-                         kwargs: dict) -> Generator[Any, Any, None]:
-        """Instantiate a generator that yeilds data from the data source.
+    def _build_assets_from_source(resources: dict,
+                        config: dict) -> tuple[dg.AssetsDefinition, dict[Any, Any]]:
+        """Builds an AssetsDefinition from a source config, assigning resources
+        listed in the assets parameter of the config to be members of the source.
+        Returns both the resulting AssetsDefinition and the remaining unassigned
+        resources.
 
         Args:
-            entry: The import path of the generator realative to
-                data_foundation.defs.dlthub.dlthub
-            args: If the entry is a second order funtion, the arguments to return the
-                generator.
-            kwargs: If the entry is a second order funtion, the key word arguments to
-                return the generator.
+            resources: A dictionary of available resource instances, where keys are
+                resource names.
+            config: A dictionary specifying configuration options for the source.
+
+        Returns: 
+            A tuple containing An `AssetsDefinition` and A dictonary of the remaining
+                resources not assigned to the source.
+
+        Raises:
+            KeyError: 
+                If a resource listed in `config["resources"]` is not found in the
+                provided `resources` dictionary.
+        """
+        remaining_resources = resources
+        selected_resources = ()
+        for bundled_resource in config.get("resources", []):
+            try:
+                selected_resources += (remaining_resources.pop(bundled_resource),)
+            except KeyError as e:
+                e.add_note(f"Resource '{bundled_resource}' could not be assigned to "
+                    f"source: '{config['name']}'. Make sure that the resouce is "
+                    "defined, and not assigned to another source.")
+                raise e
+
+        sanitized_config = sanitize_input_signature(dlt.source, config)
+        @dlt.source(**sanitized_config)
+        def source_factory(
+                selected_resources=selected_resources) -> Generator[DltResource, Any]:
+            yield from selected_resources
+
+        assets_definition = Factory._build_assets_definition(source_factory, config)
+
+        return assets_definition, remaining_resources
+
+    @staticmethod
+    def _build_assets_from_resource(
+            resource, config: dict) -> dg.AssetsDefinition:
+        """
+        Builds a Dagster AssetsDefinition from a single dlt resource.
+
+        This method wraps a single dlt resource into a dlt source using the provided
+        configuration, and then builds an `AssetsDefinition` from that source.
+
+        Args:
+            resource: A DLT resource instance to be wrapped into a source and converted
+                into a Dagster asset.
+            config: A dictionary containing configuration for the source.
 
         Returns:
-            A generator object that dlt will use to retreive paginated data for
-            ingestion.
+            An `AssetsDefinition` object representing the asset generated from the
+                provided resource.
         """
-        entry_parts = entry.split(".")
-        module_path = ".".join(entry_parts[:-1])
-        function_name = entry_parts[-1]
+        sanitized_config = sanitize_input_signature(dlt.source, config)
+        sanitized_config["name"] = config["name"].split(".")[0]
+        @dlt.source(**sanitized_config)
+        def source_factory(resource=resource) -> Generator[DltResource, Any]:
+            yield resource
 
-        data: Generator[Any, Any, None]
-        module = importlib.import_module(
-            "data_foundation.defs.dlthub.dlthub."+module_path
-        )
-        generator = getattr(module, function_name)
+        assets_definition = Factory._build_assets_definition(source_factory, config)
 
-        data = generator
+        return assets_definition
 
+    @staticmethod
+    def _build_data_generator(resource_config: dict) -> Generator[Any, Any, None]:
+        """ Dynamically imports and initializes a data generator function based on a
+        resource configuration.
+
+        This method resolves and imports a Python module and function based on the
+        `entry` key in the 
+        provided `resource_config`, which is expected to be a dotted path relative to.
+        the yaml file. If the function is a second order funcion, then it is called
+        using the configured args, and kwargs to get the generator.
+
+        Args:
+            resource_config:
+                A dictionary containing configuration for loading the data generator,
+                including:
+                    - "entry" (str): A dotted path to the target function
+                        (e.g. "module.submodule.function").
+                    - "config_path" (str): Path to the configuration file, used to
+                        resolve the module location.
+                    - "arguments" (optional): A list (or single value) of positional
+                        arguments to pass to the function.
+                    - "keyword_arguments" (optional): A dictionary of keyword arguments
+                        to pass to the function.
+
+        Returns:
+            A generator instance returned by the specified function, optionally called
+                with arguments.
+
+        Raises:
+            ModuleNotFoundError: If the specified module cannot be resolved or imported.
+            AttributeError: If the specified function does not exist in the resolved
+                module.
+            TypeError: If argument types are incorrect for the function being called.
+            ValueError: If config paths cannot be resolved relative to the source file.
+        """
+        entry_parts = resource_config["entry"].split(".")
+        module_dir = (Path(resource_config["config_path"])
+                   .relative_to(Path(__file__).parent).parent.parent)
+
+        module_name = "."+".".join(*module_dir.parts, *entry_parts[:-1])
+        module = importlib.import_module( module_name, __package__)
+
+        data_generator = getattr(module, entry_parts[-1])
+
+        # if second order function, pass arguments to get the wrapped generator
+        args = resource_config.get("arguments", [])
+        kwargs = resource_config.get("keyword_arguments", {})
         if args or kwargs:
             if not isinstance(args, list):
                 args = [args]
-            data = generator(*args, **kwargs)
-        return data
+            data_generator = data_generator(*args, **kwargs)
+        return data_generator
 
     @staticmethod
-    def _parse_config(name: str, config: dict
-                      ) -> tuple[dg.AssetsDefinition,
-                                 dg.AssetSpec,
-                                 Sequence[dg.AssetChecksDefinition] | None]:
-        """Parse a YAML file contents to create dagster resources.
+    def _build_assets_definition(source_factory: SourceFactory,
+                                  config: dict) -> dg.AssetsDefinition:
+        """Convert a source factory into a dagster assets definition so it can be
+            materialized in the dagster interface.
 
-        Args:
-            name: The name of the resouce in format {schema}.{table}.
-            connection_configs: Raw configuration dictionaries from YAML.
+            Args:
+                source_factory:  A generator like factory that yeilds dlt sources.
+                config: the config for the source that holds dagster metadata for
+                    scheduling and control.
 
-        Returns:
-            A tuple containing the assets, dependancies, and freshness checks.
+            Retruns:
+                A dagster assets definition.
         """
 
-        schema, table = name.split(".")
-        config["name"] = name
+        condition = None
+        if meta := get_nested(config.get("meta", {}), ["dagster"]):
+            condition = get_automation_condition_from_meta(meta)
 
-        # remove non-dlt keys so that it matches dlt.resource function signature
-        meta: dict = config.pop("meta", dict())
-        kinds: set = config.pop("kinds", set())
-        tags: set = config.pop("tags", None)
-        entry: str = config.pop("entry")
-        args: list = config.pop("arguments") or []
-        kwargs: dict = config.pop("keyword_arguments") or {}
+        sanitized_name = config["name"].replace(".", "__")
+        schema_name = get_schema_name(config["name"].split(".")[0])
 
-        # set table name if not defined
-        # config["table"] = config.get("table") or table
-
-        # build assets and checks
-        data = DagsterDltFactory._build_generator(entry, args, kwargs)
-        resource: DltResource = dlt.resource(data, **config)
-        assets = DagsterDltFactory._build_assets(resource, schema, table, tags, meta)
-        dep = dg.AssetSpec(
-            [schema, "src", table], kinds=kinds, group_name=schema
+        pipeline = dlt.pipeline(
+            pipeline_name=sanitized_name,
+            destination="snowflake",
+            dataset_name=schema_name,
+            progress="log",
         )
-        freshness_check = DagsterDltFactory._build_freshness_checks(meta, schema, table)
-        
-        return assets, dep, freshness_check
+
+        @dlt_assets(
+            name=sanitized_name,
+            op_tags={"tags": config.get("tags")},
+            dlt_source=source_factory(),
+            backfill_policy=dg.BackfillPolicy.single_run(),
+            pool="dlthub",
+            dlt_pipeline=pipeline,
+            dagster_dlt_translator=CustomDagsterDltTranslator(
+                automation_condition=condition
+            ),
+        )
+        def assets(
+            context: dg.AssetExecutionContext,
+            dlt: DagsterDltResource
+        ) -> Generator[DltEventType, Any]:
+            """Invoke the dlt pipeline and stream structured event data.
+
+                Args:
+                    context: Dagster execution context supplying runtime configuration.
+                    dlt: Dagster resource for executing the dlt pipeline.
+
+                Yields:
+                    dagster_dlt.dlt_event_iterator.DltEventType: Structured events
+                        emitted from the dlt pipeline run which Dagster converts into
+                        asset materialize events.
+            """
+            yield from dlt.run(context=context)
+
+        return assets
+
+    @staticmethod
+    def _build_external_asset(config) -> dg.AssetSpec | None:
+        """Constructs an external Dagster asset specification from the given
+        configuration.
+
+        If the configuration does not specify a data source (`data_from`), this function
+        treats the asset as externally managed and builds a corresponding `AssetSpec` 
+        to allow for external materialization triggers.
+
+        Args:
+            config:
+                A dictionary containing asset metadata. Expected keys:
+                    - "name" (str): The full asset name in "schema.table" format.
+                    - "kinds" (optional): A dictionary of metadata about the asset kind.
+                    - "data_from" (optional): If present, indicates the asset is
+                        external.
+
+        Returns:
+            An `AssetSpec` object representing the external asset if `data_from` is not
+                defined; otherwise, returns `None`.
+
+        Raises:
+            ValueError: If the "name" field is missing or not in the expected
+                "schema.table" format.
+        """
+        schema, table = config["name"].split(".")
+        if not config.get("data_from"):
+            external_asset = dg.AssetSpec(
+                key=[schema, "src", table],
+                kinds=config.get("kinds", {}),
+                group_name=schema,
+            )
+            return external_asset

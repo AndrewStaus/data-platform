@@ -1,0 +1,221 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Dlt Source Configuration",
+  "description": "Schema for dlt sources.yaml configuration files containing resource and soure information.",
+  "type": "object",
+  "properties": {
+    "resources": {
+      "type": "object",
+      "description": "Connection definitions for data sources and targets",
+      "patternProperties": {
+        "^[a-zA-Z0-9_]*\\.[a-zA-Z0-9_-]*$": {
+          "$ref": "#/definitions/Resource"
+        }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "description": "Connection definitions for data sources and targets",
+      "patternProperties": {
+        "^[a-zA-Z0-9_][a-zA-Z0-9_-]*$": {
+          "$ref": "#/definitions/Source"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "definitions": {
+    "meta": {
+      "type": "object",
+      "description": "Meta data to pass to external tools",
+      "properties": {
+        "dagster": {
+          "type": "object",
+          "description": "Meta data to pass to dagster to control scheduleing and checks",
+          "properties": {
+            "freshness_lower_bound_delta_seconds": {
+              "type": "integer",
+              "description": "The time in seconds since the last materialization to wait before declaring the asset in violation of SLA"
+            },
+            "automation_condition": {
+              "type": "string",
+              "description": "The automation condition to use to decided when to materizalize the asset."
+            },
+            "automation_condition_config": {
+              "type": "object",
+              "description": "Configuarion arguments if the automation condition requires.",
+              "properties": {
+                "cron_schedule": {
+                  "type": "string",
+                  "description": "A cronstring defining the schedule."
+                },
+                "cron_timezone": {
+                  "type": "string",
+                  "description": "The three character ISO identifier for the timezone."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "parallelized": {
+      "type": "boolean",
+      "description": "If `True`, the resource generator will be extracted in parallel with other resources."
+    },
+    "spec": {
+      "type": "object",
+      "description": " A specification of configuration and secret values required by the source."
+    },
+    "schema_contract": {
+      "type": "object",
+      "description": "Schema contract settings that will be applied to all resources of this source",
+      "properties": {
+        "tables":{
+          "description": "The contract is applied when a new table is created.\n- `evolve`: No constraints on schema changes. \n- `freeze`: This will raise an exception if data is encountered that does not fit the existing schema, so no data will be loaded to the destination.\n- `discard_row`: This will discard any extracted row if it does not adhere to the existing schema, and this row will not be loaded to the destination.\n- `discard_value`: This will discard data in an extracted row that does not adhere to the existing schema, and the row will be loaded without this data.",
+          "type":"string",
+          "enum": ["evolve", "freeze", "discard_row", "discard_value"]
+        },
+        "columns":{
+          "description": "The contract is applied when a new column is created on an existing table\n- `evolve`: No constraints on schema changes. \n- `freeze`: This will raise an exception if data is encountered that does not fit the existing schema, so no data will be loaded to the destination.\n- `discard_row`: This will discard any extracted row if it does not adhere to the existing schema, and this row will not be loaded to the destination.\n- `discard_value`: This will discard data in an extracted row that does not adhere to the existing schema, and the row will be loaded without this data.",
+          "type":"string",
+          "enum": ["evolve", "freeze", "discard_row", "discard_value"]
+        },
+        "data_type":{
+          "description": "The contract is applied when data cannot be coerced into a data type associated with an existing column\n- `evolve`: No constraints on schema changes. \n- `freeze`: This will raise an exception if data is encountered that does not fit the existing schema, so no data will be loaded to the destination.\n- `discard_row`: This will discard any extracted row if it does not adhere to the existing schema, and this row will not be loaded to the destination.\n- `discard_value`: This will discard data in an extracted row that does not adhere to the existing schema, and the row will be loaded without this data.",
+          "type":"string",
+          "enum": ["evolve", "freeze", "discard_row", "discard_value"]
+        }
+      }
+    },
+    "max_table_nesting": {
+      "type": "integer",
+      "description": "A schema hint that sets the maximum depth of nested table above which the remaining nodes are loaded as structs or JSON"
+    },
+      "section": {
+        "type": "boolean",
+        "description": "Configuration section that comes right after 'sources` in default layout. If not present, the current python module name will be used.  Default layout is `sources.<section>.<name>.<key_name>`. Note that resource section is used only when a single resource is passed to the pipeline."
+      },
+    "Source": {
+      "type": "object",
+      "description": "A dlt source is a logical grouping of resources that are often extracted and loaded together. A source is associated with a schema, which describes the structure of the loaded data and provides instructions how to load it. Such schema contains table schemas that describe the structure of the data coming from the resources.",
+      "properties": {
+        "resources": {
+          "type": "array",
+          "description": "A list of resource names that will be grouped with the source."
+        },
+        "root_key": {
+          "type": "boolean",
+          "description": "Enables merging on all resources by propagating row key from root to all nested tables. This option is most useful if you plan to change write disposition of a resource to disable/enable merge. Defaults to False."
+        },
+        "section": {"$ref": "#/definitions/section"},
+        "max_table_nesting": {"$ref": "#/definitions/max_table_nesting"},
+        "schema_contract": {"$ref": "#/definitions/schema_contract"},
+        "spec": {"$ref": "#/definitions/spec"},
+        "parallelized": {"$ref": "#/definitions/parallelized"},
+        "meta": {"$ref": "#/definitions/meta"}
+
+      }
+    },
+    "Resource": {
+      "type": "object",
+      "description": "Resource configuration object",
+      "properties": {
+        "entry": {
+          "type": "string",
+          "description": "The import path to the entry point of the python ingestion, relative to the yaml file"
+        },
+        "arguments": {
+          "type": "array",
+          "description": "A list of arguments to pass to the entry point in the case that it is a second order function"
+        },
+        "keyword_arguments": {
+          "type": "object",
+          "description": "Arguments to pass to the entry point in the case that it is a second order function"
+        },
+        "kinds": {
+          "type": "object",
+          "description": "A set detailing the kinds resources that the asset utilizes"
+        },
+        "write_disposition": {
+          "oneOf": [
+            {
+              "type": "string",
+              "enum": ["append", "merge", "replace"]},
+            {
+              "type": "object",
+              "properties": {
+                "disposition":{
+                  "type":"string",
+                  "enum": ["append", "merge", "replace"] 
+                },
+                "strategy":{
+                  "type":"string",
+                  "enum": ["delete-insert", "scd2", "upsert"] 
+                }
+              }
+            }
+          ],
+          "description": "Controls how to write data to a table. Accepts a shorthand string literal or configuration dictionary. Allowed shorthand string literals: `append` will always add new data at the end of the table. `replace` will replace existing data with new data. `skip` will prevent data from loading. `merge` will deduplicate and merge data based on `primary_key` and `merge_key` hints. Defaults to `append`."
+        },
+        "columns": {
+          "oneOf": [
+            {"type": "array"},
+            {"type": "object"}
+          ],
+          "description": "A list or dict of column schemas."
+        },
+        "primary_key": {
+          "oneOf": [
+            {"type": "string"},
+            {"type": "array"}
+          ],
+          "description": "A column name or a list of column names that comprise a private key. Typically used with `merge`` write disposition to deduplicate loaded data."
+        },
+        "merge_key": {
+          "oneOf": [
+            {"type": "string"},
+            {"type": "array"}
+          ],
+          "description": "A column name or a list of column names that define a merge key. Typically used with `merge` write disposition to remove overlapping data ranges ie. to keep a single record for a given day."
+        },
+        "table_format": {
+          "type": "string",
+          "description": "Defines the storage format of the table. Currently only `iceberg` is supported on Athena, and `delta` on the filesystem. Other destinations ignore this hint.",
+          "enum": ["iceberg", "delta"]
+        },
+        "file_format": {
+          "type": "string",
+          "description": "Format of the file in which resource data is stored. Useful when importing external files. Use `preferred` to force a file format that is preferred by the destination used",
+          "enum": ["preferred", "jasonl", "parquet", "csv", "insert"]
+        },
+        "references": {
+          "type": "array",
+          "description": "A list of references to other table's columns. A list in the form of `[{'referenced_table': 'other_table', 'columns': ['other_col1', 'other_col2'], 'referenced_columns': ['col1', 'col2']}]`. Table and column names will be normalized according to the configured naming convention."
+        },
+        "nested_hints": {
+          "type": "array",
+          "description": "Hints for nested tables created by this resource."
+        },
+        "selected": {
+          "type": "boolean",
+          "description": "When `True` `dlt pipeline` will extract and load this resource, if `False`, the resource will be ignored."
+        },
+        "incremental": {
+          "type": "boolean",
+          "description": "An incremental configuration for the resource."
+        },
+        "data_from": {
+          "type": "string",
+          "description": "Allows to pipe data from one resource to another to build multi-step pipelines."
+        },
+        "section": {"$ref": "#/definitions/section"},
+        "max_table_nesting": {"$ref": "#/definitions/max_table_nesting"},
+        "schema_contract": {"$ref": "#/definitions/schema_contract"},
+        "spec": {"$ref": "#/definitions/spec"},
+        "parallelized": {"$ref": "#/definitions/parallelized"},
+        "meta": {"$ref": "#/definitions/meta"}
+      }
+    }
+  }
+}

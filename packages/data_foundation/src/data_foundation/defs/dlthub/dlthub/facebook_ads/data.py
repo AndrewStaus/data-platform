@@ -248,3 +248,8 @@ def get_campaigns() -> Generator[list[dict[str, Any]], Any]:
         },
     ]
     yield response
+
+
+def get_test(campaign_data):# -> Generator[list[dict[str, Any]], Any, None]:
+    response = [{"id": x["id"]} for x in campaign_data]
+    yield response

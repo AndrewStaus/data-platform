@@ -2,7 +2,6 @@
 # in replication.yaml files.
 
 
-# yaml-language-server: $schema=../.schema/connections.json
 connections:
   adobe_experience:
     type: postgres

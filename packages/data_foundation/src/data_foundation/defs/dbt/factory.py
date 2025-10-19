@@ -46,7 +46,7 @@ class DbtConfig(dg.Config):
     favor_state: bool = False
 
 
-class DagsterDbtFactory:
+class Factory:
     """Factory to generate dagster definitions from a dbt project."""
 
     @cache
@@ -65,13 +65,13 @@ class DagsterDbtFactory:
         """
         
         assets = [
-            DagsterDbtFactory._get_assets(
+            Factory._get_assets(
                 "dbt_partitioned_models",
                 dbt=dbt,
                 select=TIME_PARTITION_SELECTOR,
                 partitioned=True,
             ),
-            DagsterDbtFactory._get_assets(
+            Factory._get_assets(
                 "dbt_non_partitioned_models",
                 dbt=dbt,
                 exclude=TIME_PARTITION_SELECTOR,

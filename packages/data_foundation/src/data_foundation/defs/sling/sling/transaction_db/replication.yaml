@@ -1,7 +1,6 @@
 # Incremental loads with a composite key that downstream fact tables expect.
 # https://docs.slingdata.io/concepts/replication
 
-# yaml-language-server: $schema=../.schema/replication.json
 name: transaction_db->snowflake
 env: {SLING_LOADED_AT_COLUMN: timestamp}
 source: transaction_db

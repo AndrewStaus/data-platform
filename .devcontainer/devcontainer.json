@@ -40,6 +40,11 @@
 			]
 		},
 		"settings": {
+			"yaml.schemas": {
+				"/workspaces/data-platform/.yaml/dlthub/sources.json": "**/dlthub/**/*.yaml",
+				"/workspaces/data-platform/.yaml/sling/connections.json": "**/sling/**/connections.yaml",
+				"/workspaces/data-platform/.yaml/sling/replication.json": "**/sling/**/*replication*.yaml"
+			},
 			"sqlfluff.dbtInterface.enabled": false,
 			"sqlfluff.dialect": "",
 			"sqlfluff.linter.run": "onSave",
@@ -116,7 +121,12 @@
 				"usecwd",
 				"venv",
 				"xgboost"
-			]
+			],
+			"python.testing.pytestArgs": [
+				"tests"
+			],
+			"python.testing.unittestEnabled": false,
+			"python.testing.pytestEnabled": true
 		}
 	}
 }

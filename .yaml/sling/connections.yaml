@@ -1,8 +1,5 @@
-# Connction details for the accounts_db that can be referenced by name
-# in replication.yaml files.
-
 connections:
-  accounts_db:
+  database_name:
     type: postgres
     database: env.SOURCE__ACCOUNTS_DB__DATABASE
     host: env.SOURCE__ACCOUNTS_DB__HOST

@@ -1,0 +1,56 @@
+# Sample yaml with all properties for reference
+resources:
+    exchange_rate.usd:
+        entry: data.get_exchange_rate
+        arguments: [usd]
+        keyword_arguments: {}
+        kinds: {api}
+        primary_key: date
+        max_table_nesting: 1
+        write_disposition:
+            disposition: merge
+            strategy: scd2
+        columns: 
+            created_at": {"dedup_sort": "desc"}
+        merge_key: [id]
+        schema_contract:
+            tables: evolve
+            columns: freeze
+            data_type: discard_row
+        table_format: delta
+        file_format: parquet
+        references:
+            - referenced_table: exchange_rate.usd
+              columns: ['col1', 'col2']
+              referenced_columns': ['col1', 'col2']
+        nested_hints: [x]
+        selected: true
+        parallelized: false
+        incremental: true
+        data_from: exchange_rate.cad
+        meta:
+            dagster:
+                automation_condition: on_schedule
+                automation_condition_config:
+                    cron_schedule: "@daily"
+                    cron_timezone: utc
+                freshness_lower_bound_delta_seconds: 108000
+
+sources:
+    exchange_rate:
+        resources: [exchange_rate.usd]
+        max_table_nesting: 0
+        root_key: false
+        schema: s
+        schema_contract:
+            tables: evolve
+            columns: freeze
+            data_type: discard_row
+        parallelized: False
+        meta:
+            dagster:
+                automation_condition: on_schedule
+                automation_condition_config:
+                    cron_schedule: "@daily"
+                    cron_timezone: utc
+                freshness_lower_bound_delta_seconds: 108000

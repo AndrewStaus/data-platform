@@ -2,7 +2,6 @@
 # updates without reprocessing the full history.
 # https://docs.slingdata.io/concepts/replication
 
-# yaml-language-server: $schema=../.schema/replication.json
 name: entity_resolution->snowflake
 env: {SLING_LOADED_AT_COLUMN: timestamp}
 source: entity_resolution

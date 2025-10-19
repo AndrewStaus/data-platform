@@ -7,7 +7,7 @@ from dagster import Definitions
 from dagster.components import definitions
 from data_platform_utils.keyvault_stub import SecretClient
 
-from .factory import DagsterDltFactory
+from .factory import Factory
 
 
 @definitions
@@ -49,4 +49,4 @@ def defs() -> Definitions:
     # Resolve the root folder containing dlt configuration files and scripts.
     config_dir = Path(__file__).joinpath(*[".."], "dlthub").resolve()
 
-    return DagsterDltFactory.build_definitions(config_dir)
+    return Factory.build_definitions(config_dir)
