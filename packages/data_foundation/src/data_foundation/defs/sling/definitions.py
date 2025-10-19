@@ -14,9 +14,9 @@ def defs() -> Definitions:
     """
     from pathlib import Path
 
-    from .factory import DagsterSlingFactory
+    from .factory import Factory
 
     # Resolve the root folder containing Sling YAML configuration files.
     config_dir = Path(__file__).joinpath(*[".."], "sling").resolve()
 
-    return DagsterSlingFactory.build_definitions(config_dir)
+    return Factory.build_definitions(config_dir)

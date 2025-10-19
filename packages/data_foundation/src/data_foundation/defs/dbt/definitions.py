@@ -12,7 +12,7 @@ from dagster import Definitions
 from dagster.components import definitions
 from dagster_dbt import DbtProject
 
-from .factory import DagsterDbtFactory
+from .factory import Factory
 
 
 @definitions
@@ -48,4 +48,4 @@ def defs() -> Definitions:
         project.prepare_if_dev()
         return project
 
-    return DagsterDbtFactory.build_definitions(dbt)
+    return Factory.build_definitions(dbt)

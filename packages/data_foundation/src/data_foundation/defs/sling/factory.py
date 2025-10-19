@@ -17,7 +17,7 @@ from data_platform_utils.secrets import get_secret
 from .translator import CustomDagsterSlingTranslator
 
 
-class DagsterSlingFactory:
+class Factory:
     """Factory to generate Dagster definitions from Sling YAML config files."""
 
     @cache
@@ -49,12 +49,12 @@ class DagsterSlingFactory:
                 config = yaml.load(file, Loader=yaml.FullLoader)
 
             if connection_configs := config.get("connections"):
-                connections, kind_map = DagsterSlingFactory._parse_connections(
+                connections, kind_map = Factory._parse_connections(
                     connection_configs, connections, kind_map
                 )
 
             if config.get("streams"):
-                assets, freshness_checks = DagsterSlingFactory._parse_replication(
+                assets, freshness_checks = Factory._parse_replication(
                     config, freshness_checks, kind_map, assets
                 )
 
@@ -91,7 +91,7 @@ class DagsterSlingFactory:
         # building external assets for dependencies.
         for source, connection_config in connection_configs.items():
             connection_config["name"] = source
-            if connection := DagsterSlingFactory._create_resource(connection_config):
+            if connection := Factory._create_resource(connection_config):
                 kind = connection_config.get("type")
                 kind_map[source] = kind
                 connections.append(connection)
@@ -143,16 +143,16 @@ class DagsterSlingFactory:
         # Iterate through each replication block and build Dagster assets, any
         # associated freshness checks, and companion external assets for dependencies.
         if bool(os.getenv("ENV")) == "dev":
-            replication_config = DagsterSlingFactory._set_dev_schema(
+            replication_config = Factory._set_dev_schema(
                 replication_config
             )
-        assets_definition = DagsterSlingFactory._create_asset(replication_config)
+        assets_definition = Factory._create_asset(replication_config)
 
         kind = kind_map.get(replication_config.get("source", None), None)
-        dep_asset_specs = DagsterSlingFactory._get_sling_deps(
+        dep_asset_specs = Factory._get_sling_deps(
             replication_config, kind
         )
-        asset_freshness_checks = DagsterSlingFactory._get_freshness_checks(
+        asset_freshness_checks = Factory._get_freshness_checks(
             replication_config
         )
 
