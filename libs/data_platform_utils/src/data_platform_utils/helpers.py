@@ -40,7 +40,7 @@ def get_database_name(database: str) -> str:
     return database
 
 def get_automation_condition_from_meta(
-    meta: dict[str, Any],
+    meta: dict[str, str],
 ) -> dg.AutomationCondition | None:
     """Return an AutomationCondition if valid configuration is provided in the meta.
     Meta should be of format dict in the following structure:
@@ -138,7 +138,7 @@ def sanitize_input_signature(func: Callable, kwargs: dict) -> dict:
     return kwargs
 
 
-def get_nested(config: Mapping[str, Any], path: list[str]) -> Any:
+def get_nested(config: Mapping[str, Any], path: list[str]) -> Any | None:
     """Helper function to safely traverse a nested dictionary that may have null values
     for a set key that is expected to be a dict. helpful because stream definitions that
     use only the default configs behave this way.

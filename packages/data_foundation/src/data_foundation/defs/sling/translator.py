@@ -181,9 +181,9 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
                 metadata or ``None`` when unspecified.
         """
 
-        meta = get_nested(stream_definition, ["config", "meta", "dagster"])
-        automation_condition = get_automation_condition_from_meta(meta)
-        return automation_condition
+        if meta := get_nested(stream_definition, ["config", "meta", "dagster"]):
+            automation_condition = get_automation_condition_from_meta(meta)
+            return automation_condition
 
     def get_partitions_def(
         self, stream_definition: Mapping[str, Any]
@@ -197,6 +197,6 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             dagster.PartitionsDefinition | None: Partition definition derived from
                 metadata or ``None`` if the stream is un-partitioned.
         """
-        meta = get_nested(stream_definition, ["config", "meta", "dagster"])
-        partitions_def = get_partitions_def_from_meta(meta)
-        return partitions_def
+        if meta := get_nested(stream_definition, ["config", "meta", "dagster"]):
+            partitions_def = get_partitions_def_from_meta(meta)
+            return partitions_def

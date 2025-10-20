@@ -1,8 +1,9 @@
 import os
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import mock_open, patch
 
+import dagster as dg
 from data_foundation.defs.sling.factory import Factory
 
 FACTORY = "data_foundation.defs.sling.factory.Factory"
@@ -54,7 +55,7 @@ class TestFactory(unittest.TestCase):
                     "dagster": {
                         "partition": "hourly",
                         "partition_start_date": "2025-07-01",
-                        "freshness_check": {"lower_bound_delta_seconds": 129600},
+                        "freshness_check": {"deadline_cron": "@daily"},
                         "automation_condition": "on_schedule",
                         "tags": ["contains_pii"],
                         "automation_condition_config": {
@@ -91,8 +92,23 @@ class TestFactory(unittest.TestCase):
                                 "cron_timezone":"utc"}}}}}}
 
 class TestBuildDefinitions(TestFactory):
-    def test_build_definitions(self):
+    @patch("builtins.open", new_callable=mock_open, read_data="data")
+    @patch("pathlib.Path.glob", return_value=["/some/path.yaml", "/some/path2.yaml"])
+    @patch(f"{FACTORY}._parse_connections", return_value=([], {}))
+    @patch(f"{FACTORY}._parse_replication", return_value=(None, [], []))
+    @patch("dagster.Definitions")
+    @patch("yaml.load")
+    def test_build_definitions(self,
+                               mock_yaml_load,
+                               mock_definitions,
+                               mock_parse_replicate,
+                               mock_parse_connections,
+                               mock_glob,
+                               mock_file):
+        connections_yaml = {"connections":self.connection_config}
+        mock_yaml_load.side_effect = [connections_yaml, self.replication_config]
         definitions = self.factory.build_definitions(Path(__file__))
+        mock_definitions.return_value = dg.Definitions()
         self.assertIsNotNone(definitions)
 
 class TestParseConnections(TestFactory):
@@ -165,10 +181,10 @@ class TestGetFreshnessChecks(TestFactory):
 
     # # FAILING
     # # expecting deadline cron to be set in config, check implementation
-    # def test_get_partitioned_freshness_checks(self):
-    #     freshness_checks = self.factory._get_freshness_checks(
-    #         self.partitioned_replication_config)
-    #     self.assertIsNotNone(freshness_checks)
+    def test_get_partitioned_freshness_checks(self):
+        freshness_checks = self.factory._get_freshness_checks(
+            self.partitioned_replication_config)
+        self.assertIsNotNone(freshness_checks)
 
     def test_raise_get_freshness_checks(self):
         with self.assertRaises(TypeError):

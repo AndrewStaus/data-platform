@@ -333,7 +333,7 @@ class Factory:
             op_tags={"tags": config.get("tags")},
             dlt_source=source_factory(),
             backfill_policy=dg.BackfillPolicy.single_run(),
-            pool="dlthub",
+            pool=schema_name,
             dlt_pipeline=pipeline,
             dagster_dlt_translator=CustomDagsterDltTranslator(
                 automation_condition=condition

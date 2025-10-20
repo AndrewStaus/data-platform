@@ -50,7 +50,7 @@ class Factory:
             config_path = config_dir.joinpath(config_path).resolve()
             with open(config_path) as file:
                 config = yaml.load(file, Loader=yaml.FullLoader)
-
+                
             if connection_configs := config.get("connections"):
                 connections, kind_map = Factory._parse_connections(
                     connection_configs, connections, kind_map
@@ -175,7 +175,7 @@ class Factory:
             replication_config=config,
             backfill_policy=dg.BackfillPolicy.single_run(),
             dagster_sling_translator=CustomDagsterSlingTranslator(),
-            pool="sling",
+            pool=config["source"],
         )
         def assets( # pragma: no cover
             context: dg.AssetExecutionContext, sling: SlingResource
@@ -311,12 +311,10 @@ class Factory:
             partition = partition or default_partition
 
             if freshness_check_config:
-                if lower_bound_delta_seconds := freshness_check_config.pop(
-                    "lower_bound_delta_seconds", None
-                ):
+                if lower_bound_delta_seconds := freshness_check_config.get(
+                    "lower_bound_delta_seconds"):
                     lower_bound_delta = timedelta(
-                        seconds=float(lower_bound_delta_seconds)
-                    )
+                        seconds=float(lower_bound_delta_seconds))
                     freshness_check_config["lower_bound_delta"] = lower_bound_delta
 
                 schema, table_name = stream_name.split(".")
