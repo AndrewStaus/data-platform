@@ -123,7 +123,7 @@ class Factory:
             else: # ex: postgres
                 connection_config[attribute]  = original_value
 
-        connection = SlingConnectionResource(**connection_config)
+        connection = SlingConnectionResource(**connection_config) # type: ignore
         return connection
 
     @staticmethod
@@ -237,7 +237,7 @@ class Factory:
                 suffix when the active environment requests user-level isolation.
         """
 
-        if default_object := replication_config["defaults"]["object"]:
+        if default_object := get_nested(replication_config, ["defaults", "object"]):
             schema, table = default_object.split(".")
             object = ".".join((get_schema_name(schema), table))
             replication_config["defaults"]["object"] = object

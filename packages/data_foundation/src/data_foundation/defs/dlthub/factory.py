@@ -285,7 +285,7 @@ class Factory:
         module_dir = (Path(resource_config["config_path"])
                    .relative_to(Path(__file__).parent).parent.parent)
 
-        module_name = "."+".".join(*module_dir.parts, *entry_parts[:-1])
+        module_name = "."+".".join([*module_dir.parts, *entry_parts[:-1]])
         module = importlib.import_module(module_name, __package__)
 
         data_generator = getattr(module, entry_parts[-1])
