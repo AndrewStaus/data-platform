@@ -140,7 +140,7 @@ class Factory:
             freshness_checks: Mutable list accumulating generated freshness checks.
 
         Returns:
-            a tuple containing the assets definition, depasset specs, and asset
+            a tuple containing the assets definition, dep asset specs, and asset
                 freshness checks.
         """
         # Iterate through each replication block and build Dagster assets, any
@@ -285,6 +285,7 @@ class Factory:
             list[dagster.AssetChecksDefinition]: Freshness checks constructed from the
                 merged configuration, one per stream with configured thresholds.
         """
+        "TODO: Fix throwing exception when replication config contains a partition"
         freshness_checks = []
 
         default_freshness_check_config = (
