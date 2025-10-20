@@ -1,5 +1,5 @@
 # Workflow for running linting checks on data foundation package
-name: Linting
+name: Unit Tests
 
 on:
   pull_request:
@@ -13,17 +13,6 @@ permissions:
   contents: read
 
 jobs:
-  sql_linting:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Install uv
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
-
-      - name: SQLFluff Check
-        run: uv run --only-group sqlfluff sqlfluff lint --format github-annotation-native
 
   python_linting:
     runs-on: ubuntu-latest
@@ -34,6 +23,6 @@ jobs:
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
-      - name: Ruff Check
-        run: uv run --only-group ruff ruff check --output-format github
+      - name: Unit Test Check
+        run: python -m unittest
 
