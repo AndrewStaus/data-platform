@@ -144,6 +144,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             str: Group name supplied in metadata or the schema extracted from the stream
                 name when no override exists.
         """
+        #TODO: get meta safely using get nested to remove the try block
         try:
             group = stream_definition["config"]["meta"]["dagster"]["group"]
             if group:
@@ -166,6 +167,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             Mapping[str, Any]: Dictionary of sanitized tags safe for Dagster asset
                 metadata.
         """
+        #TODO: get meta safely using get nested to remove the try block
         try:
             tags = stream_definition["config"]["meta"]["dagster"]["tags"]
             return {tag: "" for tag in tags if is_valid_tag_key(tag)}
@@ -186,6 +188,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             dagster.AutomationCondition | None: Automation condition built from the
                 metadata or ``None`` when unspecified.
         """
+        #TODO: get meta safely using get nested to remove the try block
         try:
             meta = stream_definition["config"]["meta"]["dagster"]
             automation_condition = get_automation_condition_from_meta(meta)
@@ -206,6 +209,7 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             dagster.PartitionsDefinition | None: Partition definition derived from
                 metadata or ``None`` if the stream is un-partitioned.
         """
+        #TODO: get meta safely using get nested to remove the try block
         try:
             meta = stream_definition["config"]["meta"]["dagster"]
             automation_condition = get_partitions_def_from_meta(meta)

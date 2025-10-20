@@ -22,4 +22,4 @@ streams:
             dagster:
                 automation_condition: "on_schedule"
                 tags: ["contains_pii"]
-                automation_condition_config: {"cron_schedule":"@daily", "cron_timezone":"utc"}
+                automation_condition_config: "cron_schedule":"@daily", "cron_timezone":"utc"}
