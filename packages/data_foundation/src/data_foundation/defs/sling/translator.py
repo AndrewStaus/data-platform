@@ -12,6 +12,7 @@ import dagster_sling as dg_sling
 from dagster._utils.tags import is_valid_tag_key
 from data_platform_utils.helpers import (
     get_automation_condition_from_meta,
+    get_nested,
     get_partitions_def_from_meta,
 )
 
@@ -69,10 +70,6 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
 
     @override
     def get_asset_key(self, stream_definition: Mapping[str, Any]) -> dg.AssetKey:
-        config = stream_definition.get("config") or {}
-        meta = config.get("meta") or {}
-        dagster = meta.get("dagster") or {}
-        asset_key = dagster.get("asset_key", None)
         """Derive the Dagster asset key for a Sling replication stream.
 
         Args:
@@ -83,6 +80,8 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             dagster.AssetKey: Asset key determined either from explicit metadata or the
                 sanitized stream name.
         """
+        asset_key = get_nested(stream_definition,
+                               ["config", "meta", "dagster", "asset_key"])
 
         if asset_key:
             if self.sanitize_stream_name(asset_key) != asset_key:
@@ -111,9 +110,8 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
         Returns:
             Iterable[dagster.AssetKey]: Asset keys representing upstream sources.
         """
-        config = stream_definition.get("config", {}) or {}
-        meta = config.get("meta", {}) or {}
-        deps = meta.get("dagster", {}).get("deps")
+
+        deps = get_nested(stream_definition, ["config", "meta", "dagster", "deps"])
         deps_out = []
         if deps and isinstance(deps, str):
             deps = [deps]
@@ -144,14 +142,10 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             str: Group name supplied in metadata or the schema extracted from the stream
                 name when no override exists.
         """
-        #TODO: get meta safely using get nested to remove the try block
-        try:
-            group = stream_definition["config"]["meta"]["dagster"]["group"]
-            if group:
-                return group
-        except Exception:
-            ...
-
+        group = get_nested(stream_definition, ["config", "meta", "dagster", "group"])
+        if group:
+            return group
+        
         stream_name = stream_definition["name"]
         schema, _ = self.sanitize_stream_name(stream_name).split(".")
         return schema
@@ -167,12 +161,10 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             Mapping[str, Any]: Dictionary of sanitized tags safe for Dagster asset
                 metadata.
         """
-        #TODO: get meta safely using get nested to remove the try block
-        try:
-            tags = stream_definition["config"]["meta"]["dagster"]["tags"]
+
+        tags = get_nested(stream_definition, ["config", "meta", "dagster", "tags"])
+        if tags:
             return {tag: "" for tag in tags if is_valid_tag_key(tag)}
-        except Exception:
-            ...
         return {}
 
     def get_automation_condition(
@@ -188,14 +180,10 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             dagster.AutomationCondition | None: Automation condition built from the
                 metadata or ``None`` when unspecified.
         """
-        #TODO: get meta safely using get nested to remove the try block
-        try:
-            meta = stream_definition["config"]["meta"]["dagster"]
-            automation_condition = get_automation_condition_from_meta(meta)
-            return automation_condition
-        except Exception:
-            ...
-        return None
+
+        meta = get_nested(stream_definition, ["config", "meta", "dagster"])
+        automation_condition = get_automation_condition_from_meta(meta)
+        return automation_condition
 
     def get_partitions_def(
         self, stream_definition: Mapping[str, Any]
@@ -209,11 +197,6 @@ class CustomDagsterSlingTranslator(dg_sling.DagsterSlingTranslator):
             dagster.PartitionsDefinition | None: Partition definition derived from
                 metadata or ``None`` if the stream is un-partitioned.
         """
-        #TODO: get meta safely using get nested to remove the try block
-        try:
-            meta = stream_definition["config"]["meta"]["dagster"]
-            automation_condition = get_partitions_def_from_meta(meta)
-            return automation_condition
-        except Exception:
-            ...
-        return None
+        meta = get_nested(stream_definition, ["config", "meta", "dagster"])
+        partitions_def = get_partitions_def_from_meta(meta)
+        return partitions_def
