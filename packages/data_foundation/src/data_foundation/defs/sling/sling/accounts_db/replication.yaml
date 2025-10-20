@@ -8,7 +8,6 @@ env: {SLING_LOADED_AT_COLUMN: timestamp}
 source: accounts_db
 target: snowflake
 streams:
-    accounts_db.accounts2:
     accounts_db.accounts:
         mode: incremental
         object: '{stream_schema_upper}.{stream_table_upper}'
