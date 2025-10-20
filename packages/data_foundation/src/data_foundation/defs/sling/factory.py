@@ -1,6 +1,5 @@
 """Factory helpers for translating Sling YAML configs into Dagster definitions."""
 
-import os
 from collections.abc import Generator
 from datetime import timedelta
 from functools import cache
@@ -11,7 +10,11 @@ import dagster as dg
 import yaml
 from dagster_sling import SlingConnectionResource, SlingResource, sling_assets
 from dagster_sling.sling_event_iterator import SlingEventType
-from data_platform_utils.helpers import get_nested, sanitize_input_signature
+from data_platform_utils.helpers import (
+    get_nested,
+    get_schema_name,
+    sanitize_input_signature,
+)
 from data_platform_utils.secrets import get_secret
 
 from .translator import CustomDagsterSlingTranslator
@@ -120,7 +123,7 @@ class Factory:
             else: # ex: postgres
                 connection_config[attribute]  = original_value
 
-        connection = SlingConnectionResource(**connection_config)
+        connection = SlingConnectionResource(**connection_config) # type: ignore
         return connection
 
     @staticmethod
@@ -142,10 +145,7 @@ class Factory:
         """
         # Iterate through each replication block and build Dagster assets, any
         # associated freshness checks, and companion external assets for dependencies.
-        if bool(os.getenv("ENV")) == "dev":
-            replication_config = Factory._set_dev_schema(
-                replication_config
-            )
+        replication_config = Factory._set_schema(replication_config)
         assets_definition = Factory._create_asset(replication_config)
 
         kind = kind_map.get(replication_config.get("source", None), None)
@@ -225,7 +225,7 @@ class Factory:
         return assets
 
     @staticmethod
-    def _set_dev_schema(replication_config: dict) -> dict:
+    def _set_schema(replication_config: dict) -> dict:
         """Override destination schemas with user-specific suffixes when configured.
 
         Args:
@@ -237,10 +237,10 @@ class Factory:
                 suffix when the active environment requests user-level isolation.
         """
 
-        user = os.environ["DESTINATION__SNOWFLAKE__CREDENTIALS__USERNAME"].upper()
-        if default_object := replication_config["defaults"]["object"]:
+        if default_object := get_nested(replication_config, ["defaults", "object"]):
             schema, table = default_object.split(".")
-            replication_config["defaults"]["object"] = f"{schema}__{user}.{table}"
+            object = ".".join((get_schema_name(schema), table))
+            replication_config["defaults"]["object"] = object
 
         for stream, stream_config in list(
             replication_config.get("streams", {}).items()
@@ -248,9 +248,8 @@ class Factory:
             stream_config = stream_config or {}
             if stream_object := stream_config.get("object"):
                 schema, table = stream_object.split(".")
-                replication_config["streams"][stream]["object"] = (
-                    f"{schema}__{user}.{table}"
-                )
+                object = ".".join((get_schema_name(schema), table))
+                replication_config["streams"][stream]["object"] = object
 
         return replication_config
 

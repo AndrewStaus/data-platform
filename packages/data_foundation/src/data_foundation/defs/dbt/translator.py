@@ -67,7 +67,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
             step = parsed_name.group(1)
             return dg.AssetKey([schema, step, table])
 
-        return super().get_asset_key(dbt_resource_props)
+        return super().get_asset_key(dbt_resource_props) # pragma: no cover
 
     @override
     def get_group_name(self, dbt_resource_props: Mapping[str, Any]) -> str | None:
@@ -89,7 +89,7 @@ class CustomDagsterDbtTranslator(DagsterDbtTranslator):
             schema = parsed_name.group(2)
             return schema
 
-        return super().get_group_name(dbt_resource_props)
+        return super().get_group_name(dbt_resource_props) # pragma: no cover
 
     @override
     def get_partitions_def(

@@ -3,7 +3,6 @@
 # replication defaults to understand how raw tables land in Snowflake.
 # https://docs.slingdata.io/concepts/replication
 
-# yaml-language-server: $schema=../.schema/replication.json
 name: accounts_db->snowflake
 env: {SLING_LOADED_AT_COLUMN: timestamp}
 source: accounts_db
@@ -22,4 +21,6 @@ streams:
             dagster:
                 automation_condition: "on_schedule"
                 tags: ["contains_pii"]
-                automation_condition_config: {"cron_schedule":"@daily", "cron_timezone":"utc"}
+                automation_condition_config: 
+                    cron_schedule: "@daily"
+                    cron_timezone: utc

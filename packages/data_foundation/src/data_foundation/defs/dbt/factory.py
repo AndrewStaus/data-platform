@@ -26,7 +26,7 @@ from dagster_dbt.core.dbt_event_iterator import DbtEventIterator
 from .constants import TIME_PARTITION_SELECTOR
 from .translator import CustomDagsterDbtTranslator
 
-defer_to_prod = os.getenv("TARGET", "").lower() != "prod"
+default_defer_to_prod_setting = os.getenv("TARGET", "").lower() != "prod"
 
 
 class DbtConfig(dg.Config):
@@ -42,7 +42,7 @@ class DbtConfig(dg.Config):
     """
 
     full_refresh: bool = False
-    defer_to_prod: bool = defer_to_prod
+    defer_to_prod: bool = default_defer_to_prod_setting
     favor_state: bool = False
 
 

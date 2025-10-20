@@ -158,12 +158,11 @@ class Factory:
         configuration
 
         Args:
-            meta: the meta property from the YAML configuration
-            schema: The schema of the target table
-            table: The table name of the target table
+            config: The resource or source config which may contain a meta property
 
         Returns:
-            A sequence of asset checks definitions to monitor for SLA violations.
+            A sequence of asset checks definitions to allow dagster to monitor for SLA
+                violations.
         """
         if delta := get_nested(
             config, ["meta", "dagster", "freshness_lower_bound_delta_seconds"]
@@ -213,7 +212,7 @@ class Factory:
         @dlt.source(**sanitized_config)
         def source_factory(
                 selected_resources=selected_resources) -> Generator[DltResource, Any]:
-            yield from selected_resources
+            yield from selected_resources # pragma: no cover
 
         assets_definition = Factory._build_assets_definition(source_factory, config)
 
@@ -221,7 +220,7 @@ class Factory:
 
     @staticmethod
     def _build_assets_from_resource(
-            resource, config: dict) -> dg.AssetsDefinition:
+            resource: DltResource, config: dict) -> dg.AssetsDefinition:
         """
         Builds a Dagster AssetsDefinition from a single dlt resource.
 
@@ -241,7 +240,7 @@ class Factory:
         sanitized_config["name"] = config["name"].split(".")[0]
         @dlt.source(**sanitized_config)
         def source_factory(resource=resource) -> Generator[DltResource, Any]:
-            yield resource
+            yield resource # pragma: no cover
 
         assets_definition = Factory._build_assets_definition(source_factory, config)
 
@@ -286,8 +285,8 @@ class Factory:
         module_dir = (Path(resource_config["config_path"])
                    .relative_to(Path(__file__).parent).parent.parent)
 
-        module_name = "."+".".join(*module_dir.parts, *entry_parts[:-1])
-        module = importlib.import_module( module_name, __package__)
+        module_name = "."+".".join([*module_dir.parts, *entry_parts[:-1]])
+        module = importlib.import_module(module_name, __package__)
 
         data_generator = getattr(module, entry_parts[-1])
 
@@ -355,7 +354,7 @@ class Factory:
                         emitted from the dlt pipeline run which Dagster converts into
                         asset materialize events.
             """
-            yield from dlt.run(context=context)
+            yield from dlt.run(context=context) # pragma: no cover
 
         return assets
 
