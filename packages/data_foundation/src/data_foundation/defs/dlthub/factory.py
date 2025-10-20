@@ -212,7 +212,7 @@ class Factory:
         @dlt.source(**sanitized_config)
         def source_factory(
                 selected_resources=selected_resources) -> Generator[DltResource, Any]:
-            yield from selected_resources
+            yield from selected_resources # pragma: no cover
 
         assets_definition = Factory._build_assets_definition(source_factory, config)
 
@@ -240,7 +240,7 @@ class Factory:
         sanitized_config["name"] = config["name"].split(".")[0]
         @dlt.source(**sanitized_config)
         def source_factory(resource=resource) -> Generator[DltResource, Any]:
-            yield resource
+            yield resource # pragma: no cover
 
         assets_definition = Factory._build_assets_definition(source_factory, config)
 
@@ -354,7 +354,7 @@ class Factory:
                         emitted from the dlt pipeline run which Dagster converts into
                         asset materialize events.
             """
-            yield from dlt.run(context=context)
+            yield from dlt.run(context=context) # pragma: no cover
 
         return assets
 
