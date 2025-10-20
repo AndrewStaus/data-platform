@@ -114,7 +114,9 @@ class TestBuildDefinitions(TestCases):
         mock_build_freshness_checks.return_value = last_update_freshness_check
         mock_build_assets_from_source.return_value = (asset, resources)
         mock_build_assets_from_resource.return_value = asset
-        mock_build_external_asset.return_value = dg.AssetSpec(["schema", "src", "table"])
+        mock_build_external_asset.return_value = (
+            dg.AssetSpec(["schema", "src", "table"])
+        )
 
         definitions = Factory.build_definitions(Path("/some/path"))
 
@@ -155,7 +157,9 @@ class TestBuildDefinitions(TestCases):
         mock_build_freshness_checks.return_value = None
         mock_build_assets_from_source.return_value = (asset, resources)
         mock_build_assets_from_resource.return_value = asset
-        mock_build_external_asset.return_value = dg.AssetSpec(["schema", "src", "table"])
+        mock_build_external_asset.return_value = (
+            dg.AssetSpec(["schema", "src", "table"])
+        )
 
         definitions = Factory.build_definitions(Path("/some/path"))
 
@@ -340,7 +344,7 @@ class TestBuildDataGenerator(TestCases):
             def func(self):
                 yield from [1]
 
-        mock_import_module.resturn_value = data
+        mock_import_module.return_value = data
 
         config = self.resources["source_1.resource_1"]
         generator = Factory._build_data_generator(config)
@@ -355,7 +359,7 @@ class TestBuildDataGenerator(TestCases):
                     yield from [1]
                 return generator
 
-        mock_import_module.resturn_value = data
+        mock_import_module.return_value = data
 
         config = self.resources["source_2.resource_3"]
         generator = Factory._build_data_generator(config)
