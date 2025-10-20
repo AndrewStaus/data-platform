@@ -53,12 +53,8 @@ testpaths = [
     "libs/data_platform_utils/tests",
 ]
 
-# [tool.ruff]
-# exclude = [
-#     "packages/data_analytics",
-#     "**/tests/**/*",
-#     "**/test_*"
-# ]
+[tool.ruff]
+exclude = ["packages/data_analytics"]
 line-length = 88
 
 [tool.ruff.format]
