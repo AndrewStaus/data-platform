@@ -20,17 +20,16 @@ class SecretClient:
     ) -> None:
         secrets = {"SOURCE": {}, "DESTINATION": {}}
   
-        env_path = find_dotenv(raise_error_if_not_found=True,
-                               usecwd=True)
+        if env_path := find_dotenv(usecwd=True):
 
-        with open(env_path) as env:
-            for line in env:
-                line = line.strip()
-                if line:
-                    key, value = line.split("=")
-                    keys = key.split("__")
-                    if len(keys) == 2:
-                        location, attribute = keys
-                        secrets[location][attribute] = value
+            with open(env_path) as env:
+                for line in env:
+                    line = line.strip()
+                    if line:
+                        key, value = line.split("=")
+                        keys = key.split("__")
+                        if len(keys) == 2:
+                            location, attribute = keys
+                            secrets[location][attribute] = value
 
         self.__secrets = secrets
