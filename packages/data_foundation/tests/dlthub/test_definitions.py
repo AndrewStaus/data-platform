@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 
 import dagster as dg
-from data_foundation.defs.dlthub.resources import defs
+from data_foundation.defs.dlthub.definitions import defs
 
 FACTORY = "data_foundation.defs.dlthub.factory.Factory"
 

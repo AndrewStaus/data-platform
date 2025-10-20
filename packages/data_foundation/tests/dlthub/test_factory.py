@@ -354,7 +354,7 @@ class TestBuildDataGenerator(TestCases):
     def test_get_second_order_generator(self, mock_import_module) -> None:
         class data:
             @staticmethod
-            def func(self, foo):
+            def func(foo):
                 def generator():
                     yield from [1]
                 return generator
