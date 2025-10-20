@@ -14,7 +14,7 @@ permissions:
 
 jobs:
 
-  python_linting:
+  pytest_unit_tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -23,6 +23,6 @@ jobs:
       - name: Install uv
         run: curl -LsSf https://astral.sh/uv/install.sh | sh
 
-      - name: Unit Test Check
-        run: python -m unittest
+      - name: Pytest Check
+        run: uv run pytest
 
