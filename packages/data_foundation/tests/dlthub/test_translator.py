@@ -116,3 +116,7 @@ class TestGetTags(TestCases):
     def test_get_tags_when_none_is_set(self) -> None:
         tags = self.translator.get_tags(self.resource_1)
         self.assertEqual(tags, {})
+
+
+if __name__ == "__main__":
+    unittest.main()

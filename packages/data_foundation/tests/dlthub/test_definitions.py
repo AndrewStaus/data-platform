@@ -31,3 +31,7 @@ class TestDefs(unittest.TestCase):
         self.assertEqual(database, "x")
         self.assertEqual(role, "x")
         self.assertEqual(warehouse, "x")
+
+
+if __name__ == "__main__":
+    unittest.main()

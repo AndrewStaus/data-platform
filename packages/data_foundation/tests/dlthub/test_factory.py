@@ -393,3 +393,7 @@ class TestBuildExternalAsset(TestCases):
         self.assertEqual(key_parts[0], "source_1")
         self.assertEqual(key_parts[1], "src")
         self.assertEqual(key_parts[2], "resource_1")
+
+
+if __name__ == "__main__":
+    unittest.main()
