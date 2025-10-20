@@ -48,9 +48,9 @@ omit = [
 
 [tool.pytest.ini_options]
 testpaths = [
-    "packages/data_foundation/tests",
-    "packages/data_science/tests",
-    "libs/data_platform_utils/tests",
+    "./packages/data_foundation/tests",
+    "./packages/data_science/tests",
+    "./libs/data_platform_utils/tests",
 ]
 
 [tool.ruff]

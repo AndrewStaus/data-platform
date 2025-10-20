@@ -57,9 +57,12 @@ class Factory:
                 )
 
             if config.get("streams"):
-                assets, freshness_checks = Factory._parse_replication(
-                    config, freshness_checks, kind_map, assets
-                )
+                assets_definition, dep_asset_specs, asset_freshness_checks = (
+                    Factory._parse_replication(config, kind_map))
+        
+                assets.append(assets_definition) if assets_definition else ...
+                assets.extend(dep_asset_specs)
+                freshness_checks.extend(asset_freshness_checks)
 
         return dg.Definitions(
             resources={"sling": SlingResource(connections=connections)},
@@ -94,7 +97,7 @@ class Factory:
         # building external assets for dependencies.
         for source, connection_config in connection_configs.items():
             connection_config["name"] = source
-            if connection := Factory._create_resource(connection_config):
+            if connection := Factory._create_resource(connection_config): # type: ignore
                 kind = connection_config.get("type")
                 kind_map[source] = kind
                 connections.append(connection)
@@ -123,50 +126,40 @@ class Factory:
             else: # ex: postgres
                 connection_config[attribute]  = original_value
 
-        connection = SlingConnectionResource(**connection_config) # type: ignore
-        return connection
+        resource = SlingConnectionResource(**connection_config) # type: ignore
+        return resource
 
     @staticmethod
     def _parse_replication(
-        replication_config, freshness_checks, kind_map, assets
-    ) -> tuple[list[dg.AssetsDefinition], list[dg.AssetChecksDefinition]]:
+        replication_config, kind_map
+    ) -> tuple[dg.AssetsDefinition, list[dg.AssetSpec], list[dg.AssetChecksDefinition]]:
         """Construct Dagster assets and freshness checks for Sling replications.
 
         Args:
             replication_config: A replication configuration dictionaries.
             freshness_checks: Mutable list accumulating generated freshness checks.
-            kind_map: Mapping of source names to their declared resource kind.
-            assets: Mutable list accumulating Dagster asset definitions.
 
         Returns:
-            tuple[list[dg.AssetsDefinition], list[dg.AssetChecksDefinition]]: Updated
-                assets and freshness checks lists containing entries for the processed
-                replications.
+            a tuple containing the assets definition, depasset specs, and asset
+                freshness checks.
         """
         # Iterate through each replication block and build Dagster assets, any
         # associated freshness checks, and companion external assets for dependencies.
         replication_config = Factory._set_schema(replication_config)
-        assets_definition = Factory._create_asset(replication_config)
+        assets_definition = Factory._create_assets(replication_config)
 
         kind = kind_map.get(replication_config.get("source", None), None)
-        dep_asset_specs = Factory._get_sling_deps(
+        dep_asset_specs = Factory._get_deps(
             replication_config, kind
         )
         asset_freshness_checks = Factory._get_freshness_checks(
             replication_config
         )
 
-        if asset_freshness_checks:
-            freshness_checks.extend(asset_freshness_checks)
-        if assets_definition:
-            assets.append(assets_definition)
-        if dep_asset_specs:
-            assets.extend(dep_asset_specs)
-
-        return assets, freshness_checks
+        return assets_definition, dep_asset_specs, asset_freshness_checks
 
     @staticmethod
-    def _create_asset(config: dict) -> dg.AssetsDefinition:
+    def _create_assets(config: dict) -> dg.AssetsDefinition:
         """Create a Dagster assets definition for a single Sling replication.
 
         Args:
@@ -184,7 +177,7 @@ class Factory:
             dagster_sling_translator=CustomDagsterSlingTranslator(),
             pool="sling",
         )
-        def assets(
+        def assets( # pragma: no cover
             context: dg.AssetExecutionContext, sling: SlingResource
         ) -> Generator[SlingEventType, Any]:
             """Execute the Sling replication and emit structured events.
@@ -254,9 +247,9 @@ class Factory:
         return replication_config
 
     @staticmethod
-    def _get_sling_deps(
-        replication_config: dict, kind: str | None
-    ) -> list[dg.AssetSpec] | None:
+    def _get_deps(
+        replication_config: dict, kind: str | None = None
+    ) -> list[dg.AssetSpec]:
         """Create external asset specs representing upstream Sling dependencies.
 
         Args:
@@ -276,7 +269,7 @@ class Factory:
                 key=[schema, "src", table], group_name=schema, kinds=kinds
             )
             deps.append(dep)
-        return deps
+        return deps or []
 
     @staticmethod
     def _get_freshness_checks(
