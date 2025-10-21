@@ -131,7 +131,7 @@ class Factory:
             project=dbt_project,
             pool="dbt",
         )
-        def assets(
+        def assets( # pragma: no coverage
             context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
         ) -> Generator[DbtEventIterator, Any, Any]:
             """Materialize the selected dbt models via the dbt CLI resource.
