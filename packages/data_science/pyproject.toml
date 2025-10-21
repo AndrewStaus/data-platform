@@ -17,6 +17,14 @@ dependencies = [
     "xgboost-cpu==3.0.5"
 ]
 
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0",
+    "pytest-xdist>=3.8.0",
+]
+
+
 [tool.uv]
 override-dependencies = [
     "xgboost; sys_platform == 'never'",

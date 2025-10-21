@@ -40,17 +40,15 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.coverage.report]
-omit = [
-    "tests/*",
-    "*/test_*.py",
-    "*/conftest.py",
-]
+skip_empty = true
+exclude_lines = ["pragma: no cover"]
+
 
 [tool.pytest.ini_options]
 testpaths = [
     "./packages/data_foundation/tests",
     "./packages/data_science/tests",
-    "./libs/data_platform_utils/tests",
+    "./libs/data_platform_utils/tests"
 ]
 
 [tool.ruff]

@@ -47,5 +47,5 @@ def defs() -> Definitions:
         )
         project.prepare_if_dev()
         return project
-
+    
     return Factory.build_definitions(dbt)

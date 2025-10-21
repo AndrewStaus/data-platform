@@ -26,7 +26,7 @@ from dagster_dbt.core.dbt_event_iterator import DbtEventIterator
 from .constants import TIME_PARTITION_SELECTOR
 from .translator import CustomDagsterDbtTranslator
 
-default_defer_to_prod_setting = os.getenv("TARGET", "").lower() != "prod"
+is_defer = os.getenv("TARGET", "").lower() == "dev"
 
 
 class DbtConfig(dg.Config):
@@ -42,7 +42,7 @@ class DbtConfig(dg.Config):
     """
 
     full_refresh: bool = False
-    defer_to_prod: bool = default_defer_to_prod_setting
+    defer_to_prod: bool = is_defer
     favor_state: bool = False
 
 
@@ -85,7 +85,7 @@ class Factory:
         )
 
         return dg.Definitions(
-            resources={"dbt": DbtCliResource(project_dir=dbt())},
+            resources={"dbt": DbtCliResource(project_dir=dbt())}, # type: ignore
             assets=assets,
             asset_checks=freshness_checks,
             sensors=[freshness_sensor],
@@ -131,7 +131,7 @@ class Factory:
             project=dbt_project,
             pool="dbt",
         )
-        def assets(
+        def assets( # pragma: no coverage
             context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
         ) -> Generator[DbtEventIterator, Any, Any]:
             """Materialize the selected dbt models via the dbt CLI resource.

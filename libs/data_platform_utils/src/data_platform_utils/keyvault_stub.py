@@ -2,7 +2,7 @@
 from dotenv import find_dotenv
 
 
-class SecretClient:
+class SecretClient: # pragma: no coverage
     """A stub keyvault to simulate an integration with Azure Keyvault. This would be
     replaced by a keyvault library.
     """
