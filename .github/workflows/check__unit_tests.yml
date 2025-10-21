@@ -27,5 +27,5 @@ jobs:
         run: uv sync --all-packages
 
       - name: Pytest Check
-        run: uv run --all-packages pytest . --disable-warnings
+        run: uv run --all-packages pytest . --cov --disable-warnings
 
