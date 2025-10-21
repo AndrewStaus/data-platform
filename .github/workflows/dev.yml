@@ -6,7 +6,7 @@ name: QA
 
 on:
   push:
-    branches: ["main"]
+    branches: ["qa"]
 
 concurrency:
   group: "qa"
