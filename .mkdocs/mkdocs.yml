@@ -2,8 +2,6 @@
 # engineers can tweak theme/plugins here while data engineers can add new docs by
 # extending the navigation under docs/.
 site_name: Data Platform
-theme:
-  name: "readthedocs"
 
 # The repo uses Windows-style paths in mkdocs.yml to support GitHub Pages builds on
 # Windows runners. Update both docs_dir and site_dir together if you reorganize docs.
@@ -13,6 +11,44 @@ site_dir: "./site"
 theme:
   # We use Material for MkDocs to unlock advanced navigation and search features.
   name: material
+  # logo: 
+  # favicon: 
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  font:
+    text: Roboto        # Body text
+    code: Roboto Mono   # Code blocks
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      options:
+        custom_icons:
+          - overrides/.icons
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 plugins:
   - search # Standard full-text search across generated pages.
@@ -27,5 +63,3 @@ plugins:
             - ../packages/data_science/src
             - ../libs/analytics_utils/src
             - ../libs/data_platform_utils/src
-  - mermaid2: # Enable Mermaid diagrams in Markdown files for architecture documentation.
-      javascript: https://unpkg.com/mermaid/dist/mermaid.min.js
