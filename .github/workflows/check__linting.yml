@@ -1,4 +1,4 @@
-# Workflow for running linting checks on data foundation package
+# Workflow for running linting checks on python packages and libs
 name: Linting
 
 on:
