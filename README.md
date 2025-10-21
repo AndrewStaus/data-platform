@@ -1,6 +1,6 @@
-[![Unit Tests](https://github.com/AndrewStaus/data-platform/actions/workflows/unit_tests.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/unit_tests.yml)
-[![Linting](https://github.com/AndrewStaus/data-platform/actions/workflows/linting.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/linting.yml)
-[![dbt Checks](https://github.com/AndrewStaus/data-platform/actions/workflows/dbt_checks.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/dbt_checks.yml)
+[![Unit Tests](https://github.com/AndrewStaus/data-platform/actions/workflows/check__unit_tests.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/check__unit_tests.yml)
+[![Linting](https://github.com/AndrewStaus/data-platform/actions/workflows/check__linting.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/check__linting.yml)
+[![dbt Checks](https://github.com/AndrewStaus/data-platform/actions/workflows/check__dbt_checks.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/check__dbt_checks.yml)
 [![CodeQL](https://github.com/AndrewStaus/data-platform/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/github-code-scanning/codeql)
 
 
