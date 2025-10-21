@@ -6,7 +6,7 @@ name: QA
 
 on:
   push:
-    branches: ["qa"]
+    branches: ["prod"]
 
 concurrency:
   group: "qa"
@@ -49,9 +49,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Deploy to Kubernetes
-        run: echo \
-            cd .helm/qa \
-            && helm upgrade --install --hide-notes dagster dagster/dagster \
-                -f .\.helm\values.yaml \
+        run: echo helm upgrade --install --hide-notes dagster dagster/dagster \
+                -f .\.helm\prod\values.yaml \
                 --set dagster-user-deployments.deployments[0].image.tag=$TAG \
                 --set dagster-user-deployments.deployments[1].image.tag=$TAG
