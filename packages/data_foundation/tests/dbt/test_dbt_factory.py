@@ -1,22 +1,8 @@
 # test_factory.py
 
 import unittest
-from unittest.mock import MagicMock, patch, call
-from data_foundation.defs.dbt.factory import Factory
-
-import dagster as dg
-from dagster_dbt import DbtCliResource
-
-
-
-import unittest
 from unittest.mock import MagicMock, patch
-import dagster as dg
-from data_foundation.defs.dbt.factory import Factory
 
-
-import unittest
-from unittest.mock import MagicMock, patch
 import dagster as dg
 from data_foundation.defs.dbt.factory import Factory
 
@@ -39,15 +25,15 @@ class TestBuildDefinitions(TestFactory):
     @patch("data_foundation.defs.dbt.factory.dg.build_sensor_for_freshness_checks")
     @patch("data_foundation.defs.dbt.factory.DbtCliResource")
     def test_builds_correct_definitions(
-        self,
-        mock_dbt_cli_resource,
-        mock_build_sensor,
-        mock_build_freshness,
-        mock_get_assets,
-    ):
+                self,
+                mock_dbt_cli_resource,
+                mock_build_sensor,
+                mock_build_freshness,
+                mock_get_assets,
+            ):
         # Arrange
         Factory.build_definitions.cache_clear()
-        mock_get_assets.side_effect = [self.mock_assets_definition, self.mock_assets_definition]
+        mock_get_assets.side_effect = [self.mock_assets_definition]*2
         mock_build_freshness.return_value = self.mock_freshness_checks
         mock_build_sensor.return_value = self.mock_sensor
         mock_dbt_cli_resource.return_value = MagicMock()
@@ -58,7 +44,7 @@ class TestBuildDefinitions(TestFactory):
         # Assert
         self.assertIsInstance(definitions, dg.Definitions)
         self.assertIn("dbt", definitions.resources)
-        self.assertEqual(definitions.assets, [self.mock_assets_definition, self.mock_assets_definition])
+        self.assertEqual(definitions.assets, [self.mock_assets_definition]*2)
         self.assertEqual(definitions.asset_checks, self.mock_freshness_checks)
         self.assertEqual(definitions.sensors, [self.mock_sensor])
 
@@ -66,7 +52,7 @@ class TestBuildDefinitions(TestFactory):
 class TestGetAssets(TestFactory):
 
     @patch("data_foundation.defs.dbt.factory.dbt_assets")
-    def test_get_assets_non_partitioned(self, mock_dbt_assets):
+    def test_get_assets_non_partitioned(self, mock_dbt_assets) -> None:
         # Arrange
         mock_dbt_project = MagicMock()
         mock_dbt_project.manifest_path = "/path/to/manifest.json"
@@ -103,16 +89,22 @@ class TestGetAssets(TestFactory):
 
         # Mock time window partition context
         mock_context = MagicMock()
-        mock_context.partition_time_window.start.strftime.return_value = "2023-01-01 00:00:00"
-        mock_context.partition_time_window.end.strftime.return_value = "2023-01-02 00:00:00"
+        mock_context.partition_time_window.start.strftime.return_value = (
+            "2023-01-01 00:00:00")
+        mock_context.partition_time_window.end.strftime.return_value = (
+            "2023-01-02 00:00:00"
+        )
 
         # Mock dbt CLI resource
         mock_dbt_resource = MagicMock()
-        mock_dbt_resource.cli.return_value.stream.return_value = iter(["event1", "event2"])
+        mock_dbt_resource.cli.return_value.stream.return_value = (
+            iter(["event1", "event2"])
+        )
 
         # Mock asset function return
         def mock_assets_fn(context, dbt, config):
-            return list(Factory._get_assets.latest_args["inner_fn"](context, dbt, config))
+            return list(Factory._get_assets
+                        .latest_args["inner_fn"](context, dbt, config))
 
     def test_get_assets_raises_if_dbt_callable_returns_none(self):
         # Act / Assert
