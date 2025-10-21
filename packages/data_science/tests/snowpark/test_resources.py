@@ -19,7 +19,9 @@ class TestGetSessionWithAllParams(TestResources):
         mock_get_database_name, mock_get_secret_value
     ):
         mock_session = MagicMock()
-        mock_session_class.builder.configs.return_value.create.return_value = mock_session
+        mock_session_class.builder.configs.return_value.create.return_value = (
+            mock_session
+        )
         mock_get_database_name.return_value = "test_db"
         mock_get_schema_name.return_value = "test_schema"
         mock_get_secret_value.side_effect = [
@@ -52,7 +54,9 @@ class TestGetSessionCreatesSchema(TestResources):
             ):
         mock_session = MagicMock()
         mock_session.use_schema.side_effect = [Exception("missing"), None]
-        mock_session_class.builder.configs.return_value.create.return_value = mock_session
+        mock_session_class.builder.configs.return_value.create.return_value = (
+            mock_session
+        )
 
         mock_get_database_name.return_value = "test_db"
         mock_get_schema_name.return_value = "test_user"
@@ -75,7 +79,9 @@ class TestGetSessionWithDefaults(TestResources):
         self, mock_session_class, mock_get_database_name, mock_get_secret_value
     ):
         mock_session = MagicMock()
-        mock_session_class.builder.configs.return_value.create.return_value = mock_session
+        mock_session_class.builder.configs.return_value.create.return_value = (
+            mock_session
+        )
         mock_get_database_name.return_value = "default_db"
         mock_get_secret_value.side_effect = [
             "user", "warehouse", "host", "user", "password", "role"

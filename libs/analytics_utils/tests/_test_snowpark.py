@@ -10,7 +10,8 @@ class TestVarHelper(unittest.TestCase):
     @patch("analytics_utils.snowpark.load_dotenv")
     @patch("analytics_utils.snowpark.find_dotenv", return_value="/fake/.env")
     @patch("analytics_utils.snowpark.os.getenv")
-    def test_var_returns_env_value(self, mock_getenv, mock_find_dotenv, mock_load_dotenv):
+    def test_var_returns_env_value(
+            self, mock_getenv, mock_find_dotenv, mock_load_dotenv):
         mock_getenv.return_value = "secret_value"
         result = sp._var("DESTINATION__USER")
         self.assertEqual(result, "secret_value")
@@ -22,10 +23,12 @@ class TestGetSession(unittest.TestCase):
     @patch("analytics_utils.snowpark._var")
     @patch("analytics_utils.snowpark.Session.get_active_session", return_value=None)
     @patch("analytics_utils.snowpark.Session.builder")
-    def test_create_new_session_with_vars(self, mock_builder, mock_get_active, mock_var):
+    def test_create_new_session_with_vars(
+            self, mock_builder, mock_get_active, mock_var):
         mock_session = MagicMock()
         mock_builder.configs.return_value.create.return_value = mock_session
-        mock_var.side_effect = ["test_user", "test_host", "test_user", "test_password", "test_role", "test_warehouse"]
+        mock_var.side_effect = ["test_user", "test_host", "test_user", "test_password",
+                                "test_role", "test_warehouse"]
 
         session = sp.get_session(verbose=False)
 
@@ -63,7 +66,8 @@ class TestDisplaySnowpark(unittest.TestCase):
     @patch("analytics_utils.snowpark.get_session")
     @patch("analytics_utils.snowpark.Connector")
     @patch("analytics_utils.snowpark.pyg.walk")
-    def test_display_snowpark_query_with_connector(self, mock_walk, mock_connector, mock_get_session):
+    def test_display_snowpark_query_with_connector(
+            self, mock_walk, mock_connector, mock_get_session):
         mock_session = MagicMock()
         mock_get_session.return_value = mock_session
         mock_session.get_current_account.return_value = "account"
@@ -84,7 +88,8 @@ class TestDisplaySnowpark(unittest.TestCase):
     @patch("analytics_utils.snowpark.get_session")
     @patch("analytics_utils.snowpark.Connector", side_effect=TypeError)
     @patch("analytics_utils.snowpark.legacy_display")
-    def test_display_snowpark_handles_typeerror(self, mock_display, mock_connector, mock_get_session):
+    def test_display_snowpark_handles_typeerror(
+            self, mock_display, mock_connector, mock_get_session):
         mock_session = MagicMock()
         mock_get_session.return_value = mock_session
 
@@ -98,7 +103,8 @@ class TestDisplayDF(unittest.TestCase):
     def test_display_df_with_spec(self, mock_render):
         df = pd.DataFrame({"a": [1, 2]})
         sp._display_df(df, spec="test_spec")
-        mock_render.assert_called_once_with(df, "test_spec", theme_key="streamlit", appearance="light")
+        mock_render.assert_called_once_with(
+            df, "test_spec", theme_key="streamlit", appearance="light")
 
     @patch("analytics_utils.snowpark.pyg.walk")
     def test_display_df_without_spec(self, mock_walk):
