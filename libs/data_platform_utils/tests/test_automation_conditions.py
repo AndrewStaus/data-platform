@@ -58,7 +58,8 @@ class TestCustomAutomationCondition(unittest.TestCase):
         self.assertTrue(callable(method))
 
     def test_get_automation_condition_returns_none_for_invalid(self):
-        method = CustomAutomationCondition.get_automation_condition("nonexistent_condition")
+        method = CustomAutomationCondition.get_automation_condition(
+            "nonexistent_condition")
         self.assertIsNone(method)
 
 
