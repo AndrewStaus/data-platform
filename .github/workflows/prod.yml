@@ -1,0 +1,57 @@
+# Workflow for deploying changes to prod.
+# Stub for now, will need to hook up to snowflake, container registry, and add
+# credentials in the github action environment.
+
+name: Prod
+
+on:
+  push:
+    branches: ["main"]
+
+concurrency:
+  group: "prod"
+  cancel-in-progress: true
+
+permissions:
+  checks: write
+  contents: read
+
+jobs:
+  build_data_foundation:
+    environment: prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker Images
+        run: echo docker build . -f Dockerfile.data_foundation --target data_foundation \
+            -t dagster/prod/data_foundation:$TAG \
+            --secret id=DESTINATION__PASSWORD,env=DESTINATION__PASSWORD
+
+  build_data_science:
+    environment: prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker Images
+        run: echo docker build . -f Dockerfile.data_science --target data_science \
+            -t dagster/prod/data_science:$TAG
+
+  deploy:
+    environment: prod
+    runs-on: ubuntu-latest
+    needs: [build_data_foundation, build_data_science]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Kubernetes
+        run: echo \
+            cd .helm/prod \
+            && helm upgrade --install --hide-notes dagster dagster/dagster \
+                -f .\.helm\values.yaml \
+                --set dagster-user-deployments.deployments[0].image.tag=$TAG \
+                --set dagster-user-deployments.deployments[1].image.tag=$TAG
