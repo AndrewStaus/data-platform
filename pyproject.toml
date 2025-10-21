@@ -42,18 +42,13 @@ build-backend = "setuptools.build_meta"
 [tool.coverage.report]
 skip_empty = true
 exclude_lines = ["pragma: no cover"]
-omit = [
-    "tests/*",
-    "*/test_*.py",
-    "*/conftest.py",
-]
 
 
 [tool.pytest.ini_options]
 testpaths = [
     "./packages/data_foundation/tests",
     "./packages/data_science/tests",
-    "./libs/data_platform_utils/tests",
+    "./libs/data_platform_utils/tests"
 ]
 
 [tool.ruff]

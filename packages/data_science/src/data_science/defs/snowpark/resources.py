@@ -35,7 +35,7 @@ class SnowparkResource(dg.ConfigurableResource):
         from data_platform_utils.helpers import get_database_name, get_schema_name
         from snowflake.snowpark import Session
 
-        if sys.platform == "win32":
+        if sys.platform == "win32": # pragma: no coverage
             # hotfix to prevent path conversion issue on windows installations
             # should be able to remove once resolved in snowflake.snowpark
             import pathlib
@@ -57,7 +57,7 @@ class SnowparkResource(dg.ConfigurableResource):
                 "user":      get_secret_value("DESTINATION__SNOWFLAKE__USER"),
                 "password":  get_secret_value("DESTINATION__SNOWFLAKE__PASSWORD"),
                 "role":      get_secret_value("DESTINATION__SNOWFLAKE__ROLE"),
-                "warehouse": warehouse,
+                "warehouse": warehouse
             })
             .create()
         )

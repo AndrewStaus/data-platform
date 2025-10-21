@@ -685,6 +685,13 @@ dependencies = [
     { name = "psutil" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-xdist" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "dagster-cloud", specifier = "==1.11.15" },
@@ -696,6 +703,13 @@ requires-dist = [
     { name = "dagster-snowflake", specifier = "==0.27.15" },
     { name = "data-platform-utils", directory = "libs/data_platform_utils" },
     { name = "psutil", specifier = "==7.1.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "pytest-cov", specifier = ">=7.0.0" },
+    { name = "pytest-xdist", specifier = ">=3.8.0" },
 ]
 
 [[package]]
@@ -770,6 +784,13 @@ dependencies = [
 [package.metadata]
 requires-dist = [{ name = "dagster", specifier = ">=1.11.12" }]
 
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "pytest-cov", specifier = ">=7.0.0" },
+    { name = "pytest-xdist", specifier = ">=3.8.0" },
+]
+
 [[package]]
 name = "data-science"
 version = "0.1.0"
@@ -788,6 +809,13 @@ dependencies = [
     { name = "xgboost-cpu" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-xdist" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "dagster-cloud", specifier = "==1.11.15" },
@@ -801,6 +829,13 @@ requires-dist = [
     { name = "snowflake-ml-python", specifier = "==1.17.0" },
     { name = "snowflake-snowpark-python", specifier = "==1.40.0" },
     { name = "xgboost-cpu", specifier = "==3.0.5" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "pytest-cov", specifier = ">=7.0.0" },
+    { name = "pytest-xdist", specifier = ">=3.8.0" },
 ]
 
 [[package]]
