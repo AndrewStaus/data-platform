@@ -8,5 +8,5 @@ while ($true) {
         -o jsonpath="{.items[0].metadata.name}" `
     )
 
-    kubectl port-forward $DAGSTER_WEBSERVER_POD_NAME 6000:80
+    kubectl port-forward $DAGSTER_WEBSERVER_POD_NAME 60000:80
 }
