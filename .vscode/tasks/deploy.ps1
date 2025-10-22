@@ -1,12 +1,15 @@
+# Simulate a prod deployment by sending to a locally hosted KIND pod.
+
 # setup env
+$env:TARGET = ((Get-Content .env.prod) -match 'TARGET=(.*)').split("=")[1].trim()
 $env:DESTINATION__USER = ((Get-Content .env.prod) -match 'DESTINATION__USER=(.*)').split("=")[1].trim()
 $env:DESTINATION__DATABASE = ((Get-Content .env.prod) -match 'DESTINATION__DATABASE=(.*)').split("=")[1].trim()
 $env:DESTINATION__HOST = ((Get-Content .env.prod) -match 'DESTINATION__HOST=(.*)').split("=")[1].trim()
 $env:DESTINATION__ROLE = ((Get-Content .env.prod) -match 'DESTINATION__ROLE=(.*)').split("=")[1].trim()
 $env:DESTINATION__PASSWORD = ((Get-Content .env.prod) -match 'DESTINATION__PASSWORD=(.*)').split("=")[1].trim()
 $env:DESTINATION__WAREHOUSE = ((Get-Content .env.prod) -match 'DESTINATION__WAREHOUSE=(.*)').split("=")[1].trim()
-$env:TARGET = ((Get-Content .env.prod) -match 'TARGET=(.*)').split("=")[1].trim()
 
+# set variables
 $dbt_path = ".\packages\data_foundation\dbt"
 $tag = (-join ((97..122) | Get-Random -Count 15 | ForEach-Object {[char]$_}))
 $foundation_image = "dagster/data-foundation:"+$tag

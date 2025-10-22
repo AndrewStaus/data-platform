@@ -21,7 +21,7 @@ FROM python:3.12-bullseye AS dbt_builder
 FROM python:3.12-slim-bullseye AS dbt_compiler
     # compile dbt target so that recompile is not needed at runtime in dagster
     ARG TARGET="dev"
-    ENV TARGET=$target
+    ENV TARGET=$TARGET
     COPY --from=dbt_builder dbt /usr/local/bin/dbt
     COPY /packages/data_foundation/dbt dbt
     RUN --mount=type=secret,id=destination__user \

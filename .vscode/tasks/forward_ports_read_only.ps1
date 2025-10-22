@@ -4,9 +4,9 @@ while ($true) {
 
     $DAGSTER_WEBSERVER_POD_NAME=( `
         kubectl get pods --namespace default `
-        -l "app.kubernetes.io/name=dagster,app.kubernetes.io/instance=dagster,component=dagster-webserver" `
+        -l "app.kubernetes.io/name=dagster,app.kubernetes.io/instance=dagster,component=dagster-webserver-read-only" `
         -o jsonpath="{.items[0].metadata.name}" `
     )
 
-    kubectl port-forward $DAGSTER_WEBSERVER_POD_NAME 6000:80
+    kubectl port-forward $DAGSTER_WEBSERVER_POD_NAME 7000:80
 }
