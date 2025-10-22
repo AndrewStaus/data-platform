@@ -118,5 +118,5 @@ class TestGetTags(TestCases):
         self.assertEqual(tags, {})
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no coverage
     unittest.main()

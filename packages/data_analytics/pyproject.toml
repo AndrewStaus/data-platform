@@ -1,8 +1,9 @@
 [project]
 name = "data_analytics"
-version = "0.1.0"
 description = "Environment for interactive analysis of data stored in snowflake"
+version = "0.1.0"
 readme = "README.md"
+authors = [{name = "Andrew Staus"}]
 requires-python = "==3.10.*"
 dependencies = [
     "analytics-utils",

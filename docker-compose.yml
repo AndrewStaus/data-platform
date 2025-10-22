@@ -1,0 +1,113 @@
+version: "3.9"
+
+secrets:
+  DESTINATION__PASSWORD:
+      environment: DESTINATION__PASSWORD
+
+networks:
+  dagster_network:
+    driver: bridge
+    name: dagster_network
+
+services:
+  dagster-data-foundation:
+    build:
+      context: .
+      dockerfile: Dockerfile.data_foundation
+      secrets:
+        - DESTINATION__PASSWORD
+    container_name: dagster-data-foundation
+    env_file: ".env"
+    environment:
+      DAGSTER_POSTGRES_USER: postgres_user
+      DAGSTER_POSTGRES_PASSWORD: postgres_password
+      DAGSTER_POSTGRES_DB: postgres_db
+      DAGSTER_CURRENT_IMAGE: data_foundation
+    networks: ["dagster_network"]
+    healthcheck:
+      test: ["CMD", "dagster", "api", "grpc-health-check", "--host", "127.0.0.1", "--port", "4000"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+
+  dagster-data-science:
+    build:
+      context: .
+      dockerfile: Dockerfile.data_science
+      secrets:
+        - DESTINATION__PASSWORD
+    container_name: dagster-data-science
+    env_file: ".env"
+    environment:
+      DAGSTER_POSTGRES_USER: postgres_user
+      DAGSTER_POSTGRES_PASSWORD: postgres_password
+      DAGSTER_POSTGRES_DB: postgres_db
+      DAGSTER_CURRENT_IMAGE: data_science
+    networks: ["dagster_network"]
+    healthcheck:
+      test: ["CMD", "dagster", "api", "grpc-health-check", "--host", "127.0.0.1", "--port", "4000"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 45s
+
+  dagster-postgresql:
+    image: postgres:11
+    container_name: dagster-postgresql
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: postgres_db
+    networks: ["dagster_network"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres_user -d postgres_db"]
+      interval: 10s
+      timeout: 8s
+      retries: 5
+    expose: ["5432"]
+    ports: ["5432:5432"]
+
+  dagster-daemon:
+    image: docker.io/dagster/dagster-celery-k8s
+    entrypoint: ["dagster-daemon", "run"]
+    container_name: dagster-daemon
+    restart: on-failure
+    environment:
+      DAGSTER_POSTGRES_USER: postgres_user
+      DAGSTER_POSTGRES_PASSWORD: postgres_password
+      DAGSTER_POSTGRES_DB: postgres_db
+    volumes: # Make docker client accessible so we can launch containers using host docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/io_manager_storage:/tmp/io_manager_storage
+    networks: [dagster_network]
+    depends_on:
+      dagster-postgresql:
+        condition: service_healthy
+      dagster-data-foundation:
+        condition: service_healthy
+      dagster-data-science:
+        condition: service_healthy
+
+  dagster-webserver:
+    image: docker.io/dagster/dagster-celery-k8s
+    entrypoint: ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000", "-w", "workspace.yaml"]
+    container_name: dagster-webserver
+    env_file: ".env"
+    environment:
+      DAGSTER_POSTGRES_USER: postgres_user
+      DAGSTER_POSTGRES_PASSWORD: postgres_password
+      DAGSTER_POSTGRES_DB: postgres_db
+    volumes: # Make docker client accessible so we can launch containers using host docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/io_manager_storage:/tmp/io_manager_storage
+    networks: ["dagster_network"]
+    depends_on:
+      dagster-postgresql:
+        condition: service_healthy
+      dagster-data-foundation:
+        condition: service_healthy
+      dagster-data-science:
+        condition: service_healthy
+    expose: ["3000"]
+    ports: ["3000:3000"]
