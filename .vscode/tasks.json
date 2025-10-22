@@ -97,6 +97,20 @@
             }
         },
         {
+            "label": "k8s port forward (read only)",
+            "type": "shell",
+            "command": "./.vscode/tasks/forward_ports_read_only.ps1",
+            "icon": {"id":"server"},
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            }
+        },
+        {
             "label": "dagster dev",
             "type": "shell",
             "command": "uv run dg dev",

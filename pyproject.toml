@@ -1,7 +1,9 @@
 [project]
+description = "Data platform demonstration that integrates dagster, dbt, sling, and dlt."
 name = "data_platform"
 version = "0.1.0"
-description = "Data platform demonstration that integrates dagster, dbt, sling, and dlt."
+readme = "README.md"
+authors = [{name = "Andrew Staus"}]
 requires-python = ">=3.12, <3.13"
 
 dependencies = [

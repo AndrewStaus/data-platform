@@ -1,6 +1,6 @@
 {
-    "dbt_sources_scaffold":{
-        "prefix": "dbt_sources_scaffold",
+    "sources":{
+        "prefix": "sources-dbt",
         "scope": "jinja-yaml,yaml",
         "description": "description",
         "body": [
@@ -15,9 +15,9 @@
             ""
         ]
     },
-    "dbt_staged_scaffold": {
+    "staged-dbt": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "dbt_staged_scaffold",
+        "prefix": "staged-dbt",
         "description": "description",
         "body": [
             "{{",
@@ -41,8 +41,8 @@
             ""
         ]
     },
-    "dbt_snapshot_scaffold":{
-        "prefix": "dbt_snapshot_scaffold",
+    "snapshot-dbt":{
+        "prefix": "snapshot-dbt",
         "scope": "jinja-yaml,yaml",
         "description": "description",
         "body": [
@@ -68,7 +68,7 @@
             ""
         ]
     },
-    "automation_condition_config_sql":{
+    "automation-condition_config_sql-dbt":{
         "scope": "jinja-sql,sql,snowflake-sql",
         "prefix": "automation_condition_config",
         "description": "description",
@@ -82,9 +82,9 @@
             "  }"
         ]
     },
-    "dbt_with_source_cte":{
+    "with-source-cte-dbt":{
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "dbt_with_source_cte",
+        "prefix": "with-source-cte-dbt",
         "description": "description",
         "body": [
             "with ${1:table} as (",
@@ -92,9 +92,9 @@
             ")"
         ]
     },
-    "dbt_source_cte":{
+    "source-cte-dbt":{
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "dbt_source_cte",
+        "prefix": "source-cte-dbt",
         "description": "description",
         "body": [
             "${1:table} as (",
@@ -102,9 +102,9 @@
             ")"
         ]
     },
-    "dbt_with_ref_cte":{
+    "with-ref-cte-dbt":{
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "dbt_with_ref_cte",
+        "prefix": "with-ref-cte-dbt",
         "description": "description",
         "body": [
             "with ${1:alias} as (",
@@ -112,9 +112,9 @@
             ")"
         ]
     },
-    "dbt_ref_cte":{
+    "ref-cte-dbt":{
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "dbt_ref_cte",
+        "prefix": "ref-cte-dbt",
         "description": "description",
         "body": [
             "${1:alias} as (",
@@ -122,9 +122,9 @@
             ")"
         ]
     },
-    "dbt_incremental_config": {
+    "incremental-config-dbt": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "dbt_incremental_config",
+        "prefix": "incremental-config-dbt",
         "description": "description",
         "body": [
             "{{-",
@@ -136,9 +136,9 @@
             "-}}",
         ]
     },
-    "dbt_is_incremental": {
+    "is-incremental-dbt": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "dbt_is_incremental",
+        "prefix": "is-incremental-dbt",
         "description": "description",
         "body": [
             "{% if is_incremental() -%}",
@@ -146,9 +146,9 @@
             "{%- endif %}"
         ]
     },
-    "dbt_partition_config": {
+    "partition-config-dbt": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "dbt_partition",
+        "prefix": "partition-config-dbt",
         "description": "description",
         "body": [
             "\"partition\": \"${1|hourly,daily,weekly,monthly|}\",",
@@ -156,9 +156,9 @@
             "\"freshness_check\": {\"deadline_cron\": \"${5|0,*,0,1,2,3,4,5,6,7,8,9|} ${6|2,*,0,1,2,3,4,5,6,7,8,9|} ${7|*,0,1,2,3,4,5,6,7,8,9|} ${8|*,0,1,2,3,4,5,6,7,8,9|} ${9|*,0,1,2,3,4,5,6,7,8,9|}\"}",
         ]
     },
-    "dbt_partition_is_incremental": {
+    "partition-is-incremental-dbt": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "dbt_partition_is_incremental",
+        "prefix": "partition-is-incremental-dbt",
         "description": "description",
         "body": [
             "{% if is_incremental() -%}",

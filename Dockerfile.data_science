@@ -1,12 +1,12 @@
 FROM python:3.12-slim-bullseye AS data_science
     ENV PATH="/opt/dagster/app/.venv/bin:$PATH"
-    ENV DAGSTER_HOME=/opt/dagster/dagster_home
+    ENV DAGSTER_HOME=/opt/dagster/dagster_home/
     ENV TARGET=prod
     COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
     
     # copy libs and configs
     WORKDIR /opt/
-    COPY .dagster_home/dagster.yaml dagster_home/dagster.yaml
+    COPY .dagster_home/dagster.yaml $DAGSTER_HOME
     COPY /libs/data_platform_utils libs/data_platform_utils
     
     # install user code
@@ -15,8 +15,8 @@ FROM python:3.12-slim-bullseye AS data_science
     COPY /packages/data_science/pyproject.toml pyproject.toml
     RUN --mount=type=cache,target=/root/.cache/uv,id=science_uv_cache \
         uv sync --no-dev --compile-bytecode --link-mode=copy
-    COPY .env.prod .env
+    COPY .env .env
     
-    EXPOSE 4000
-    
-    CMD ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-m", "data_science"]
+    EXPOSE 5000
+
+    CMD ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "5000", "-m", "data_science.definitions"]

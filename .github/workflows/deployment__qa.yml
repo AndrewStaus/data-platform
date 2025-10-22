@@ -26,8 +26,14 @@ jobs:
 
       - name: Build Docker Images
         run: echo docker build . -f Dockerfile.data_foundation --target data_foundation \
-            -t dagster/qa/data_foundation:$TAG \
-            --secret id=DESTINATION__PASSWORD,env=DESTINATION__PASSWORD
+            -t dagster/prod/data_foundation:$TAG \
+            --build-arg TARGET="qa" \
+            --secret id=destination__user,env=DESTINATION__USER \
+            --secret id=destination__database,env=DESTINATION__DATABASE \
+            --secret id=destination__host,env=DESTINATION__HOST \
+            --secret id=destination__role,env=DESTINATION__ROLE \
+            --secret id=destination__password,env=DESTINATION__PASSWORD \
+            --secret id=destination__warehouse,env=DESTINATION__WAREHOUSE
 
   build_data_science:
     environment: qa

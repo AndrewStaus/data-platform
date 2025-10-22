@@ -20,18 +20,29 @@ FROM python:3.12-bullseye AS dbt_builder
 
 FROM python:3.12-slim-bullseye AS dbt_compiler
     # compile dbt target so that recompile is not needed at runtime in dagster
-    ENV TARGET=prod
+    ARG TARGET="dev"
+    ENV TARGET=$TARGET
     COPY --from=dbt_builder dbt /usr/local/bin/dbt
     COPY /packages/data_foundation/dbt dbt
-    RUN --mount=type=secret,id=DESTINATION__PASSWORD \
-            export DESTINATION__PASSWORD=$(cat /run/secrets/DESTINATION__PASSWORD) \
+    RUN --mount=type=secret,id=destination__user \
+        --mount=type=secret,id=destination__database \
+        --mount=type=secret,id=destination__host \
+        --mount=type=secret,id=destination__role \
+        --mount=type=secret,id=destination__password \
+        --mount=type=secret,id=destination__warehouse \
+        export DESTINATION__USER=$(cat /run/secrets/destination__user) \
+        && export DESTINATION__DATABASE=$(cat /run/secrets/destination__database) \
+        && export DESTINATION__HOST=$(cat /run/secrets/destination__host) \
+        && export DESTINATION__ROLE=$(cat /run/secrets/destination__role) \
+        && export DESTINATION__PASSWORD=$(cat /run/secrets/destination__password) \
+        && export DESTINATION__WAREHOUSE=$(cat /run/secrets/destination__warehouse) \
         && cd dbt && dbt clean && dbt deps && dbt compile
 
 FROM python:3.12-slim-bullseye AS data_foundation
     # install binaries from build stages, copy compiled dbt and python sources,
     # and build project.
     ENV PATH="/opt/dagster/app/.venv/bin:$PATH"
-    ENV DAGSTER_HOME=/opt/dagster/dagster_home
+    ENV DAGSTER_HOME=/opt/dagster/dagster_home/
     ENV TARGET=prod
     ENV SLING_BINARY=/usr/local/bin/sling
 
@@ -41,19 +52,20 @@ FROM python:3.12-slim-bullseye AS data_foundation
     COPY --from=dbt_builder dbt /usr/local/bin/dbt
     
     # copy libs and configs
-    WORKDIR /opt/
-    COPY .dagster_home/dagster.yaml dagster_home/dagster.yaml
-    COPY /libs/data_platform_utils libs/data_platform_utils
+    COPY .dagster_home/dagster.yaml $DAGSTER_HOME
+    COPY /libs/data_platform_utils /opt/libs/data_platform_utils
 
     # install user code
     WORKDIR /opt/dagster/app
     COPY /packages/data_foundation/src src
     COPY /packages/data_foundation/pyproject.toml pyproject.toml
     RUN --mount=type=cache,target=/root/.cache/uv,id=foundation_uv_cache \
-        uv sync --no-dev --compile-bytecode --link-mode=copy
+        uv sync --no-dev --compile-bytecode --link-mode=copy \
+        && rm .venv/bin/dbt
     COPY --from=dbt_compiler dbt dbt
-    COPY .env.prod .env
+    COPY .env .env
 
     EXPOSE 4000
 
-    CMD ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-m", "data_foundation"]
+    CMD ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "data_foundation.definitions"]
+

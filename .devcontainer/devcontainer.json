@@ -40,6 +40,7 @@
 			]
 		},
 		"settings": {
+			"editor.snippetSuggestions": "bottom",
 			"yaml.schemas": {
 				"/workspaces/data-platform/.yaml/dlthub/sources.json": "**/dlthub/**/*.yaml",
 				"/workspaces/data-platform/.yaml/sling/connections.json": "**/sling/**/connections.yaml",

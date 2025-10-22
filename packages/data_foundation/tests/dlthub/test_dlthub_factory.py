@@ -395,5 +395,5 @@ class TestBuildExternalAsset(TestCases):
         self.assertEqual(key_parts[2], "resource_1")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no coverage
     unittest.main()
