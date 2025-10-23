@@ -67,5 +67,5 @@ FROM python:3.12-slim-bullseye AS data_foundation
 
     EXPOSE 4000
 
-    CMD ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "data_foundation.definitions"]
+    CMD ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-m", "data_foundation.definitions"]
 

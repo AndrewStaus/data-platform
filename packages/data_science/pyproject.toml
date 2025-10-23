@@ -7,7 +7,8 @@ authors = [{name = "Andrew Staus"}]
 requires-python = ">=3.12, <3.13"
 dependencies = [
     "dagster-cloud==1.11.15",
-    "dagster-k8s==0.27.15",
+    # "dagster-k8s==0.27.15",
+    "dagster-docker==0.27.15",
     "dagster-snowflake==0.27.15",
     "dagster_postgres==0.27.15",
     "data-platform-utils",

@@ -19,4 +19,4 @@ FROM python:3.12-slim-bullseye AS data_science
     
     EXPOSE 5000
 
-    CMD ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "5000", "-m", "data_science.definitions"]
+    CMD ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "5000", "-m", "data_science.definitions"]

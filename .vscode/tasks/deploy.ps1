@@ -18,7 +18,7 @@ $defer_path = $dbt_path+"\state\"
 
 # build docker
 Write-Host("`nBUILDING FOUNDATION DOCKER IMAGE")
-docker build . -f Dockerfile.data_foundation --target data_foundation -t $foundation_image `
+docker build . -f .docker/data_foundation.dockerfile --target data_foundation -t $foundation_image `
     --build-arg TARGET="prod" `
     --secret id=destination__user,env=DESTINATION__USER `
     --secret id=destination__database,env=DESTINATION__DATABASE `
@@ -28,7 +28,7 @@ docker build . -f Dockerfile.data_foundation --target data_foundation -t $founda
     --secret id=destination__warehouse,env=DESTINATION__WAREHOUSE
     
 Write-Host("`nBUILDING SCIENCE DOCKER IMAGE")
-docker build . -f Dockerfile.data_science --target data_science -t $science_image
+docker build . -f .docker/data_science.dockerfile --target data_science -t $science_image
 
 # deploy to kubernetes
 Write-Host("`nDEPLOYING BUILD")
