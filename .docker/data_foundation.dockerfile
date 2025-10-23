@@ -52,7 +52,7 @@ FROM python:3.12-slim-bullseye AS data_foundation
     COPY --from=dbt_builder dbt /usr/local/bin/dbt
     
     # copy libs and configs
-    # COPY .dagster_home/dagster.yaml $DAGSTER_HOME
+    COPY .docker/dagster.yaml $DAGSTER_HOME
     COPY /libs/data_platform_utils /opt/libs/data_platform_utils
 
     # install user code
@@ -63,9 +63,10 @@ FROM python:3.12-slim-bullseye AS data_foundation
         uv sync --no-dev --compile-bytecode --link-mode=copy \
         && rm .venv/bin/dbt
     COPY --from=dbt_compiler dbt dbt
+
+    # this is for keyvault stub will be removed in real deployment
     COPY .env .env
 
     EXPOSE 4000
 
     CMD ["dagster", "code-server", "start", "-h", "0.0.0.0", "-p", "4000", "-m", "data_foundation.definitions"]
-

@@ -4,7 +4,7 @@ services:
   # to reduce the interval and timeout in the healthcheck to speed up your `docker-compose up` times.
   postgres:
     image: postgres:11
-    container_name: dagster-postgres
+    container_name: dagster-postgresql-0
     environment:
       POSTGRES_USER: dagster_user
       POSTGRES_PASSWORD: dagster_password
@@ -42,10 +42,6 @@ services:
     container_name: dagster-data-foundation
     env_file: ".env"
     environment:
-      DAGSTER_POSTGRES_HOST: dagster-postgres
-      DAGSTER_POSTGRES_USER: dagster_user
-      DAGSTER_POSTGRES_PASSWORD: dagster_password
-      DAGSTER_POSTGRES_DB: dagster_db
       DAGSTER_CURRENT_IMAGE: "data_platform-data-foundation"
     networks: ["dagster_network"]
 
@@ -62,10 +58,6 @@ services:
     container_name: dagster-data-science
     env_file: ".env"
     environment:
-      DAGSTER_POSTGRES_HOST: dagster-postgres
-      DAGSTER_POSTGRES_USER: dagster_user
-      DAGSTER_POSTGRES_PASSWORD: dagster_password
-      DAGSTER_POSTGRES_DB: dagster_db
       DAGSTER_CURRENT_IMAGE: "data_platform-data-science"
     networks: ["dagster_network"]
 
@@ -83,11 +75,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
     networks: ["dagster_network"]
-    environment:
-      DAGSTER_POSTGRES_HOST: dagster-postgres
-      DAGSTER_POSTGRES_USER: dagster_user
-      DAGSTER_POSTGRES_PASSWORD: dagster_password
-      DAGSTER_POSTGRES_DB: dagster_db
     depends_on:
       postgres:
         condition: service_healthy
@@ -113,11 +100,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
     networks: ["dagster_network"]
-    environment:
-      DAGSTER_POSTGRES_HOST: dagster-postgres
-      DAGSTER_POSTGRES_USER: dagster_user
-      DAGSTER_POSTGRES_PASSWORD: dagster_password
-      DAGSTER_POSTGRES_DB: dagster_db
     depends_on:
       postgres:
         condition: service_healthy
@@ -125,7 +107,6 @@ services:
         condition: service_started
       dagster-data-science:
         condition: service_started
-
 
 secrets:
   destination__user:

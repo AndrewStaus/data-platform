@@ -13,7 +13,7 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS dbt_builder
         | /bin/bash -s -- --update \
         && mv /root/.local/bin/dbt /dbt
 
-FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye
+FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye data_platform_dev_container
     ENV SLING_BINARY=/usr/local/bin/sling
     ENV DBT_BINARY=/home/vscode/.local/bin/dbt
 
