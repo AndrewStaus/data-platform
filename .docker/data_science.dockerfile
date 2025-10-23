@@ -6,7 +6,7 @@ FROM python:3.12-slim-bullseye AS data_science
     
     # copy libs and configs
     WORKDIR /opt/
-    COPY .dagster_home/dagster.yaml $DAGSTER_HOME
+    # COPY .dagster_home/dagster.yaml $DAGSTER_HOME
     COPY /libs/data_platform_utils libs/data_platform_utils
     
     # install user code

@@ -10,7 +10,7 @@ dependencies = [
     "dagster-dbt==0.27.15",
     "dagster-dlt==0.27.15",
     # "dagster-k8s==0.27.15",
-    "dagster-docker==0.27.15",
+    # "dagster-docker==0.27.15",
     "dagster-postgres==0.27.15",
     "dagster-sling==0.27.15",
     "dagster-snowflake==0.27.15",

@@ -52,7 +52,7 @@ FROM python:3.12-slim-bullseye AS data_foundation
     COPY --from=dbt_builder dbt /usr/local/bin/dbt
     
     # copy libs and configs
-    COPY .dagster_home/dagster.yaml $DAGSTER_HOME
+    # COPY .dagster_home/dagster.yaml $DAGSTER_HOME
     COPY /libs/data_platform_utils /opt/libs/data_platform_utils
 
     # install user code
