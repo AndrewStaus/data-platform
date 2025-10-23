@@ -4,7 +4,7 @@ services:
   # to reduce the interval and timeout in the healthcheck to speed up your `docker-compose up` times.
   postgres:
     image: postgres:11
-    container_name: dagster-postgresql
+    container_name: dagster-postgresql-0
     environment:
       POSTGRES_USER: dagster_user
       POSTGRES_PASSWORD: dagster_password
