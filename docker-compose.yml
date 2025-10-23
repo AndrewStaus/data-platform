@@ -83,7 +83,7 @@ services:
       dagster-data-science:
         condition: service_started
     expose: ["3000"]
-    ports: ["3000:3000"]
+    ports: ["3500:3000"]
 
   # This service runs the dagster-daemon process, which is responsible for taking runs
   # off of the queue and launching them, as well as creating runs from schedules or sensors.
