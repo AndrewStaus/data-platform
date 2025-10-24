@@ -29,7 +29,11 @@ Streams will inherit settings from the replication defaults if not otherwise set
 ???+ quote "Configure Streams"
     ![Sling Stream](../img/sling/4_streams.gif){ align=left }
 
-
+### YAML Hints
+YAML schemas are enabled to allow for checks for valid inputs, auto-complete, and
+descriptions to speed up development time.
+???+ quote "Configure Streams"
+    ![Sling Stream](../img/sling/5_hints.gif){ align=left }
 
 ## Connections
 ??? example "connections.yaml"
