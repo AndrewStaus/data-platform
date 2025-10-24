@@ -61,7 +61,6 @@
 			"dbt.dbtIntegration": "fusion",
 			"dbt.fileNameTemplateGenerateModel": "{prefix}_{sourceName}__{tableName}",
 			"dbt.prefixGenerateModel": "stg",
-			"python.terminal.useEnvFile": true,
 			"dbt.enableNewLineagePanel": true,
 			"dbt.deferConfigPerProject": {
 				"packages/data_foundation/dbt": {
@@ -71,6 +70,8 @@
 					"deferToProduction": true
 				}
 			},
+			"python.terminal.useEnvFile": true,
+			"python.useEnvironmentsExtension": true,
 			"python-envs.pythonProjects": [
 				{
 					"path": "libs/analytics_utils",
