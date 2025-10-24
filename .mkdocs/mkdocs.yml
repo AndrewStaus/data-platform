@@ -2,6 +2,9 @@
 # engineers can tweak theme/plugins here while data engineers can add new docs by
 # extending the navigation under docs/.
 site_name: Data Platform
+repo_name: Data Platform
+repo_url: https://github.com/AndrewStaus/data-platform
+
 
 # The repo uses Windows-style paths in mkdocs.yml to support GitHub Pages builds on
 # Windows runners. Update both docs_dir and site_dir together if you reorganize docs.
