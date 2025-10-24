@@ -20,28 +20,15 @@ packages/data_foundation/dlthub/
 
 Each subdirectory represents a distinct data source or integration, such as **Facebook Ads**, **Google Ads**, **Exchange Rate APIs**, or **Open Data feeds**.
 
-```
-dlthub/
- ├── exchange_rate/
- │   ├── __init__.py
- │   ├── data.py
- │   └── sources.yaml
- │
- ├── facebook_ads/
- │   ├── __init__.py
- │   ├── data.py
- │   └── sources.yaml
- │
- ├── google_ads/
- │   ├── __init__.py
- │   ├── data.py
- │   └── sources.yaml
- │
- └── open_data/
-     ├── __init__.py
-     ├── data.py
-     └── sources.yaml
-```
+
+???+ quote "layout"
+      ``` text
+      dlthub/
+      ├── source_name/
+      │   ├── __init__.py
+      │   ├── data.py
+      │   └── sources.yaml
+      ```
 
 ---
 
@@ -51,13 +38,25 @@ Each source directory defines three core components that enable flexible data in
 
 ### 1. `__init__.py`
 
-The `__init__.py` file identifies the folder as a Python module, allowing Dagster and dltHub to dynamically import resources and pipelines.
-
-It can also define helper functions or constants used across the source, such as authentication tokens, endpoint definitions, or dataset-specific utilities.
+The `__init__.py` file is an empty file that identifies the folder as a Python module,
+allowing Dagster and dltHub to dynamically import resources and pipelines.
 
 ---
 
 ### 2. `data.py`
+??? example "data.py"
+
+      ```python
+      import requests
+
+      def get_exchange_rates():
+         url = "https://api.exchangerate.host/latest"
+         response = requests.get(url)
+         data = response.json()
+
+         # Yield in pages or time slices if needed
+         yield data["rates"]
+      ```
 
 The **`data.py`** script defines the **data generator** — a Python function that yields data in batches.  
 Each yield represents a page or chunk of records fetched from the source system (API, file, or database).
@@ -67,25 +66,20 @@ This generator pattern allows dltHub to:
 - Handle pagination and rate limits  
 - Maintain memory efficiency during ingestion  
 
-Example:
-
-```python
-import requests
-
-def get_exchange_rates():
-    url = "https://api.exchangerate.host/latest"
-    response = requests.get(url)
-    data = response.json()
-
-    # Yield in pages or time slices if needed
-    yield data["rates"]
-```
-
 Ingestion functions can also accept arguments (like date ranges or filters), allowing Dagster to parametrize runs dynamically.
 
 ---
 
 ### 3. `sources.yaml`
+??? example "source.yaml"
+
+      ```yaml
+      resources:
+         exchange_rate.usd:
+            entry: data.get_exchange_rates
+            arguments: [usd]
+            write_disposition: replace
+      ```
 
 The **`sources.yaml`** file defines the **replication and resource configuration** for dltHub.  
 It tells dltHub how to call the generator and where to send the resulting data.
@@ -95,19 +89,11 @@ Typical fields include:
 | Key | Description |
 | ---- | ------------ |
 | `entry` | The import path to the generator function, e.g. `exchange_rate.data.get_exchange_rates` |
-| `args` | Optional positional arguments passed to the generator |
-| `kwargs` | Optional keyword arguments for dynamic parameters (like `start_date`, `end_date`) |
-| `destination` | The target dataset or schema in Snowflake (commonly `raw`) |
+| `arguments` | Optional positional arguments passed to the function to select a generator |
+| `keword_arguments` | Optional keyword arguments passed to the function to select a generator |
 | `write_disposition` | Defines whether data is appended, replaced, or merged |
 
-Example configuration:
 
-```yaml
-resources:
-  - entry: exchange_rate.data.get_exchange_rates
-    destination: raw.exchange_rate
-    write_disposition: replace
-```
 
 ---
 
@@ -120,70 +106,6 @@ Each dltHub resource is automatically materialized as a **Dagster asset**, allow
 - Track lineage from **source → raw → dbt staging → marts**
 - Visualize dependencies between connectors and downstream dbt models
 - Surface metadata such as run duration, success/failure, and record counts
-
-Example Dagster asset definition:
-
-```python
-from dagster import asset
-from dlthub.exchange_rate.data import get_exchange_rates
-
-@asset
-def exchange_rate_raw():
-    for batch in get_exchange_rates():
-        load_to_snowflake(batch, table="raw.exchange_rate")
-```
-
-Dagster uses this integration to ensure each dltHub dataset is up-to-date before dbt transformations begin.
-
----
-
-## Data Flow Summary
-
-```
-External APIs / Feeds
-   ↓
-dltHub (data generators & configs)
-   ↓
-Snowflake → schema: raw
-   ↓
-dbt (staging, intermediate, marts)
-   ↓
-Analytics, Dashboards, ML
-```
-
-Each layer remains **modular and declarative**:
-- dltHub handles *extraction and loading*
-- dbt handles *transformation and modeling*
-- Dagster orchestrates and observes *the entire lifecycle*
-
----
-
-## Adding a New Source
-
-To create a new dltHub integration:
-
-1. **Create a new folder** under `dlthub/` named after the dataset.  
-   Example: `dlthub/github/`
-2. **Add three files**:
-   - `__init__.py`
-   - `data.py`
-   - `sources.yaml`
-3. **Implement the generator** in `data.py`:
-   ```python
-   def get_commits(repo):
-       url = f"https://api.github.com/repos/{repo}/commits"
-       for page in range(1, 10):
-           yield requests.get(f"{url}?page={page}").json()
-   ```
-4. **Configure replication** in `sources.yaml`:
-   ```yaml
-   resources:
-     - entry: github.data.get_commits
-       args: ["org/repo"]
-       destination: raw.github_commits
-       write_disposition: append
-   ```
-5. **Register the resource** in Dagster to expose it as an asset.
 
 ---
 

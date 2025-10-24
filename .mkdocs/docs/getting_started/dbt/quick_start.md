@@ -1,5 +1,9 @@
 # Quick Start
 
+Follow these steps to quickly set up and run your first dbt configuration.
+
+## Overview
+
 This guide walks through how to extend the existing **dbt project** integrated with **Dagster**.  
 All **raw data** from Sling and dltHub is already available in the `raw` database.  
 You’ll add new **staging**, **intermediate**, and **mart** models that transform this data for analytics.

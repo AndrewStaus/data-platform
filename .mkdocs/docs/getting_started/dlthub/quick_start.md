@@ -120,11 +120,7 @@ Press `Ctrl + Space` and select **`dlt-sources`** to scaffold a sources template
 
 # Data Generator
 
-The **data generator** defines *how* data is fetched.  
-It can yield any iterable of dictionaries (records).  
-dltHub automatically batches and streams data to the destination.
-
-??? example "data.py Example"
+??? example "data.py"
 
     ```python
     import requests
@@ -141,10 +137,14 @@ dltHub automatically batches and streams data to the destination.
             page += 1
     ```
 
-**Tips:**
-- Always use **`yield`** (not `return`) to stream data in small chunks.  
-- Use API pagination, cursors, or offsets to avoid loading too much data into memory.  
-- Each yield should return a list (or iterable) of records, e.g. `[{...}, {...}, ...]`.
+    !!! tip
+        - Always use **`yield`** (not `return`) to stream data in small chunks.  
+        - Use API pagination, cursors, or offsets to avoid loading too much data into memory.  
+        - Each yield should return a list (or iterable) of records, e.g. `[{...}, {...}, ...]`.
+
+The **data generator** defines *how* data is fetched.  
+It can yield any iterable of dictionaries (records).  
+dltHub automatically batches and streams data to the destination.
 
 ???+ quote "Yielding Data"
     ![dltHub Yielding](../../img/dlt/5_yield.gif){ align=left }
