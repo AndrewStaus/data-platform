@@ -6,7 +6,42 @@ You’ll add new **staging**, **intermediate**, and **mart** models that transfo
 
 ---
 
-## 1. Create a Staging Model
+## 1. Define the Source
+
+Each source system should have a `_sources.yml` file inside its staging folder.  
+This declares the raw tables ingested by Sling and dltHub so dbt can reference them with the `source()` function.
+
+???+ quote "Defining Sources"
+    ![dbt Sources](../../img/dbt/1_sources.gif){ align=left }
+
+??? example "models/staging/accounts_db/_sources.yml"
+
+    ```yaml
+    version: 2
+
+    sources:
+    - name: my_database
+      database: "{{ '_'~target.name~'_' if target.name != 'prod'-}} raw"
+      schema: "my_database {{- '__'~target.schema if target.name != 'prod'}}"
+      tables:
+      - name: my_table
+        description: "Data extracted from the source system"
+
+    ```
+
+    !!! tip "Best Practice"
+        Each source system should have its own `_sources.yml` file.  
+        For example:
+        ```
+        staging/
+        ├── my_database/_sources.yml
+        ├── facebook_ads/_sources.yml
+        ├── transaction_db/_sources.yml
+        ```
+
+---
+
+## 2. Create a Staging Model
 
 Staging models standardize and clean source data from the `raw` schema.  
 Each staging folder corresponds to a source system (e.g., `accounts_db`, `facebook_ads`, `transaction_db`).
@@ -21,14 +56,19 @@ Create a new SQL file named with the convention:
 `stg_<source_system>__<table_name>.sql`
 
 ???+ quote "Creating Staging Models"
-    ![dbt Staging](../../img/dbt/1_staging.gif){ align=left }
+    ![dbt Staging](../../img/dbt/2_staging.gif){ align=left }
 
-??? example "stg_accounts_db__accounts.sql"
-    `models/staging/accounts_db/stg_accounts_db__accounts.sql`
+??? example "models/staging/my_database/stg_my_database__accounts.sql"
 
     ```sql
-    with source as (
-        select * from {{ source("accounts_db", "accounts") }}
+    {{
+    config(
+        materialized = "view",
+        )
+    -}}
+
+    with my_table as (
+        select * from {{ source("my_database", "my_table") }}
     ),
 
     renamed as (
@@ -36,54 +76,57 @@ Create a new SQL file named with the convention:
             id::int               account_id,
             name::varchar(50)     account_name,
             created_at::timestamp created_at
-        from source
+        from my_table
     )
 
     select * from renamed
     ```
 
-**Best Practices**
-- Use `snake_case` for column names.  
-- Explicitly cast data types.  
-- Prefix staging models with `stg_` and separate schema and table with double underscores (`__`).
+    !!! tip "Best Practice"
+        - Wrap sources in their own one line cte
+        - Use all lowercase for readbility
+        - Use `snake_case` for column names.  
+        - Explicitly cast data types.  
+        - Prefix staging models with `stg_` and separate schema and table with double underscores (`__`).
 
 ---
-
-## 2. Define the Source
-
-Each source system should have a `_sources.yml` file inside its staging folder.  
-This declares the raw tables ingested by Sling and dltHub so dbt can reference them with the `source()` function.
-
-???+ quote "Defining Sources"
-    ![dbt Sources](../../img/dbt/2_sources.gif){ align=left }
-
-??? example "models/staging/accounts_db/_sources.yml"
-
-    ```yaml
-    version: 2
-
-    sources:
-    - name: accounts_db
-        description: "Landing zone for accounts_db"
-        database: "{{ '_'+target.name+'_' if not target.name == ('prod') -}} raw"
-        schema: accounts_db {{- '__'+target.user if not target.name == ('prod') }}
-        tables:
-        - name: accounts
-            description: "Accounts data extracted from the source system"
+## 3. Add dbt and Dagster Jinja Configuration Block
+??? example "models/staging/my_database/stg_my_database__accounts.sql"
+    ```sql
+    {{-
+        config(
+            schema = "my_database",
+            alias = "my_table",
+            materialized = "incremental",
+            unique_key = "account_id",
+            incremental_strategy="delete+insert",
+            meta = {
+                "dagster": {
+                    "automation_condition": "eager",
+                    "freshness_check": {"lower_bound_delta_seconds": 129600}
+                }
+            },
+            post_hook = ["{{
+                apply_privacy_rules(
+                    apply_mask=True,
+                    delete_interval="10 years',
+                    anonymize_interval="5 years",
+                    reference_date_column="updated_at",
+                    pii_columns=[
+                        "account_name",
+                    ]
+                )
+            }}"]
+        )
+    -}}
+    - ...
     ```
 
-    !!! tip
-        Each source system should have its own `_sources.yml` file.  
-        For example:
-        ```
-        staging/
-        ├── accounts_db/_sources.yml
-        ├── facebook_ads/_sources.yml
-        ├── transaction_db/_sources.yml
-        ```
----
+Add the jinja conflig block to the top of the model to define how and when the table is
+materialized.
+___
 
-## 3. Document and Test Staging Models
+## 4. Document and Test Staging Models
 
 Add a companion `.yml` file for each staging model to define metadata and tests.
 
@@ -96,8 +139,8 @@ Add a companion `.yml` file for each staging model to define metadata and tests.
     version: 2
 
     models:
-    - name: stg_accounts_db__accounts
-        description: "Standardized accounts data cleaned from raw source"
+    - name: stg_my_database__my_table
+        description: "Standardized data cleaned from raw source"
         columns:
         - name: account_id
             description: "Unique identifier for the account"
@@ -121,13 +164,10 @@ Add a companion `.yml` file for each staging model to define metadata and tests.
 
 ---
 
-## 4. Create Intermediate Models
+## 5. Create Intermediate Models
 
 Intermediate models combine or enrich staging data before final marts.  
 They typically live under `models/intermediate/` and are grouped by business domain (e.g., `marketing`, `finance`, `sales`).
-
-???+ quote "Intermediate Models"
-    ![dbt Intermediate](../../img/dbt/4_intermediate.gif){ align=left }
 
 ??? example "models/intermediate/marketing/int_marketing__campaign_performance.sql"
 
@@ -155,13 +195,10 @@ They typically live under `models/intermediate/` and are grouped by business dom
 
 ---
 
-## 5. Create Mart Models
+## 6. Create Mart Models
 
 Mart models are the final layer — curated datasets for analytics, reporting, or dashboards.  
 They live in `models/marts/` and are organized by domain (e.g., `marketing`, `finance`, `operations`).
-
-???+ quote "Creating Mart Models"
-    ![dbt Marts](../../img/dbt/5_marts.gif){ align=left }
 
 ??? example "models/marts/marketing/fct_marketing__fct_attributions.sql"
 
@@ -181,38 +218,33 @@ They live in `models/marts/` and are organized by domain (e.g., `marketing`, `fi
 
 **Naming Conventions:**
 
-| Prefix | Purpose |
-| ------- | -------- |
-| `stg_` | Raw → Cleaned data |
-| `int_` | Intermediate joins and transformations |
-| `dim_` | Dimension tables |
-| `fct_` | Fact tables or aggregated datasets |
+| Prefix | Zone             | Purpose |
+| ------ | ---------------- | ------- |
+| `src_` | Raw (Bronze)     |Raw data |
+| `stg_` | Staging (Silver) |Raw → Cleaned data |
+| `int_` | Staging (Silver) |Intermediate joins and transformations |
+| `dim_` | Mart (Gold)      |Dimension tables |
+| `fct_` | Mart (Gold)      |Fact tables or aggregated datasets |
+| `flt_` | Mart (Gold)      |Flat tables for reporting and ml modeling |
 
 ---
 
-## 6. Build, Test, and Document
+## 7. Build and Test
 
-After adding your models:
-
-```bash
-dbt build
-```
-
-This command runs models, executes tests, and builds dependencies automatically.  
-You can also generate and view documentation:
+After adding your models they can be materialized and tested in your development
+envrionment by running:
 
 ```bash
-dbt docs generate
-dbt docs serve
+dbt build -s stg_my_database__my_table+
 ```
 
-Dagster will automatically detect the new dbt assets and display them in the **Asset Graph**, showing full lineage:
-```
-Sling/dltHub → raw → staging → intermediate → marts
-```
+Or by using the dbt extension:
 
 ???+ quote "Dagster Integration"
-    ![dbt Dagster Graph](../../img/dbt/6_dagster.gif){ align=left }
+    ![dbt Dagster Graph](../../img/dbt/4_build.gif){ align=left }
+
+This command runs models, executes tests, and builds dependencies automatically.
+
 
 ---
 
@@ -220,11 +252,10 @@ Sling/dltHub → raw → staging → intermediate → marts
 
 | Step | Description |
 | ---- | ------------ |
-| **Staging** | Clean and standardize data from the raw schema. |
 | **Sources** | Declare raw tables for use in dbt. |
+| **Staging** | Clean and standardize data from the raw schema. |
 | **Intermediate** | Join and enrich data across domains. |
 | **Marts** | Build curated datasets for analytics. |
 | **Build & Test** | Use `dbt build` to validate and materialize models. |
-| **Observe in Dagster** | View the lineage graph from ingestion to marts. |
 
 ---

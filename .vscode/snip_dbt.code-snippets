@@ -1,23 +1,40 @@
 {
-    "sources":{
-        "prefix": "sources-dbt",
+    "dbt-docs":{
+        "prefix": "dbt-docs",
+        "scope": "jinja-yaml,yaml",
+        "description": "description",
+        "body": [
+            "version: 2",
+            "",
+            "models:",
+            "- name: ${1:${TM_FILENAME_BASE/${1:/lcase}/g}}",
+            "  description: \"${2:Table description.}\"",
+            "  columns:",
+            "  - name: ${3:column_name}",
+            "  - name: ${4:column_name}",
+            "  - name: ${5:column_name}",
+        ]
+    },
+    "dbt-sources":{
+        "prefix": "dbt-sources",
         "scope": "jinja-yaml,yaml",
         "description": "description",
         "body": [
             "version: 2",
             "",
             "sources:",
-            "- name: ${1:source_name}",
+            "- name: ${1:${TM_DIRECTORY/(?:.*\\/)(.*)$/${1:/lcase}/g}}",
             "  database: \"{{ '_'~target.name~'_' if target.name != 'prod'-}} raw\"",
-            "  schema: \"${2:$1} {{- '__'~target.schema if not target.name in ['prod', 'qa']}}\"",
+            "  schema: \"${2:$1} {{- '__'~target.schema if target.name != 'prod'}}\"",
             "  tables:",
             "  - name: ${3:table_name}",
+            "    description: \"${4:Detailed description.}\"",
             ""
         ]
     },
-    "staged-dbt": {
+    "dbt-staged": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "staged-dbt",
+        "prefix": "dbt-staged",
         "description": "description",
         "body": [
             "{{",
@@ -32,7 +49,6 @@
             "",
             "renamed as (",
             "    select",
-            "        {# rename columns here #}",
             "        ${3:*}",
             "    from $1",
             ")",
@@ -41,8 +57,8 @@
             ""
         ]
     },
-    "snapshot-dbt":{
-        "prefix": "snapshot-dbt",
+    "dbt-snapshot":{
+        "prefix": "dbt-snapshot",
         "scope": "jinja-yaml,yaml",
         "description": "description",
         "body": [
@@ -68,9 +84,9 @@
             ""
         ]
     },
-    "automation-condition_config_sql-dbt":{
+    "dbt-automation-condition-config":{
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "automation_condition_config",
+        "prefix": "dbt-automation-condition-config",
         "description": "description",
         "body":[
             "meta = {",
@@ -82,9 +98,9 @@
             "  }"
         ]
     },
-    "with-source-cte-dbt":{
+    "dbt-with-source-cte":{
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "with-source-cte-dbt",
+        "prefix": "dbt-with-source-cte",
         "description": "description",
         "body": [
             "with ${1:table} as (",
@@ -92,9 +108,9 @@
             ")"
         ]
     },
-    "source-cte-dbt":{
+    "dbt-source-cte":{
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "source-cte-dbt",
+        "prefix": "dbt-source-cte",
         "description": "description",
         "body": [
             "${1:table} as (",
@@ -102,9 +118,9 @@
             ")"
         ]
     },
-    "with-ref-cte-dbt":{
+    "dbt-with-ref-cte":{
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "with-ref-cte-dbt",
+        "prefix": "dbt-with-ref-cte",
         "description": "description",
         "body": [
             "with ${1:alias} as (",
@@ -112,9 +128,9 @@
             ")"
         ]
     },
-    "ref-cte-dbt":{
+    "dbt-ref-cte":{
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "ref-cte-dbt",
+        "prefix": "dbt-ref-cte",
         "description": "description",
         "body": [
             "${1:alias} as (",
@@ -122,9 +138,9 @@
             ")"
         ]
     },
-    "incremental-config-dbt": {
+    "dbt-incremental-config": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "incremental-config-dbt",
+        "prefix": "dbt-incremental-config",
         "description": "description",
         "body": [
             "{{-",
@@ -136,9 +152,9 @@
             "-}}",
         ]
     },
-    "is-incremental-dbt": {
+    "dbt-is-incremental": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "is-incremental-dbt",
+        "prefix": "dbt-is-incremental",
         "description": "description",
         "body": [
             "{% if is_incremental() -%}",
@@ -146,9 +162,9 @@
             "{%- endif %}"
         ]
     },
-    "partition-config-dbt": {
+    "dbt-partition-config": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "partition-config-dbt",
+        "prefix": "dbt-partition-config",
         "description": "description",
         "body": [
             "\"partition\": \"${1|hourly,daily,weekly,monthly|}\",",
@@ -156,9 +172,9 @@
             "\"freshness_check\": {\"deadline_cron\": \"${5|0,*,0,1,2,3,4,5,6,7,8,9|} ${6|2,*,0,1,2,3,4,5,6,7,8,9|} ${7|*,0,1,2,3,4,5,6,7,8,9|} ${8|*,0,1,2,3,4,5,6,7,8,9|} ${9|*,0,1,2,3,4,5,6,7,8,9|}\"}",
         ]
     },
-    "partition-is-incremental-dbt": {
+    "dbt-partition-is-incremental": {
         "scope": "jinja-sql,sql,snowflake-sql",
-        "prefix": "partition-is-incremental-dbt",
+        "prefix": "dbt-partition-is-incremental",
         "description": "description",
         "body": [
             "{% if is_incremental() -%}",
