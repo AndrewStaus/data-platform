@@ -2,24 +2,145 @@
 
 ## Setup
 
-1. Open VS Code.
-2. *Windows*: Install the `WSL` Extension.
-3. *Windows*: Press `CTRL SHIFT P` and run `>WSL: Connect to WSL`.
-4. Install the `Dev Containers` Extension.
-5. *Windows*: Select `Clone Repository` to download to your Linux filesystem for better
-performance.
-6. Copy `.env.example` to `.env` and set your development credentials.
-7. Press `CTRL SHIFT P` and run `>Dev Containers: Open in container`.
-8. install Docker for WSL if prompted (This is the free community edition of docker).
-9. Run `uv sync --all-packages` in the terminal.
+Follow these steps to set up your local development environment for the project.
 
-*Note:* Windows Subsystem for Linux with an installed distribution is required for
-developers using a Windows based local machine.
+---
+
+### 1. Open VS Code
+
+Launch **Visual Studio Code** and make sure it’s up to date.
+
+???+ quote "VS Code Setup"
+    ![VS Code](../img/setup/1_vscode.gif){ align=left }
+
+---
+
+### 2. Install Required Extensions
+
+**Windows users:**
+
+1. Install the **WSL (Windows Subsystem for Linux)** extension.  
+2. Press `Ctrl + Shift + P`, then run **`>WSL: Connect to WSL`**.
+
+All users should then install the **Dev Containers** extension.
+
+???+ quote "Installing Extensions"
+    ![VS Code Extensions](../img/setup/2_extensions.gif){ align=left }
+
+---
+
+### 3. Clone the Repository
+
+**Windows users:**  
+Use **“Clone Repository”** to download the project to your **Linux filesystem** (this provides much better performance inside WSL).
+
+???+ quote "Cloning the Repository"
+    ![Clone Repository](../img/setup/3_clone.gif){ align=left }
+
+---
+
+### 4. Configure Environment Variables
+
+Copy the example environment file and update your credentials:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and fill in your local development secrets (e.g., API keys, database credentials).
+
+???+ quote "Environment Setup"
+    ![Environment Variables](../img/setup/4_env.gif){ align=left }
+
+---
+
+### 5. Open the Project in a Dev Container
+
+From VS Code, press `Ctrl + Shift + P` and run:
+
+```
+> Dev Containers: Open in Container
+```
+
+If prompted, install **Docker for WSL** (free community edition).  
+This launches your project in an isolated development container with preconfigured dependencies.
+
+???+ quote "Dev Container Setup"
+    ![Dev Container](../img/setup/5_container.gif){ align=left }
+
+---
+
+### 6. Sync Dependencies
+
+Once the container is running, open the integrated terminal and run:
+
+```bash
+uv sync --all-packages
+```
+
+This command installs and synchronizes all project dependencies.
+
+???+ quote "Syncing Dependencies"
+    ![Sync Dependencies](../img/setup/6_uvsync.gif){ align=left }
+
+---
+
+**Note:**  
+Windows users must have **Windows Subsystem for Linux (WSL)** installed with at least one Linux distribution configured.  
+You can verify WSL installation with:
+
+```bash
+wsl --list --verbose
+```
+
+---
 
 ## Usage
-- dbt-Fusion and its extensions will be automatically installed in the container.
-You can run dbt models directly from VS Code.
-- Snowflake extension is also installed to execute non-dbt scripts from VS Code.
-- environments for libs, and packages/data_analytics will not be automatically
-installed.  For a better development experience, you should run `uv sync` from within
-the project directories to install the appropriate virtual environments.
+
+Once your container environment is up and running, you’re ready to develop.
+
+---
+
+### Running dbt-Fusion
+
+- **dbt-Fusion** and its extensions are automatically installed inside the container.  
+  You can execute dbt models directly from VS Code using the built-in terminal.
+
+???+ quote "Running dbt-Fusion"
+    ![Run dbt Models](../img/usage/1_dbt_fusion.gif){ align=left }
+
+---
+
+### Running Snowflake Scripts
+
+The **Snowflake extension** is also preinstalled.  
+You can use it to run non-dbt SQL scripts directly from VS Code.
+
+???+ quote "Snowflake Extension"
+    ![Snowflake Extension](../img/usage/2_snowflake.gif){ align=left }
+
+---
+
+### Managing Local Environments
+
+Libraries and packages under `libs/` and `packages/data_analytics/` do **not** install automatically.  
+For best results, run the following inside each subproject directory:
+
+```bash
+uv sync
+```
+
+This creates and syncs isolated virtual environments for each workspace.
+
+???+ quote "Local Environment Sync"
+    ![Sync Local Environments](../img/usage/3_sync_envs.gif){ align=left }
+
+---
+
+✅ **Summary**
+- Use **WSL** and **Dev Containers** for a consistent local setup.  
+- Run **`uv sync --all-packages`** after launching your container.  
+- dbt-Fusion and Snowflake are ready out of the box.  
+- Run **`uv sync`** inside each subproject for smoother development.
+
+---

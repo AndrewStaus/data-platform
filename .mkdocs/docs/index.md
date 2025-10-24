@@ -37,29 +37,7 @@ clear ownership boundaries.
 
 ## Local Development
 
-### Setup
 
-1. Open VS Code.
-2. *Windows*: Install the `WSL` Extension.
-3. *Windows*: Press `CTRL SHIFT P` and run `>WSL: Connect to WSL`.
-4. Install the `Dev Containers` Extension.
-5. *Windows*: Select `Clone Repository` to download to your Linux filesystem for better
-performance.
-6. Copy `.env.example` to `.env` and set your development credentials.
-7. Press `CTRL SHIFT P` and run `>Dev Containers: Open in container`.
-8. install Docker for WSL if prompted (This is the free community edition of docker).
-9. Run `uv sync --all-packages` in the terminal.
-
-*Note:* Windows Subsystem for Linux with an installed distribution is required for
-developers using a Windows based local machine.
-
-### Usage
-- dbt-Fusion and its extensions will be automatically installed in the container.
-You can run dbt models directly from VS Code.
-- Snowflake extension is also installed to execute non-dbt scripts from VS Code.
-- environments for libs, and packages/data_analytics will not be automatically
-installed.  For a better development experience, you should run `uv sync` from within
-the project directories to install the appropriate virtual environments.
 
 ## Dagster (Platform Engineer View)
 
@@ -78,25 +56,6 @@ settings shared across developers and CI, such as disabling telemetry.
 - Helm deployment values are stored in `.helm/values.yaml` to control the configuration
 of the Kubernetes deployments while preserving upstream defaults.
 
-## dbt (Data & Analytics Engineer View)
-
-The dbt project is in the `packages/data_foundation/dbt/` directory and is structured as
-follows:
-
-- `dbt_project.yml` and `profiles.yml` capture project-wide behavior and
-  environment-specific Snowflake credentials. Comments highlight the
-  relationship between Dagster, dbt, and warehouse settings.
-- `models/` holds staging layers grouped by source system as well as mart
-  models such as `marts/common/fct_common__fct_transactions.sql`. Each model has
-  an accompanying YAML file that documents columns, tests, and freshness checks.
-- `snapshots/` preserves historical slowly-changing dimensions and facts. Inline
-  comments describe retention and privacy handling for sensitive domains.
-- `seeds/` contains CSV-backed reference data with YAML documentation.
-- `groups/` assigns ownership metadata so alerts and governance roll to the
-  appropriate teams.
-- `macros/` provides shared macros similar to UDF's that enables complex logic to be
-defined in one place and reused across the project.
-- `packages.yml` lists third-party macro packages used across the project.
 
 ## Documentation Site
 
@@ -108,18 +67,6 @@ a GitHub Pages whenever changes land on `main`.
 - Documentation can be found on the gitHub pages site:
   #### https://andrewstaus.github.io/data-platform/
 
-### Secrets and configuration
-
-- Environment-specific secrets are loaded from `.env` file which the user must create
-using `.env.example` as a template. The Dagster code location will still load—when the
-required secrets are missing, however assets will fail to materialize successfully if
-their secrets are not present.
-
-- If the `.env` file is changed, the dev container must be reloaded before the change
-will take effect.
-- If your network proxies TLS, export `DBT_ALLOW_INSECURE_SSL=1` before running
-`dagster dev`. The code temporarily disables certificate verification while dbt
-downloads packages and restores the settings afterwards.
 
 ## Contribution Guidelines
 
