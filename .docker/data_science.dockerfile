@@ -6,7 +6,7 @@ FROM python:3.12-slim-bullseye AS data_science
     
     # copy libs and configs
     WORKDIR /opt/
-    COPY .dagster_home/dagster.yaml $DAGSTER_HOME
+    COPY .docker/dagster.yaml $DAGSTER_HOME
     COPY /libs/data_platform_utils libs/data_platform_utils
     
     # install user code
@@ -15,6 +15,8 @@ FROM python:3.12-slim-bullseye AS data_science
     COPY /packages/data_science/pyproject.toml pyproject.toml
     RUN --mount=type=cache,target=/root/.cache/uv,id=science_uv_cache \
         uv sync --no-dev --compile-bytecode --link-mode=copy
+
+    # this is for keyvault stub will be removed in real deployment
     COPY .env .env
     
     EXPOSE 5000

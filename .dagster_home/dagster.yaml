@@ -1,17 +1,7 @@
-# Dagster instance configuration shared by all developers. Keeping these settings
-# in version control helps platform engineers review operational defaults that
-# affect local runs, CI, and deployments.
+# Dagster instance configuration for `dagster dev` runs for local development.
+
 telemetry:
   # Disable Dagster telemetry to avoid sending anonymized usage data from local and
   # CI environments. Platform teams can flip this to `true` in downstream forks if
   # they want to participate in usage analytics.
   enabled: false
-
-storage:
-  postgres:
-    postgres_db:
-      username: dagster_user
-      password: dagster_password
-      hostname: dagster-postgresql-0
-      db_name: dagster_db
-      port: 5432

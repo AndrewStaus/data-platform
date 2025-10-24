@@ -19,7 +19,7 @@
 # tool artifacts
 **/*dagster_home*/*
 .mkdocs/site
-.mkdocs/docs/*
+.mkdocs/docs/modules/*
 logs/
 
 # exceptions

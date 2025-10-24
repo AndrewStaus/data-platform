@@ -1,0 +1,20 @@
+# Dagster instance configuration for helm and docker-compose deployments.
+
+telemetry:
+  # Disable Dagster telemetry to avoid sending anonymized usage data from local and
+  # CI environments. Platform teams can flip this to `true` in downstream forks if
+  # they want to participate in usage analytics.
+  enabled: false
+
+storage:
+  # Configure the connection to the postgres server for dagster to managed job queues,
+  # and track state.
+  # Configured for a containerized postgres deployment, but can be changed to a remote
+  # instance by updating values here, and in the docker-compose and helm values.
+  postgres:
+    postgres_db:
+      username: dagster_user
+      password: dagster_password
+      hostname: dagster-postgresql-0
+      db_name: dagster_db
+      port: 5432

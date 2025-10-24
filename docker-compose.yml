@@ -108,7 +108,6 @@ services:
       dagster-data-science:
         condition: service_started
 
-
 secrets:
   destination__user:
       environment: DESTINATION__USER

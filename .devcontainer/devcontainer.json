@@ -22,7 +22,7 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"dbtlabsinc.dbt",
+				// "dbtlabsinc.dbt",
 				"samuelcolvin.jinjahtml",
 				"ms-python.python",
 				"tamasfe.even-better-toml",
@@ -61,7 +61,6 @@
 			"dbt.dbtIntegration": "fusion",
 			"dbt.fileNameTemplateGenerateModel": "{prefix}_{sourceName}__{tableName}",
 			"dbt.prefixGenerateModel": "stg",
-			"python.terminal.useEnvFile": true,
 			"dbt.enableNewLineagePanel": true,
 			"dbt.deferConfigPerProject": {
 				"packages/data_foundation/dbt": {
@@ -71,9 +70,16 @@
 					"deferToProduction": true
 				}
 			},
+			"python.terminal.useEnvFile": true,
+			"python.useEnvironmentsExtension": true,
 			"python-envs.pythonProjects": [
 				{
 					"path": "libs/analytics_utils",
+					"envManager": "ms-python.python:venv",
+					"packageManager": "ms-python.python:pip"
+				},
+				{
+					"path": "libs/data_platform_utils",
 					"envManager": "ms-python.python:venv",
 					"packageManager": "ms-python.python:pip"
 				},
@@ -83,7 +89,12 @@
 					"packageManager": "ms-python.python:pip"
 				},
 				{
-					"path": "libs/data_platform_utils",
+					"path": "packages/data_foundation",
+					"envManager": "ms-python.python:venv",
+					"packageManager": "ms-python.python:pip"
+				},
+				{
+					"path": "packages/data_science",
 					"envManager": "ms-python.python:venv",
 					"packageManager": "ms-python.python:pip"
 				}
@@ -124,7 +135,8 @@
 				"xgboost"
 			],
 			"python.testing.pytestArgs": [
-				"tests"
+				".",
+				"--disable-warnings"
 			],
 			"python.testing.unittestEnabled": false,
 			"python.testing.pytestEnabled": true
