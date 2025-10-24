@@ -19,7 +19,7 @@ def main() -> None:
 
     remove_old(project_dir, docs_folder)
     process_modules(project_dir, docs_folder, packages)
-    set_index(project_dir, docs_folder)
+    # set_index(project_dir, docs_folder)
 
 def compile_path(source_root:Path, source_path:Path, sep:str, suffix="") -> str:
     return (sep
