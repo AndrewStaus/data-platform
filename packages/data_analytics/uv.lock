@@ -117,6 +117,13 @@ requires-dist = [
     { name = "sqlalchemy", specifier = "==1.4.49" },
 ]
 
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.4.2" },
+    { name = "pytest-cov", specifier = ">=7.0.0" },
+    { name = "pytest-xdist", specifier = ">=3.8.0" },
+]
+
 [[package]]
 name = "annotated-types"
 version = "0.7.0"

@@ -16,6 +16,7 @@ dependencies = [
     "dagster-snowflake==0.27.15",
     "psutil==7.1.0",
     "data-platform-utils",
+    "scikit-learn"
 ]
 
 [dependency-groups]

@@ -45,7 +45,7 @@ def defs() -> Definitions:
             state_path=state_path,
             profile="dbt",
         )
-        project.prepare_if_dev()
+        # project.prepare_if_dev() # not required for fusion
         return project
     
     return Factory.build_definitions(dbt)

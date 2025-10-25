@@ -682,6 +682,7 @@ dependencies = [
     { name = "dagster-snowflake" },
     { name = "data-platform-utils" },
     { name = "psutil" },
+    { name = "scikit-learn" },
 ]
 
 [package.dev-dependencies]
@@ -701,6 +702,7 @@ requires-dist = [
     { name = "dagster-snowflake", specifier = "==0.27.15" },
     { name = "data-platform-utils", directory = "libs/data_platform_utils" },
     { name = "psutil", specifier = "==7.1.0" },
+    { name = "scikit-learn" },
 ]
 
 [package.metadata.requires-dev]
