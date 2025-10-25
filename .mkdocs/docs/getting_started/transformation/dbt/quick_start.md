@@ -16,7 +16,7 @@ Each source system should have a `_sources.yml` file inside its staging folder.
 This declares the raw tables ingested by Sling and dltHub so dbt can reference them with the `source()` function.
 
 ???+ quote "Defining Sources"
-    ![dbt Sources](../../img/dbt/1_sources.gif){ align=left }
+    ![dbt Sources](../../../img/dbt/1_sources.gif){ align=left }
 
 ??? example "models/staging/accounts_db/_sources.yml"
 
@@ -60,7 +60,7 @@ Create a new SQL file named with the convention:
 `stg_<source_system>__<table_name>.sql`
 
 ???+ quote "Creating Staging Models"
-    ![dbt Staging](../../img/dbt/2_staging.gif){ align=left }
+    ![dbt Staging](../../../img/dbt/2_staging.gif){ align=left }
 
 ??? example "models/staging/my_database/stg_my_database__accounts.sql"
 
@@ -135,7 +135,7 @@ ___
 Add a companion `.yml` file for each staging model to define metadata and tests.
 
 ???+ quote "Model Documentation"
-    ![dbt Schema YAML](../../img/dbt/3_schema.gif){ align=left }
+    ![dbt Schema YAML](../../../img/dbt/3_schema.gif){ align=left }
 
 ??? example "models/staging/accounts_db/stg_accounts_db__accounts.yml" 
 
@@ -245,7 +245,7 @@ dbt build -s stg_my_database__my_table+
 Or by using the dbt extension:
 
 ???+ quote "Dagster Integration"
-    ![dbt Dagster Graph](../../img/dbt/4_build.gif){ align=left }
+    ![dbt Dagster Graph](../../../img/dbt/4_build.gif){ align=left }
 
 This command runs models, executes tests, and builds dependencies automatically.
 

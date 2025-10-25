@@ -1,7 +1,3 @@
-[![Unit Tests](https://github.com/AndrewStaus/data-platform/actions/workflows/check__unit_tests.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/check__unit_tests.yml)
-[![Linting](https://github.com/AndrewStaus/data-platform/actions/workflows/check__linting.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/check__linting.yml)
-[![dbt Checks](https://github.com/AndrewStaus/data-platform/actions/workflows/check__dbt_checks.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/check__dbt_checks.yml)
-[![CodeQL](https://github.com/AndrewStaus/data-platform/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/github-code-scanning/codeql)
 # Data Platform
 
 **Dagster** • **dbt** • **Snowflake**
@@ -27,71 +23,84 @@ It’s designed for **data engineers**, **analytics engineers**, and **platform 
 ## 🧩 Core Layers
 
 ### **Dagster** — Orchestration & Lineage  
-Dagster ties everything together.  
-It:
+Dagster ties everything together:
+
 - Executes Sling and dltHub pipelines  
 - Runs dbt transformations in sequence  
 - Surfaces metadata, lineage, and freshness in one unified graph  
 
-➡ See [Dagster Overview](dagster/index.md)
+➡ See [Dagster Overview](getting_started/orchestration/dagster/index.md)
 
 ---
 
 ### **dbt** — Transformations & Marts  
 SQL transformations that model raw data into **clean, analytics-ready marts**.  
 Includes:
+
 - Staging layers organized by source system  
 - Shared dimensions and fact models (`marts/`)  
 - Tests, freshness checks, and ownership metadata  
 
-➡ See [dbt Project](getting_started/dbt/index.md)
+➡ See [dbt Overview](getting_started/transformation/dbt/index.md)
 
 ---
 
 ### **Sling** — Declarative Replication  
 YAML-based configuration for **extract and load (EL)** pipelines.  
 Sling connects external databases or APIs to Snowflake’s **raw** layer, defining:
+
 - Connection details (`connections.yaml`)
 - Replication rules and stream settings (`replication.yaml`)
 
-➡ See [Sling Overview](getting_started/sling/index.md)
+➡ See [Sling Overview](getting_started/ingestion/sling/index.md)
 
 ---
 
 ### **dltHub** — Pythonic Ingestion  
 Lightweight Python connectors for APIs and semi-structured sources.  
 Each module defines:
+
 - `data.py`: a generator yielding structured data batches  
 - `sources.yaml`: replication and destination mapping  
 
 Ideal for dynamic datasets or paginated APIs.
 
-➡ See [dltHub Overview](getting_started/dlthub/index.md)
+➡ See [dltHub Overview](getting_started/ingestion/dlthub/index.md)
 
 ---
 
 ## 🏗️ Repository Layout
 
-| Path | Purpose |
-| --- | --- |
-| `.devcontainer/` | Shared VS Code development container |
-| `.github/` | CI/CD pipelines (tests, linting, docs, security) |
-| `packages/data_foundation/` | Core ingestion, transformation, and orchestration code |
-| `packages/data_analytics/` | Exploratory SQL and notebooks |
-| `packages/data_science/` | Machine learning integrations and Snowpark definitions |
-| `.mkdocs/` | Documentation site configuration |
-| `.env.example` | Template for local environment variables |
+| Path | Owner Focus | Description | 
+| --- | --- | --- |
+| **.dagster_home/** | Platform | persistent storage for development settings such as telemetry defaults. |
+| **.devconatainer/** | Platform | Visual Studio Code Dev Container to share development environment for local development. |
+| **.github/** | Platform | CI/CD automation (publishing docs, running checks). |
+| **.helm** | Platform | Deployment values for helm chart to deploy to Kubernetes. |
+| **.mkdocs/** | Cross-functional | Markdown sources for the MkDocs site published via GitHub Pages. |
+| **.vscode/** | Cross-functional | Shared workspace settings, including code snippets for faster development. |
+| **docs/** | Cross-functional | Static documentation pages. Prioritize placing documentation in the relevant area of the project, however this space can be used for documentation does not otherwise have an appropriate location. |
+| **libs/** | Cross-functional | Shared libraries for common functions between packages. |
+| **packages/** | --- | Code locations which are deployed as separate docker images providing environment isolation so that multiple teams can manage their own code. |
+| **packages/data_analytics/** | Data & Analytics | Exploratory sql analyses and notebooks. |
+| **packages/data_science/** | Data & Analytics | Dagster definitions, resource configuration, and integration glue code. Includes Snowpark definitions for ML-Ops. |
+| **packages/data_foundation/** | --- | Foundational data assets that are used across the business.  Contains ingestion's and the main dbt project |
+| **../../src/data_foundation** | Platform | Dagster definitions, resource configuration, and integration glue code. Includes Sling source connection YAML that controls raw data ingestion   |
+| **../../dbt/** | Cross-functional | dbt project containing models, seeds, snapshots, and tests. YAML files document sources, staging models, and marts. |
+| **.env.example** | Cross-functional | Environment variable template for local development.  Should be copied to `.env` and have values replaced with correct credentials. |
+| **Dockerfile**, **pyproject.toml**, **uv.lock** | Platform | Runtime dependencies for orchestrator workers. |
+| **workspaces** | Platform | Dagster code location configuration for local development. |
 
 ---
 
 ## 💻 Local Development
 
-1. Open in VS Code (Dev Container ready)  
-2. Copy `.env.example` → `.env` and set credentials  
-3. Run `uv sync --all-packages` to install dependencies  
-4. Launch Dagster with `dagster dev`  
-
-*Windows users*: ensure [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) is installed and connected before opening the Dev Container.
+- Consistent containerized environment across all engineers
+- Fast iteration with instant feedback from Dagster & dbt
+- Test and debug orchestration locally before deployment
+- Safe sandboxing with isolated Snowflake schemas
+- Reproducible builds via Dev Container configuration
+- Preinstalled extensions for dbt, Snowflake, and Python
 
 ---
 
@@ -109,10 +118,10 @@ Ideal for dynamic datasets or paginated APIs.
 
 | Topic | Documentation |
 | ------ | -------------- |
-| **Sling** | [Extract & Load Configuration](getting_started/sling/index.md) |
-| **dltHub** | [Python Connectors & API Sources](getting_started/dlthub/index.md) |
-| **dbt** | [Transformations, Marts, and Testing](getting_started/dbt/index.md) |
-| **Dagster** | [Orchestration and Asset Graph](getting_started/dagster/index.md) |
+| **Sling** | [Extract & Load Configuration](getting_started/ingestion/sling/index.md) |
+| **dltHub** | [Python Connectors & API Sources](getting_started/ingestion/dlthub/index.md) |
+| **dbt** | [Transformations, Marts, and Testing](getting_started/transformation/dbt/index.md) |
+| **Dagster** | [Orchestration and Asset Graph](getting_started/orchestration/dagster/index.md) |
 | **Local Setup** | [Developer Quick Start](getting_started/index.md) |
 
 ---
@@ -126,9 +135,9 @@ Ideal for dynamic datasets or paginated APIs.
 ---
 
 ## 🌐 Links
-
-- 📄 **Project Docs:** [andrewstaus.github.io/data-platform](https://andrewstaus.github.io/data-platform/)  
+  
 - ⚙️ **Dagster Docs:** [docs.dagster.io](https://docs.dagster.io/)  
 - 🧠 **dbt Docs:** [docs.getdbt.com](https://docs.getdbt.com/)  
-- ❄️ **Snowflake Docs:** [docs.snowflake.com](https://docs.snowflake.com/)
-
+- ❄️ **Snowflake Docs:** [docs.snowflake.com](https://docs.snowflake.com/)  
+- 🔁 **dltHub Docs:** [dlthub.com/docs](https://dlthub.com/docs/intro)  
+- ⚡ **Sling Docs:** [slingdata.io/docs](https://docs.slingdata.io/)  
