@@ -49,7 +49,7 @@ class Factory:
         for config_path in config_paths:
             config_path = config_dir.joinpath(config_path).resolve()
             with open(config_path) as file:
-                config = yaml.load(file, Loader=yaml.FullLoader)
+                config = yaml.load(file, Loader=yaml.FullLoader) or {}
                 
             if connection_configs := config.get("connections"):
                 connections, kind_map = Factory._parse_connections(
