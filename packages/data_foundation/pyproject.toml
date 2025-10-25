@@ -15,7 +15,8 @@ dependencies = [
     "psutil==7.1.0",
     "data-platform-utils",
     "scikit-learn",
-    "pandas"
+    "pandas",
+    "pyarrow"
 ]
 
 [dependency-groups]

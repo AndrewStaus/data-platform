@@ -7,7 +7,7 @@ import pandas as pd
 def titanic() -> Generator[pd.DataFrame, Any]:
     from sklearn import datasets
 
-    titanic = datasets.fetch_openml(name='titanic', version=1)
+    titanic = datasets.fetch_openml(name="titanic", version=1)
 
     data = pd.DataFrame(titanic["data"])
     target = pd.DataFrame(titanic["target"])
