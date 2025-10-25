@@ -20,7 +20,7 @@ def get_schema_name(schema: str) -> str:
         str: Schema name suffixed with the destination user when targeting ``dev`` to
         ensure isolation between developers.
     """
-    postfix = os.getenv("DESTINATION__USER", "")
+    postfix = os.getenv("DESTINATION__USER", "").upper()
     if os.getenv("TARGET") == "dev":
         schema = f"{schema}__{postfix}"
     return schema
@@ -35,8 +35,8 @@ def get_database_name(database: str) -> str:
         str: Database name optionally prefixed with ``_dev_`` in development
         environments.
     """
-    if os.getenv("TARGET") == "dev":
-        database = f"_dev_{database}"
+    if target := os.getenv("TARGET", "").upper():
+        database = f"_{target}_{database}"
     return database
 
 def get_automation_condition_from_meta(
