@@ -1,4 +1,4 @@
-# 📊 Data Analytics
+# Data Analytics
 
 The **Analytics** module extends the data platform with an **interactive Snowpark integration**, enabling data scientists and analysts to explore, transform, and visualize Snowflake data directly from **Jupyter Notebooks** — without needing Dagster orchestration or manual connection setup.
 
