@@ -42,6 +42,6 @@ Stream-level settings inherit values from the replication defaults unless explic
 YAML schemas are enabled to validate inputs, provide autocomplete, and display field descriptions — all designed to improve accuracy and speed during setup.
 
 ???+ quote "YAML Hints"
-    ![Sling Stream](../../img/sling/5_hints.gif){ align=left }
+    ![YAML Hints](../../img/sling/5_hints.gif){ align=left }
 
 ---
