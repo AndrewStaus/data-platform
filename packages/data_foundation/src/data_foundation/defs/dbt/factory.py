@@ -63,17 +63,20 @@ class Factory:
                 and the dbt CLI resource configured with the project directory supplied
                 by the callable.
         """
+
+        dbt_project = dbt()
+        assert dbt_project
         
         assets = [
             Factory._get_assets(
                 "dbt_partitioned_models",
-                dbt=dbt,
+                dbt_project=dbt_project,
                 select=TIME_PARTITION_SELECTOR,
                 partitioned=True,
             ),
             Factory._get_assets(
                 "dbt_non_partitioned_models",
-                dbt=dbt,
+                dbt_project=dbt_project,
                 exclude=TIME_PARTITION_SELECTOR,
                 partitioned=False,
             ),
@@ -85,7 +88,7 @@ class Factory:
         )
 
         return dg.Definitions(
-            resources={"dbt": DbtCliResource(project_dir=dbt())}, # type: ignore
+            resources={"dbt": DbtCliResource(project_dir=dbt_project)},
             assets=assets,
             asset_checks=freshness_checks,
             sensors=[freshness_sensor],
@@ -95,7 +98,7 @@ class Factory:
     @staticmethod
     def _get_assets(
         name: str | None,
-        dbt: Callable[[], DbtProject],
+        dbt_project: DbtProject,
         partitioned: bool = False,
         select: str = DBT_DEFAULT_SELECT,
         exclude: str | None = None,
@@ -104,7 +107,7 @@ class Factory:
 
         Args:
             name: The Dagster asset group name used to namespace materializations.
-            dbt: Callable that produces the configured :class:`DbtProject`.
+            dbt_project: Configured dbt project.
             partitioned: Indicates whether the assets rely on partition time windows.
             select: dbt selection string narrowing which models to materialize.
             exclude: Optional selection string for excluding models from the run.
@@ -112,10 +115,7 @@ class Factory:
         Returns:
             dagster.AssetsDefinition: A Dagster assets definition that streams dbt CLI
                 events and respects the provided partitioning behavior.
-        """
-
-        dbt_project = dbt()
-        assert dbt_project
+        """        
 
         @dbt_assets(
             name=name,

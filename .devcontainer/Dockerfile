@@ -40,6 +40,7 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS data_platform_dev
         && uv pip install --system ruff sqlfluff \
         && mkdir -p /home/vscode/.vscode-server/extensions \
         && mkdir -p /home/vscode/.local/bin/ \
+        && ln -sf '/home/vscode/.local/bin/dbt' '/home/vscode/.local/bin/dbtf' \
         && echo 'alias dbtf=/home/vscode/.local/bin/dbt' >> /home/vscode/.bashrc \
         # && echo '. .venv/bin/activate' >> /home/vscode/.bashrc \
         && chown -R vscode /home/vscode/

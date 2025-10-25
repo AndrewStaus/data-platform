@@ -41,11 +41,12 @@ def defs() -> Definitions:
         """
         project = DbtProject(
             project_dir=project_dir,
+            packaged_project_dir=project_dir,
             target=os.getenv("TARGET", "dev"),
             state_path=state_path,
             profile="dbt",
         )
-        # project.prepare_if_dev() # not required for fusion
+        project.prepare_if_dev() # not required for fusion
         return project
     
     return Factory.build_definitions(dbt)
