@@ -40,19 +40,21 @@ You can:
 ### Automation Conditions
 
 ??? example "automation condition"
-``` yaml
-meta:
-  dagster:
-    automation_condition: "on_cron_no_deps"
-    automation_condition_config:
-      cron_schedule: "@daily"
-      cron_timezone: "utc"
-```
+
+    ``` yaml
+    meta:
+      dagster:
+        automation_condition: "on_cron_no_deps"
+        automation_condition_config:
+          cron_schedule: "@daily"
+          cron_timezone: "utc"
+    ```
 
 Automation conditions are lightweight configurations defined in metadata that tell Dagster when to run assets automatically.
 Common conditions include:
 
 | Condition | Behavior |
+| --------- | -------- |
 | **on_cron_no_deps** |	Runs on a defined cron schedule, independent of dependencies. |
 | **on_cron_with_deps** |	Runs on a schedule after upstream assets succeed. |
 | **on_upstream_change** |	Automatically triggers when an upstream asset is updated. |
@@ -64,6 +66,7 @@ Common conditions include:
 ### Schedules & Sensors
 
 Dagster automates when and how assets are refreshed.
+
 | Type         | Description                                              | Example                       |
 | ------------ | -------------------------------------------------------- | ----------------------------- |
 | **Schedule** | Runs on a fixed cron schedule                            | `@daily`, `0 2 * * *`         |

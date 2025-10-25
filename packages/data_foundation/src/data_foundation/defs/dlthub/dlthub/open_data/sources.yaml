@@ -1,0 +1,8 @@
+resources:
+    open_data.titanic:
+        entry: data.titanic
+        write_disposition: replace
+        kinds: {api}
+        meta:
+            dagster:
+                automation_condition: missing_or_changed

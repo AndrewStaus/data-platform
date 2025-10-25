@@ -144,11 +144,12 @@ class Factory:
         data = Factory._build_data_generator(config)
         sanitized_config = sanitize_input_signature(dlt.resource, config)
 
+        table_name = config.get("name", "").split(".")[-1]
+        sanitized_config["table_name"] = table_name or config["table_name"]
+
         # swap string reference with hard reference to the instantiated resource
         if config.get("data_from"):
-            table_name = config.get("name", "").split(".")[0]
             sanitized_config["data_from"] = resources[config["data_from"]]
-            sanitized_config["table_name"] = table_name or config["table_name"]
         return dlt.resource(data, **sanitized_config)    
 
     @staticmethod
