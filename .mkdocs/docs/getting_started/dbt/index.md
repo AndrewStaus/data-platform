@@ -191,7 +191,7 @@ Common examples include:
 
 ### `packages.yml`
 
-??? example packages.yml
+??? example "packages.yml"
     ```yaml
     packages:
     - package: dbt-labs/dbt_utils

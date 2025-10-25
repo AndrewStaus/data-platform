@@ -43,20 +43,33 @@ allowing Dagster and dltHub to dynamically import resources and pipelines.
 
 ---
 
-### 2. `data.py`
+
+### 2. Generator
 ??? example "data.py"
 
-      ```python
-      import requests
+    ```python
+    import requests
 
-      def get_exchange_rates():
-         url = "https://api.exchangerate.host/latest"
-         response = requests.get(url)
-         data = response.json()
+    def fetch_transactions():
+        """Fetch paginated transactions from API"""
+        page = 1
+        while True:
+            response = requests.get(f"https://api.example.com/transactions?page={page}")
+            data = response.json()
+            if not data:
+                break
+            yield data
+            page += 1
+    ```
 
-         # Yield in pages or time slices if needed
-         yield data["rates"]
-      ```
+    !!! tip
+        - Always use **`yield`** (not `return`) to stream data in small chunks.  
+        - Use API pagination, cursors, or offsets to avoid loading too much data into memory.  
+        - Each yield should return a list (or iterable) of records, e.g. `[{...}, {...}, ...]`.
+
+The **data generator** defines *how* data is fetched.  
+It can yield any iterable of dictionaries (records).  
+dltHub automatically batches and streams data to the destination.
 
 The **`data.py`** script defines the **data generator** — a Python function that yields data in batches.  
 Each yield represents a page or chunk of records fetched from the source system (API, file, or database).
@@ -70,42 +83,63 @@ Ingestion functions can also accept arguments (like date ranges or filters), all
 
 ---
 
-### 3. `sources.yaml`
-??? example "source.yaml"
+### Resources
+??? example "sources.yaml"
 
-      ```yaml
-      resources:
-         exchange_rate.usd:
-            entry: data.get_exchange_rates
-            arguments: [usd]
-            write_disposition: replace
-      ```
+    ```yaml
+    resources:
+        my_api.users:
+            entry: data.fetch_users
+            write_disposition: append
+            primary_key: ["id"]
+            kinds: {api}
 
-The **`sources.yaml`** file defines the **replication and resource configuration** for dltHub.  
-It tells dltHub how to call the generator and where to send the resulting data.
+        my_api.transactions:
+            entry: data.fetch_transactions
+            write_disposition: append
+            primary_key: ["id"]
+            kinds: {api}
+    ```
+
+**Explanation:**
+- Each resource maps to a data generator function (defined in `data.py`).
+- The resource defines how its data is written to the target system.
+- Use multiple resources when extracting from different endpoints or datasets.
 
 Typical fields include:
 
 | Key | Description |
 | ---- | ------------ |
-| `entry` | The import path to the generator function, e.g. `exchange_rate.data.get_exchange_rates` |
+| `entry` | The entry path to the generator function, e.g. `exchange_rate.data.get_exchange_rates` |
 | `arguments` | Optional positional arguments passed to the function to select a generator |
 | `keword_arguments` | Optional keyword arguments passed to the function to select a generator |
 | `write_disposition` | Defines whether data is appended, replaced, or merged |
 
-
-
 ---
 
-## Integration with Dagster
+### Sources
 
-**Dagster** is responsible for **executing**, **monitoring**, and **documenting** all dltHub pipelines.  
+??? example "sources.yaml"
 
-Each dltHub resource is automatically materialized as a **Dagster asset**, allowing you to:
-- Schedule ingestion jobs (hourly, daily, weekly)
-- Track lineage from **source → raw → dbt staging → marts**
-- Visualize dependencies between connectors and downstream dbt models
-- Surface metadata such as run duration, success/failure, and record counts
+    ```yaml
+    sources:
+        my_api:
+            resources:
+            - my_api.users
+            - my_api.transactions
+            meta:
+                dagster:
+                    automation_condition: on_schedule
+                    automation_condition_config:
+                        cron_schedule: "@daily"
+                        cron_timezone: utc
+                    freshness_lower_bound_delta_seconds: 108000
+    ```
+
+**Explanation:**
+- The `sources` block declares a data source (e.g., an API, database, or file store).
+- Each source can contain one or more **resources**, representing individual endpoints or tables.
+- Grouping them provides modularity and reuse for replication definitions.
 
 ---
 
@@ -128,10 +162,5 @@ This ensures every dataset — from an external API to the final mart — is ful
 | `data.py` | Implements the generator that retrieves and yields raw data |
 | `sources.yaml` | Defines resource configuration, replication behavior, and destinations |
 | Folder (e.g. `exchange_rate/`, `facebook_ads/`) | Represents one external data source |
-| Dagster integration | Orchestrates ingestion, monitors runs, and maps lineage |
 
 ---
-
-**In short:**  
-dltHub is the **ingestion backbone** of the data platform — modular, Pythonic, and orchestrated by Dagster.  
-It bridges external data sources to the warehouse, ensuring that **dbt** always operates on clean, current, and governed datasets.

@@ -145,18 +145,3 @@ Press `Ctrl + Space` and select **`dlt-sources`** to scaffold a sources template
 The **data generator** defines *how* data is fetched.  
 It can yield any iterable of dictionaries (records).  
 dltHub automatically batches and streams data to the destination.
-
-???+ quote "Yielding Data"
-    ![dltHub Yielding](../../img/dlt/5_yield.gif){ align=left }
-
----
-
-✅ **Summary**
-
-| Concept | Description |
-| -------- | ------------ |
-| **Data Generator** | Defines how data is fetched or produced in Python (`data.py`). |
-| **Source** | Groups multiple resources under a single namespace (`sources.yaml`). |
-| **Resource** | References a generator function and defines write behavior (`sources.yaml`). |
-
----
