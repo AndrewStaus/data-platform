@@ -13,7 +13,7 @@ Inside that folder, create two files:
 - `replication.yaml` — defines replication (extract & load) behavior
 
 ???+ quote "Creating Configuration Files"
-    ![Sling Files](../../img/sling/1_files.gif){ align=left }
+    ![Sling Files](../../../img/sling/1_files.gif){ align=left }
 
 ---
 
@@ -23,7 +23,7 @@ Sling provides IntelliSense scaffolds to simplify setup.
 Press `Ctrl + Space` to open the autocomplete pane and select **`sling-connections`** to populate a connection template.
 
 ???+ quote "connections.yaml"
-    ![Sling Connections](../../img/sling/2_connections.gif){ align=left }
+    ![Sling Connections](../../../img/sling/2_connections.gif){ align=left }
 
 ---
 
@@ -33,7 +33,7 @@ Use IntelliSense (`Ctrl` + `Space`) to explore valid stream configuration option
 Stream-level settings inherit values from the replication defaults unless explicitly overridden.
 
 ???+ quote "Configure Streams"
-    ![Sling Stream](../../img/sling/4_streams.gif){ align=left }
+    ![Sling Stream](../../../img/sling/4_streams.gif){ align=left }
 
 ---
 
@@ -42,6 +42,6 @@ Stream-level settings inherit values from the replication defaults unless explic
 YAML schemas are enabled to validate inputs, provide autocomplete, and display field descriptions — all designed to improve accuracy and speed during setup.
 
 ???+ quote "YAML Hints"
-    ![Sling Stream](../../img/sling/5_hints.gif){ align=left }
+    ![YAML Hints](../../../img/sling/5_hints.gif){ align=left }
 
 ---

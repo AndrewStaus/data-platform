@@ -19,7 +19,6 @@ def main() -> None:
 
     remove_old(project_dir, docs_folder)
     process_modules(project_dir, docs_folder, packages)
-    # set_index(project_dir, docs_folder)
 
 def compile_path(source_root:Path, source_path:Path, sep:str, suffix="") -> str:
     return (sep
@@ -59,10 +58,10 @@ def process_modules(project_dir: Path, docs_folder: str, modules:list[str]) -> N
 
         for source_path in source_paths:
 
-            # skip empty file
-            with open(source_path) as file:
-                if not "".join(file.readlines()).replace(" ",""):
-                    continue
+            # # skip empty file
+            # with open(source_path) as file:
+            #     if not "".join(file.readlines()).replace(" ",""):
+            #         continue
 
             # generate the .md file path for the documentation stub
             doc_rel_path = compile_path(source_root, source_path, sep="/", suffix=".md")
@@ -85,12 +84,7 @@ def process_modules(project_dir: Path, docs_folder: str, modules:list[str]) -> N
 
             os.makedirs(doc_path.parent, exist_ok=True)
             with open(doc_path, "a") as file:
+                file.write("# " + import_path.split(".")[-1])
                 file.write("\n::: " + import_path)
-
-def set_index(project_dir, docs_folder) -> None:
-    shutil.copyfile(
-        Path(project_dir).joinpath("README.md"),
-        Path(docs_folder).joinpath("index.md")
-)
 
 main()

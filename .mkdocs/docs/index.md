@@ -1,19 +1,75 @@
-[![Unit Tests](https://github.com/AndrewStaus/data-platform/actions/workflows/check__unit_tests.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/check__unit_tests.yml)
-[![Linting](https://github.com/AndrewStaus/data-platform/actions/workflows/check__linting.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/check__linting.yml)
-[![dbt Checks](https://github.com/AndrewStaus/data-platform/actions/workflows/check__dbt_checks.yml/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/check__dbt_checks.yml)
-[![CodeQL](https://github.com/AndrewStaus/data-platform/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/AndrewStaus/data-platform/actions/workflows/github-code-scanning/codeql)
-
-
 # Data Platform
-**Dagster** + **dbt** + **Snowflake**
 
-This repository contains a reference implementation of a modern data platform that
-combines [Dagster](https://dagster.io/) orchestration, [dbt](https://www.getdbt.com/)
-transformation pipelines, and Snowflake data warehousing. It is intentionally organized
-so that data engineers, analytics engineers, and platform engineers can collaborate with
-clear ownership boundaries.
+**Dagster** • **dbt** • **Snowflake**
 
-## Repository Layout
+A modern, modular data platform for end-to-end orchestration, transformation, and analytics.
+
+---
+
+## 🚀 What It Is
+
+This repository is a **reference implementation** of a modern data stack that unifies:
+
+- **Dagster** for orchestration and observability  
+- **dbt** for SQL-based transformation and testing  
+- **Snowflake** for scalable cloud warehousing  
+- **dltHub** for Pythonic ingestion and normalization of semi-structured data  
+- **Sling** for declarative configuration of replication pipelines from databases and filesystems
+
+It’s designed for **data engineers**, **analytics engineers**, and **platform engineers** to work side-by-side with clear boundaries, strong governance, and simple local development.
+
+---
+
+## 🧩 Core Layers
+
+### **Dagster** — Orchestration & Lineage  
+Dagster ties everything together:
+
+- Executes Sling and dltHub pipelines  
+- Runs dbt transformations in sequence  
+- Surfaces metadata, lineage, and freshness in one unified graph  
+
+➡ See [Dagster Overview](getting_started/orchestration/dagster/index.md)
+
+---
+
+### **dbt** — Transformations & Marts  
+SQL transformations that model raw data into **clean, analytics-ready marts**.  
+Includes:
+
+- Staging layers organized by source system  
+- Shared dimensions and fact models (`marts/`)  
+- Tests, freshness checks, and ownership metadata  
+
+➡ See [dbt Overview](getting_started/transformation/dbt/index.md)
+
+---
+
+### **Sling** — Declarative Replication  
+YAML-based configuration for **extract and load (EL)** pipelines.  
+Sling connects external databases or APIs to Snowflake’s **raw** layer, defining:
+
+- Connection details (`connections.yaml`)
+- Replication rules and stream settings (`replication.yaml`)
+
+➡ See [Sling Overview](getting_started/ingestion/sling/index.md)
+
+---
+
+### **dltHub** — Pythonic Ingestion  
+Lightweight Python connectors for APIs and semi-structured sources.  
+Each module defines:
+
+- `data.py`: a generator yielding structured data batches  
+- `sources.yaml`: replication and destination mapping  
+
+Ideal for dynamic datasets or paginated APIs.
+
+➡ See [dltHub Overview](getting_started/ingestion/dlthub/index.md)
+
+---
+
+## 🏗️ Repository Layout
 
 | Path | Owner Focus | Description | 
 | --- | --- | --- |
@@ -35,52 +91,53 @@ clear ownership boundaries.
 | **Dockerfile**, **pyproject.toml**, **uv.lock** | Platform | Runtime dependencies for orchestrator workers. |
 | **workspaces** | Platform | Dagster code location configuration for local development. |
 
-## Local Development
+---
 
+## 💻 Local Development
 
+- Consistent containerized environment across all engineers
+- Fast iteration with instant feedback from Dagster & dbt
+- Test and debug orchestration locally before deployment
+- Safe sandboxing with isolated Snowflake schemas
+- Reproducible builds via Dev Container configuration
+- Preinstalled extensions for dbt, Snowflake, and Python
 
-## Dagster (Platform Engineer View)
+---
 
-Dagster assets and schedules live under
-`packages/data_foundation/src/data_foundation/defs/`
-### Key concepts:
-- `sling/` contains source replication specifications used to ingest raw layers in
-Snowflake. These YAML files now include inline comments describing connection secrets,
-replication cadence, and ingestion pattern.
-- `dlthub/` contains source replication code to ingest raw layers in Snowflake through
-Python defined logic.  Python code is used to generate structured and semi-structured
-data (dataframes, lists of lists, lists of dicts, etc.), and dlt will wrap that logic
-and provide control over replication cadence, ingestion patterns, and normalization.
-- Dagster uses the `dagster.yaml` file in the repository root for instance
-settings shared across developers and CI, such as disabling telemetry.
-- Helm deployment values are stored in `.helm/values.yaml` to control the configuration
-of the Kubernetes deployments while preserving upstream defaults.
+## 🔍 Governance & Observability
 
+- **YAML-first configuration** for transparency and version control  
+- **Dagster lineage graphs** linking ingestion → transformation → marts  
+- **Automated docs** published via MkDocs and GitHub Pages  
+- **Secrets** securely managed via `.env` and vault integration  
+- **CI checks** for linting, unit tests, and dbt validation
 
-## Documentation Site
+---
 
-- `.mkdocs/mkdocs.yml` defines the MkDocs/Material configuration used to render the
-  docs stored under `docs/`.
-- The GitHub Actions workflow in `.github/workflows/docs.yml`  will regenerate and 
-publishes the documentation to based on comments and doc strings in the source code to
-a GitHub Pages whenever changes land on `main`.
-- Documentation can be found on the gitHub pages site:
-  #### https://andrewstaus.github.io/data-platform/
+## 📘 Learn More
 
+| Topic | Documentation |
+| ------ | -------------- |
+| **Sling** | [Extract & Load Configuration](getting_started/ingestion/sling/index.md) |
+| **dltHub** | [Python Connectors & API Sources](getting_started/ingestion/dlthub/index.md) |
+| **dbt** | [Transformations, Marts, and Testing](getting_started/transformation/dbt/index.md) |
+| **Dagster** | [Orchestration and Asset Graph](getting_started/orchestration/dagster/index.md) |
+| **Local Setup** | [Developer Quick Start](getting_started/index.md) |
 
-## Contribution Guidelines
+---
 
-- Keep YAML comments up to date—they explain how orchestration, ingestion, and
-modeling pieces fit together for the next engineer who reads the config.
-- When adding a new source system, define the Sling connection in
-`data_foundation/src/defs/sling/sling/` and create matching dbt source definitions
-under `data_foundation/dbt/models/staging/<system>/`.
-- All production-facing changes should include tests (`dbt test`) and, when
-relevant, updates to the documentation site.
+## 🤝 Contributing
 
-## Further Reading
+- Keep YAML comments current — they document orchestration and ownership.  
+- Add new sources via **Sling** or **dltHub**, then create matching dbt sources.  
+- All production changes must include **tests** and **docs** updates.
 
-- Project docs: <https://andrewstaus.github.io/data-platform/>
-- Dagster docs: <https://docs.dagster.io/>
-- dbt docs: <https://docs.getdbt.com/>
-- Snowflake docs: <https://docs.snowflake.com/>
+---
+
+## 🌐 Links
+  
+- ⚙️ **Dagster Docs:** [docs.dagster.io](https://docs.dagster.io/)  
+- 🧠 **dbt Docs:** [docs.getdbt.com](https://docs.getdbt.com/)  
+- ❄️ **Snowflake Docs:** [docs.snowflake.com](https://docs.snowflake.com/)  
+- 🔁 **dltHub Docs:** [dlthub.com/docs](https://dlthub.com/docs/intro)  
+- ⚡ **Sling Docs:** [slingdata.io/docs](https://docs.slingdata.io/)  

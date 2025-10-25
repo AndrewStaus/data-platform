@@ -14,7 +14,7 @@ Inside that folder, create the following files:
 - `replication.yaml` — defines replication (extract & load) behavior
 
 ???+ quote "Creating Configuration Files"
-    ![dltHub Files](../../img/dlt/1_files.gif){ align=left }
+    ![dltHub Files](../../../img/dlt/1_files.gif){ align=left }
 
 ---
 
@@ -24,7 +24,7 @@ In `data.py`, define a generator function that **yields batches of records**.
 Each `yield` returns a small batch of data for dltHub to load incrementally, allowing for **pagination and low memory overhead** during ingestion.
 
 ???+ quote "data.py"
-    ![dltHub Data](../../img/dlt/2_data.gif){ align=left }
+    ![dltHub Data](../../../img/dlt/2_data.gif){ align=left }
 
 ---
 
@@ -43,7 +43,7 @@ Press `Ctrl + Space` in VS Code to open IntelliSense and select **`dlt-resources
 | `args` / `kwargs` | *(Optional)* Additional parameters to pass to the generator function. |
 
 ???+ quote "Configure Resource"
-    ![dltHub Resource](../../img/dlt/3_resource.gif){ align=left }
+    ![dltHub Resource](../../../img/dlt/3_resource.gif){ align=left }
 
 ---
 
@@ -62,7 +62,7 @@ Press `Ctrl + Space` and select **`dlt-sources`** to scaffold a sources template
 | `meta` | Meta configuration for defining schedules and checks.  Source meta will override any settings in a resources. |
 
 ???+ quote "Configure Source"
-    ![dltHub Source](../../img/dlt/4_sources.gif){ align=left }
+    ![dltHub Source](../../../img/dlt/4_sources.gif){ align=left }
 
 ---
 
@@ -120,11 +120,7 @@ Press `Ctrl + Space` and select **`dlt-sources`** to scaffold a sources template
 
 # Data Generator
 
-The **data generator** defines *how* data is fetched.  
-It can yield any iterable of dictionaries (records).  
-dltHub automatically batches and streams data to the destination.
-
-??? example "data.py Example"
+??? example "data.py"
 
     ```python
     import requests
@@ -141,22 +137,11 @@ dltHub automatically batches and streams data to the destination.
             page += 1
     ```
 
-**Tips:**
-- Always use **`yield`** (not `return`) to stream data in small chunks.  
-- Use API pagination, cursors, or offsets to avoid loading too much data into memory.  
-- Each yield should return a list (or iterable) of records, e.g. `[{...}, {...}, ...]`.
+    !!! tip
+        - Always use **`yield`** (not `return`) to stream data in small chunks.  
+        - Use API pagination, cursors, or offsets to avoid loading too much data into memory.  
+        - Each yield should return a list (or iterable) of records, e.g. `[{...}, {...}, ...]`.
 
-???+ quote "Yielding Data"
-    ![dltHub Yielding](../../img/dlt/5_yield.gif){ align=left }
-
----
-
-✅ **Summary**
-
-| Concept | Description |
-| -------- | ------------ |
-| **Data Generator** | Defines how data is fetched or produced in Python (`data.py`). |
-| **Source** | Groups multiple resources under a single namespace (`sources.yaml`). |
-| **Resource** | References a generator function and defines write behavior (`sources.yaml`). |
-
----
+The **data generator** defines *how* data is fetched.  
+It can yield any iterable of dictionaries (records).  
+dltHub automatically batches and streams data to the destination.

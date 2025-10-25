@@ -203,18 +203,6 @@ To replicate a new data source:
 
 ---
 
-## Governance and Observability
-
-Sling configurations are fully integrated with Dagster’s **metadata and lineage graph**, enabling:
-
-- **Source-to-raw data visibility**  
-- **Automated schema drift handling** (via `add_new_columns` and `adjust_column_type`)  
-- **Incremental updates** to reduce load time and cost  
-- **Fine-grained tagging** of sensitive or restricted datasets  
-
-Ownership and SLA metadata can also be annotated in the replication definitions, ensuring accountability for data quality and refresh frequency.
-
----
 
 ✅ **Summary**
 
@@ -226,7 +214,3 @@ Ownership and SLA metadata can also be annotated in the replication definitions,
 | Dagster integration | Executes and monitors replications; maps lineage to dbt |
 
 ---
-
-**In short:**  
-Sling is the **data movement backbone** of the platform — reliable, declarative, and fully orchestrated by Dagster.  
-It ensures that every dataset in **dbt’s raw schema** is **accurate, traceable, and refreshable**, forming the foundation of your analytical ecosystem.

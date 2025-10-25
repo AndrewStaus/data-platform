@@ -1,0 +1,23 @@
+sources:
+    my_api:
+        resources: [my_api.users, my_api.transactions]
+        meta:
+          dagster:
+            automation_condition: on_schedule
+            automation_condition_config:
+              cron_schedule: "@daily"
+              cron_timezone: utc
+            freshness_lower_bound_delta_seconds: 129600
+
+resources:
+    my_api.users:
+        entry: data.fetch_users
+        primary_key: id
+        write_disposition: merge
+        kinds: {api}
+
+    my_api.transactions:
+        entry: data.fetch_transactions
+        primary_key: id
+        write_disposition: merge
+        kinds: {api}

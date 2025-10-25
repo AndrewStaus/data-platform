@@ -29,19 +29,19 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS data_platform_dev
         . /home/vscode/.tmp/.env \
         && mkdir -p $SNOWFLAKE_HOME \ && cd $SNOWFLAKE_HOME \
         && echo [$DESTINATION__HOST] > connections.toml \
-        && echo "account = \"$DESTINATION__HOST\"" >> connections.toml \
-        && echo "user = \"$DESTINATION__USER\"" >> connections.toml \
-        && echo "authenticator = \"snowflake\"" >> connections.toml \
-        && echo "password = \"$DESTINATION__PASSWORD\"" >> connections.toml \
-        && echo "database = \"_dev_analytics\"" >> connections.toml \
-        && echo "warehouse = \"$DESTINATION__WAREHOUSE\"" >> connections.toml
+        && echo "account = /"$DESTINATION__HOST/"" >> connections.toml \
+        && echo "user = /"$DESTINATION__USER/"" >> connections.toml \
+        && echo "authenticator = /"snowflake/"" >> connections.toml \
+        && echo "password = /"$DESTINATION__PASSWORD/"" >> connections.toml \
+        && echo "database = /"_dev_analytics/"" >> connections.toml \
+        && echo "warehouse = /"$DESTINATION__WAREHOUSE/"" >> connections.toml
 
     RUN pip install uv \
         && uv pip install --system ruff sqlfluff \
         && mkdir -p /home/vscode/.vscode-server/extensions \
         && mkdir -p /home/vscode/.local/bin/ \
         && echo 'alias dbtf=/home/vscode/.local/bin/dbt' >> /home/vscode/.bashrc \
-        && echo '. .venv/bin/activate' >> /home/vscode/.bashrc \
+        # && echo '. .venv/bin/activate' >> /home/vscode/.bashrc \
         && chown -R vscode /home/vscode/
 
         
