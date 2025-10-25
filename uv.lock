@@ -773,7 +773,7 @@ sqlfluff = [{ name = "sqlfluff" }]
 
 [[package]]
 name = "data-platform-utils"
-version = "0.1.4"
+version = "0.1.5"
 source = { directory = "libs/data_platform_utils" }
 dependencies = [
     { name = "dagster" },
