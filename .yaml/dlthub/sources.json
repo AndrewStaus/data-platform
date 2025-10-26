@@ -92,10 +92,10 @@
       "type": "integer",
       "description": "A schema hint that sets the maximum depth of nested table above which the remaining nodes are loaded as structs or JSON"
     },
-      "section": {
-        "type": "boolean",
-        "description": "Configuration section that comes right after 'sources` in default layout. If not present, the current python module name will be used.  Default layout is `sources.<section>.<name>.<key_name>`. Note that resource section is used only when a single resource is passed to the pipeline."
-      },
+    "section": {
+      "type": "boolean",
+      "description": "Configuration section that comes right after 'sources` in default layout. If not present, the current python module name will be used.  Default layout is `sources.<section>.<name>.<key_name>`. Note that resource section is used only when a single resource is passed to the pipeline."
+    },
     "Source": {
       "type": "object",
       "description": "A dlt source is a logical grouping of resources that are often extracted and loaded together. A source is associated with a schema, which describes the structure of the loaded data and provides instructions how to load it. Such schema contains table schemas that describe the structure of the data coming from the resources.",

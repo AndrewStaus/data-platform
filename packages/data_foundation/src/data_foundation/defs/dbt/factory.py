@@ -21,7 +21,6 @@ from dagster_dbt import (
     dbt_assets,
 )
 from dagster_dbt.asset_utils import DBT_DEFAULT_SELECT
-from dagster_dbt.core.dbt_event_iterator import DbtEventIterator
 
 from .constants import TIME_PARTITION_SELECTOR
 from .translator import CustomDagsterDbtTranslator
@@ -124,7 +123,8 @@ class Factory:
             exclude=exclude,
             dagster_dbt_translator=CustomDagsterDbtTranslator(
                 settings=DagsterDbtTranslatorSettings(
-                    enable_duplicate_source_asset_keys=True,
+                    # enable_duplicate_source_asset_keys=False,
+                    # enable_asset_checks=False,
                 )
             ),
             backfill_policy=dg.BackfillPolicy.single_run(),
@@ -133,7 +133,8 @@ class Factory:
         )
         def assets( # pragma: no coverage
             context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
-        ) -> Generator[DbtEventIterator, Any, Any]:
+        ) -> Generator[dg.Output[Any] | dg.AssetMaterialization | dg.AssetObservation
+                       | dg. AssetCheckResult | dg.AssetCheckEvaluation, Any, Any]:
             """Materialize the selected dbt models via the dbt CLI resource.
 
             Args:
@@ -145,15 +146,15 @@ class Factory:
                     toggles dbt CLI flags.
 
             Yields:
-                dagster_dbt.core.dbt_event_iterator.DbtEventIterator: The stream of
-                    structured dbt events produced during the CLI invocation. Yielding
-                    the iterator allows Dagster to surface granular run status in the
-                    UI.
+                The stream of structured dbt events produced during the CLI invocation.
+                    Yielding the results allows Dagster to surface granular run status
+                    in the UI.
             """
             args = ["build"]
 
             if config.full_refresh:
                 args.append("--full-refresh")
+
             if config.defer_to_prod:
                 args.extend(dbt.get_defer_args())
                 if config.favor_state:
@@ -171,14 +172,6 @@ class Factory:
 
                 args.extend(("--vars", json.dumps(dbt_vars)))
 
-                yield from dbt.cli(
-                    args,
-                    context=context
-                ).stream()  # .with_insights() # type: ignore
-            else:
-                yield from dbt.cli(
-                    args,
-                    context=context
-                ).stream()  # .with_insights() # type: ignore
+            yield from dbt.cli(args, context=context).stream()
 
         return assets

@@ -5,19 +5,10 @@ models:
       - name: campaign_criteria_id
         data_type: number
         description: The identifier for the criteria
-        config:
-          meta: {}
-          tags: []
       - name: _scd_id
         data_type: varchar
         description: The unique identifier for the record during the period it was active for
-        config:
-          meta: {}
-          tags: []
       - name: _loaded_at
         data_type: timestamp_ntz
         description: When the record was ingested
-        config:
-          meta: {}
-          tags: []
     description: The targeting criteria for the campaign

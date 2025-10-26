@@ -5,16 +5,9 @@ resources:
         write_disposition: merge
         kinds: {api}
 
-    facebook_ads.test:
-        entry: data.get_test
-        primary_key: id
-        write_disposition: merge
-        data_from: facebook_ads.campaigns
-        kinds: {api}
-
 sources:
     facebook_ads:
-        resources: [facebook_ads.campaigns, facebook_ads.test]
+        resources: [facebook_ads.campaigns]
         parallelized: true
         meta:
             dagster:

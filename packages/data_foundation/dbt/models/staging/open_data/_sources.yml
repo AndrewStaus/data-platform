@@ -11,71 +11,29 @@ sources:
         columns:
           - name: PCLASS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: NAME
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: SEX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: AGE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: SIBSP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: PARCH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: TICKET
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: FARE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CABIN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: EMBARKED
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: BOAT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: BODY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: HOME_DEST
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: SURVIVED
             description: ''
-            config:
-              meta: {}
-              tags: []

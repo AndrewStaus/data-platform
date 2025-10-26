@@ -19,6 +19,8 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS data_platform_dev
 
     ENV UV_CACHE_DIR=/home/vscode/.cache/uv
     ENV UV_LINK_MODE=copy
+    ENV DBT_PROFILES_DIR=/workspaces/data-platform/packages/data_foundation/dbt
+    ENV DBT_PROJECT_DIR=/workspaces/data-platform/packages/data_foundation/dbt
     ENV SNOWFLAKE_HOME=/home/vscode/.config/snowflake/
     ENV PATH="/home/vscode/.local/bin/:$PATH"
 
@@ -29,12 +31,12 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS data_platform_dev
         . /home/vscode/.tmp/.env \
         && mkdir -p $SNOWFLAKE_HOME \ && cd $SNOWFLAKE_HOME \
         && echo [$DESTINATION__HOST] > connections.toml \
-        && echo "account = /"$DESTINATION__HOST/"" >> connections.toml \
-        && echo "user = /"$DESTINATION__USER/"" >> connections.toml \
-        && echo "authenticator = /"snowflake/"" >> connections.toml \
-        && echo "password = /"$DESTINATION__PASSWORD/"" >> connections.toml \
-        && echo "database = /"_dev_analytics/"" >> connections.toml \
-        && echo "warehouse = /"$DESTINATION__WAREHOUSE/"" >> connections.toml
+        && echo "account = \"$DESTINATION__HOST\"" >> connections.toml \
+        && echo "user = \"$DESTINATION__USER\"" >> connections.toml \
+        && echo "authenticator = \"snowflake\"" >> connections.toml \
+        && echo "password = \"$DESTINATION__PASSWORD\"" >> connections.toml \
+        && echo "database = \"_dev_analytics\"" >> connections.toml \
+        && echo "warehouse = \"$DESTINATION__WAREHOUSE\"" >> connections.toml
 
     RUN pip install uv \
         && uv pip install --system ruff sqlfluff \
