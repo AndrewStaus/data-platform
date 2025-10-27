@@ -1,0 +1,11 @@
+/* Hide the inline search box in the header, but keep modal functional */
+
+/* The inline version (header-embedded) is inside the header nav bar */
+.md-search .md-search__inner {
+  width: 0%;
+  padding-right: 8px;
+}
+
+.md-search {
+  width: 0%;
+}

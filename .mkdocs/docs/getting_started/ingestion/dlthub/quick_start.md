@@ -14,7 +14,7 @@ Inside that folder, create the following files:
 - `replication.yaml` — defines replication (extract & load) behavior
 
 ???+ quote "Creating Configuration Files"
-    ![dltHub Files](../../../img/dlt/1_files.gif){ align=left }
+    ![dltHub Files](../../../assets/images/dlt/1_files.gif){ align=left }
 
 ---
 
@@ -24,7 +24,7 @@ In `data.py`, define a generator function that **yields batches of records**.
 Each `yield` returns a small batch of data for dltHub to load incrementally, allowing for **pagination and low memory overhead** during ingestion.
 
 ???+ quote "data.py"
-    ![dltHub Data](../../../img/dlt/2_data.gif){ align=left }
+    ![dltHub Data](../../../assets/images/dlt/2_data.gif){ align=left }
 
 ---
 
@@ -43,7 +43,7 @@ Press `Ctrl + Space` in VS Code to open IntelliSense and select **`dlt-resources
 | `args` / `kwargs` | *(Optional)* Additional parameters to pass to the generator function. |
 
 ???+ quote "Configure Resource"
-    ![dltHub Resource](../../../img/dlt/3_resource.gif){ align=left }
+    ![dltHub Resource](../../../assets/images/dlt/3_resource.gif){ align=left }
 
 ---
 
@@ -62,7 +62,7 @@ Press `Ctrl + Space` and select **`dlt-sources`** to scaffold a sources template
 | `meta` | Meta configuration for defining schedules and checks.  Source meta will override any settings in a resources. |
 
 ???+ quote "Configure Source"
-    ![dltHub Source](../../../img/dlt/4_sources.gif){ align=left }
+    ![dltHub Source](../../../assets/images/dlt/4_sources.gif){ align=left }
 
 ---
 

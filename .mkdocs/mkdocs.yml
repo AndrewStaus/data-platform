@@ -2,7 +2,7 @@
 # engineers can tweak theme/plugins here while data engineers can add new docs by
 # extending the navigation under docs/.
 site_name: Data Platform
-repo_name: Data Platform
+repo_name: AndrewStaus/data-platform
 repo_url: https://github.com/AndrewStaus/data-platform
 
 
@@ -11,9 +11,13 @@ repo_url: https://github.com/AndrewStaus/data-platform
 docs_dir: "./docs"
 site_dir: "./site"
 
+extra_css:
+  - assets/stylesheets/extra.css
+
 theme:
   # We use Material for MkDocs to unlock advanced navigation and search features.
   name: material
+
   features:
     - navigation.tabs
     - navigation.path
@@ -41,8 +45,8 @@ theme:
         name: Switch to light mode
 
   font:
-    text: Roboto        # Body text
-    code: Roboto Mono   # Code blocks
+    text: Roboto
+    code: Roboto Mono
 
 markdown_extensions:
   - attr_list
@@ -66,11 +70,11 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
 
+
 plugins:
-  - search # Standard full-text search across generated pages.
-  # - gen-files:
-  #     scripts:
-  #       - gen_pages.py
+  - search: # Standard full-text search across generated pages.
+      lang: en
+  # - typeset
   - mkdocstrings: # Autodoc support for Python objects referenced in the docs/ tree.
       handlers:
         python:

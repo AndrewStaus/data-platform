@@ -1,4 +1,4 @@
-# Data Platform
+# Home
 
 **Dagster** • **dbt** • **Snowflake**
 
@@ -6,7 +6,7 @@ A modern, modular data platform for end-to-end orchestration, transformation, an
 
 ---
 
-## 🚀 What It Is
+## What It Is
 
 This repository is a **reference implementation** of a modern data stack that unifies:
 
@@ -20,7 +20,7 @@ It’s designed for **data engineers**, **analytics engineers**, and **platform 
 
 ---
 
-## 🧩 Core Layers
+## Core Layers
 
 ### **Dagster** — Orchestration & Lineage  
 Dagster ties everything together:
@@ -69,7 +69,7 @@ Ideal for dynamic datasets or paginated APIs.
 
 ---
 
-## 🏗️ Repository Layout
+## Repository Layout
 
 | Path | Owner Focus | Description | 
 | --- | --- | --- |
@@ -93,7 +93,7 @@ Ideal for dynamic datasets or paginated APIs.
 
 ---
 
-## 💻 Local Development
+## Local Development
 
 - Consistent containerized environment across all engineers
 - Fast iteration with instant feedback from Dagster & dbt
@@ -104,7 +104,7 @@ Ideal for dynamic datasets or paginated APIs.
 
 ---
 
-## 🔍 Governance & Observability
+## Governance & Observability
 
 - **YAML-first configuration** for transparency and version control  
 - **Dagster lineage graphs** linking ingestion → transformation → marts  
@@ -114,7 +114,7 @@ Ideal for dynamic datasets or paginated APIs.
 
 ---
 
-## 📘 Learn More
+## Learn More
 
 | Topic | Documentation |
 | ------ | -------------- |
@@ -126,7 +126,7 @@ Ideal for dynamic datasets or paginated APIs.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 - Keep YAML comments current — they document orchestration and ownership.  
 - Add new sources via **Sling** or **dltHub**, then create matching dbt sources.  
@@ -134,7 +134,7 @@ Ideal for dynamic datasets or paginated APIs.
 
 ---
 
-## 🌐 Links
+## Links
   
 - ⚙️ **Dagster Docs:** [docs.dagster.io](https://docs.dagster.io/)  
 - 🧠 **dbt Docs:** [docs.getdbt.com](https://docs.getdbt.com/)  
