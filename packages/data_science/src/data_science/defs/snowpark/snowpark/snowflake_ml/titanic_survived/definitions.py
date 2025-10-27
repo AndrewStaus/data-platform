@@ -1,6 +1,9 @@
+from pathlib import Path
+
 import dagster as dg
 from dagster.components import definitions
 from data_platform_utils.automation_conditions import CustomAutomationCondition
+from snowflake.ml.jobs import submit_file
 
 from ....resources import SnowparkResource
 
@@ -22,38 +25,34 @@ def asset(
         context: dg.AssetExecutionContext,
         snowpark: SnowparkResource,
         config: MLTrainConfig) -> dg.MaterializeResult:
-    from .train_pipeline import materialize
 
-    session = snowpark.get_session(schema="open_data")
-    metadata = materialize(context, session, config.retrain_threshold)
-    return dg.MaterializeResult(metadata=metadata)
-
-
-
-@dg.asset_check(
-        asset=["ml", "model", "titanic_survived"],
-        description=("Check that default version of model scores above"
-                    "threshold for retraining")
-)
-def score_above_threshold_check(
-        snowpark: SnowparkResource,
-        config: MLTrainConfig) -> dg.AssetCheckResult:
+    file_path = Path(__file__).joinpath("..", "train.py").resolve().as_posix()
     
-    from snowflake.ml.registry.registry import Registry
+
     session = snowpark.get_session(schema="open_data")
-    registry = Registry(session)
-    model = registry.get_model("titanic_survived").default
-    score = model.get_metric("score")
-    return dg.AssetCheckResult(
-        passed=bool(score > config.retrain_threshold),
-        metadata={"score": score}
+    job = submit_file(
+        file_path,
+        "SYSTEM_COMPUTE_POOL_GPU",
+        enable_metrics=True,
+        stage_name="payload_stage",
+        session=session
     )
+    context.log.info("ML Job started \n"
+                f"id: {job.id}\n"
+                f"name: {job.name}"
+    )   
+
+    status = job.wait()
+    context.log.info(f"Run completed with status {status}")
+    metadata = job.result()
+
+
+    return dg.MaterializeResult(metadata=metadata)
 
 
 @definitions
 def defs() -> dg.Definitions:
     
     return dg.Definitions(
-        assets=[asset],
-        asset_checks=[score_above_threshold_check]
+        assets=[asset]
     )

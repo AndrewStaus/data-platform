@@ -191,26 +191,23 @@ class Factory:
                     progress events produced during the replication.
             """
 
-            if "defaults" not in config:
-                config["defaults"] = {}
-
-            try:  # to inject start and end dates for partitioned runs
+            if context.has_partition_key:
                 time_window = context.partition_time_window
-                if time_window:
-                    if "source_options" not in config["defaults"]:
-                        config["defaults"]["source_options"] = {}
 
-                    format = "%Y-%m-%d %H:%M:%S"
-                    start = time_window.start.strftime(format)
-                    end = time_window.end.strftime(format)
-                    config["defaults"]["source_options"]["range"] = f"{start},{end}"
-            except Exception:  # run normal run if time window not provided
-                pass
+                format = "%Y-%m-%d %H:%M:%S"
+                start = time_window.start.strftime(format)
+                end = time_window.end.strftime(format)
+
+                config["defaults"] = config.get("defaults", {})
+                config["defaults"]["source_options"] = (
+                    config["defaults"].get("source_options", {}))
+                
+                config["defaults"]["source_options"]["range"] = f"{start},{end}"
 
             yield from sling.replicate(
                 context=context,
                 replication_config=config,
-                dagster_sling_translator=CustomDagsterSlingTranslator(),
+                dagster_sling_translator=CustomDagsterSlingTranslator()
             )
             for row in sling.stream_raw_logs():
                 context.log.info(row)
@@ -263,8 +260,8 @@ class Factory:
         kinds = {kind} if kind else None
 
         deps = []
-        for k in replication_config["streams"]:
-            schema, table = k.split(".")
+        for name in replication_config["streams"]:
+            schema, table = name.split(".")
             dep = dg.AssetSpec(
                 key=[schema, "src", table], group_name=schema, kinds=kinds
             )
@@ -272,9 +269,8 @@ class Factory:
         return deps or []
 
     @staticmethod
-    def _get_freshness_checks(
-        replication_config: dict,
-    ) -> list[dg.AssetChecksDefinition]:
+    def _get_freshness_checks(replication_config: dict
+            ) -> list[dg.AssetChecksDefinition]:
         """Build freshness checks for each stream declared in a replication config.
 
         Args:
@@ -285,7 +281,6 @@ class Factory:
             list[dagster.AssetChecksDefinition]: Freshness checks constructed from the
                 merged configuration, one per stream with configured thresholds.
         """
-        "TODO: Fix throwing exception when replication config contains a partition"
         freshness_checks = []
 
         default_freshness_check_config = (
@@ -348,9 +343,10 @@ class Factory:
                         )
                         freshness_checks.extend(last_update_freshness_checks)
                 except TypeError as e:
-                    raise TypeError(
-                        "Error creating freshness check, check your configuration for "
-                        f"'{asset_key}'. Supplied arguments: {freshness_check_config}"
-                    ) from e
+                    e.add_note("Error creating freshness check, check your "
+                    "configuration for '{asset_key}'. Supplied arguments: "
+                    f"{freshness_check_config}"
+                    )
+                    raise e
 
         return freshness_checks

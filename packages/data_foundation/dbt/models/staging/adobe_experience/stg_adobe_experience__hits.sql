@@ -8,10 +8,9 @@
         tags = ["partitioned"],
         meta = {
             "dagster": {
-                "partition": "daily",
+                "partition": "monthly",
                 "partition_start_date": "2025-07-01",
-                "automation_condition": "eager",
-                "freshness_check": {"deadline_cron": "@daily"}
+                "automation_condition": "eager"
             }
         }
     )

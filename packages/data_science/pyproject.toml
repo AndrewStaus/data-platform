@@ -4,20 +4,18 @@ description = "Code location for dagster that exposes snowpark resources for ML-
 version = "0.1.0"
 readme = "README.md"
 authors = [{name = "Andrew Staus"}]
-requires-python = ">=3.12, <3.13"
+requires-python = ">=3.13, <3.14"
 dependencies = [
     "dagster-cloud==1.11.15",
-    # "dagster-k8s==0.27.15",
-    "dagster-docker==0.27.15",
     "dagster-snowflake==0.27.15",
     "dagster_postgres==0.27.15",
     "data-platform-utils",
     "faker==37.11.0",
     "psutil==7.1.0",
-    "snowflake==1.8.0",
-    "snowflake-ml-python==1.17.0",
-    "snowflake-snowpark-python==1.40.0",
-    "xgboost-cpu==3.0.5"
+    "snowflake>=1.8.0",
+    "snowflake-ml-python>=1.18.0",
+    "snowflake-snowpark-python>=1.41.0",
+    "xgboost==3.0.1",
 ]
 
 [dependency-groups]
@@ -30,7 +28,6 @@ dev = [
 
 [tool.uv]
 override-dependencies = [
-    "xgboost; sys_platform == 'never'",
     "nvidia-nccl-cu12; sys_platform == 'never'"
 ]
 
