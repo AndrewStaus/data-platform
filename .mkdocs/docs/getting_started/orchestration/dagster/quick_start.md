@@ -26,7 +26,7 @@ Once the UI opens, select “Assets” in the sidebar to view the asset graph.
 - Click any asset to view metadata, schema, and run history.
 
 ???+ quote "Asset Graph"
-    ![Asset Graph](../../../img/dagster/1_asset_graph.gif){ align=left }
+    ![Asset Graph](../../../assets/images/dagster/1_asset_graph.gif){ align=left }
 
 ## Run Materializations
 
@@ -43,7 +43,7 @@ Each run shows:
 - Execution metadata such as duration, version, and success status.
 
 ???+ quote "Materialize Assets"
-    ![Materialize Assets](../../../img/dagster/2_materialize.gif){ align=left }
+    ![Materialize Assets](../../../assets/images/dagster/2_materialize.gif){ align=left }
 
 ## Inspect and Debug
 
@@ -52,7 +52,7 @@ Each run shows:
 - The Code Locations tab displays connected modules like sling, dlthub, and dbt.
 
 ???+ quote "Inspect Runs"
-    ![Inspect Runs](../../../img/dagster/3_inspect_runs.gif){ align=left }
+    ![Inspect Runs](../../../assets/images/dagster/3_inspect_runs.gif){ align=left }
 
 ## Stopping the Server
 

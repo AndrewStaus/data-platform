@@ -20,7 +20,7 @@ uv sync
 ```
 
 ???+ quote "Install Packages"
-    ![Install Packages](../../img/analytics/1_install_packages.gif){ align=left }
+    ![Install Packages](../../assets/images/analytics/1_install_packages.gif){ align=left }
 
     !!! tip "Best Practice"
         Deactivate your current shell before installing the packages by entering the
@@ -73,7 +73,7 @@ There are several methods that can be used to query data:
 All are equivalent and valid as they are compiled and run on the snowflake warehouse.
 
 ???+ quote "Query Methods"
-    ![Query Methods](../../img/analytics/2_query_methods.gif){ align=left }
+    ![Query Methods](../../assets/images/analytics/2_query_methods.gif){ align=left }
 
 ---
 
@@ -90,7 +90,7 @@ powerful tool to explore the data.  It is optimized to work with Snowpark datafr
 and ensures a seamless experience for users.
 
 ???+ quote "Display Table"
-    ![Display Table](../../img/analytics/3_display_table.gif){ align=left }
+    ![Display Table](../../assets/images/analytics/3_display_table.gif){ align=left }
 
 ---
 
@@ -100,5 +100,5 @@ Beyond tabular display, display() also supports rich visualizations similar to T
 You can drag-and-drop fields to create charts, pivot tables, and explore trends.
 
 ???+ quote "Display Visualization"
-    ![Display Visualization](../../img/analytics/4_display_visualization.gif){ align=left }
+    ![Display Visualization](../../assets/images/analytics/4_display_visualization.gif){ align=left }
 

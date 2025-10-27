@@ -19,7 +19,7 @@ Launch **Visual Studio Code** and make sure it’s up to date.
 1. Install the [**WSL**](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl) extension.  
 2. Press `Ctrl + Shift + P`, then run **`>WSL: Connect to WSL`**.
 ???+ quote "WSL: Connect to WSL"
-    ![Clone Repository](../img/usage/1_connect_wsl.gif){ align=left }
+    ![Clone Repository](../assets/images/usage/1_connect_wsl.gif){ align=left }
 
 **All users:**
 
@@ -34,7 +34,7 @@ Install the [**Dev Containers**](https://marketplace.visualstudio.com/items?item
 **“Clone Repository”** to download the project to your **Linux filesystem** (this provides much better performance inside WSL).
 
 ???+ quote "Cloning the Repository"
-    ![Clone Repository](../img/usage/2_clone_repo.gif){ align=left }
+    ![Clone Repository](../assets/images/usage/2_clone_repo.gif){ align=left }
 
 ---
 
@@ -49,7 +49,7 @@ cp .env.example .env
 Edit `.env` and fill in your local development secrets (e.g., API keys, database credentials).
 
 ???+ quote "Environment Setup"
-    ![Environment Variables](../img/usage/3_set_env.gif){ align=left }
+    ![Environment Variables](../assets/images/usage/3_set_env.gif){ align=left }
 
 ---
 
@@ -65,7 +65,7 @@ If prompted, install **Docker for WSL** (free community edition).
 This launches your project in an isolated development container with preconfigured dependencies.
 
 ???+ quote "Dev Container Setup"
-    ![Dev Container](../img/usage/4_open_container.gif){ align=left }
+    ![Dev Container](../assets/images/usage/4_open_container.gif){ align=left }
 
 ---
 
@@ -74,7 +74,7 @@ This launches your project in an isolated development container with preconfigur
 Create a feature branch based off the QA branch.
 
 ???+ quote "Feature Branch"
-    ![Dev Container](../img/usage/5_create_branch.gif){ align=left }
+    ![Dev Container](../assets/images/usage/5_create_branch.gif){ align=left }
 
 ---
 
@@ -89,7 +89,7 @@ uv sync --all-packages
 This command installs and synchronizes all project dependencies.
 
 ???+ quote "Syncing Dependencies"
-    ![Sync Dependencies](../img/usage/6_uv_sync.gif){ align=left }
+    ![Sync Dependencies](../assets/images/usage/6_uv_sync.gif){ align=left }
 
 ---
 
@@ -119,7 +119,7 @@ dagster dev
 ```
 
 ???+ quote "Dagster Dev"
-    ![Dagster Dev](../img/usage/7_dagster_dev.gif){ align=left }
+    ![Dagster Dev](../assets/images/usage/7_dagster_dev.gif){ align=left }
 
 ---
 
