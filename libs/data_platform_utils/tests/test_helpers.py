@@ -31,7 +31,7 @@ class TestGetSchemaName(TestHelpers):
     def test_get_schema_name_non_dev(self):
         os.environ["TARGET"] = "prod"
         result = helpers.get_schema_name("my_schema")
-        self.assertEqual(result, "MY_SCHEMA") 
+        self.assertEqual(result, "MY_SCHEMA")
 
 class TestGetDatabaseName(TestHelpers):
     def test_get_database_name_dev_environment(self):
