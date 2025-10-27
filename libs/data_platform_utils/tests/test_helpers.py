@@ -26,23 +26,23 @@ class TestGetSchemaName(TestHelpers):
         os.environ["TARGET"] = "dev"
         os.environ["DESTINATION__USER"] = "alice"
         result = helpers.get_schema_name("my_schema")
-        self.assertEqual(result, "my_schema__alice")
+        self.assertEqual(result, "MY_SCHEMA__ALICE")
 
     def test_get_schema_name_non_dev(self):
         os.environ["TARGET"] = "prod"
         result = helpers.get_schema_name("my_schema")
-        self.assertEqual(result, "my_schema")
+        self.assertEqual(result, "MY_SCHEMA")
 
 class TestGetDatabaseName(TestHelpers):
     def test_get_database_name_dev_environment(self):
         os.environ["TARGET"] = "dev"
         result = helpers.get_database_name("my_db")
-        self.assertEqual(result, "_dev_my_db")
+        self.assertEqual(result, "_DEV_MY_DB")
 
     def test_get_database_name_non_dev(self):
         os.environ["TARGET"] = "prod"
         result = helpers.get_database_name("my_db")
-        self.assertEqual(result, "my_db")
+        self.assertEqual(result, "MY_DB")
 
 class TestGetAutomationConditionFromMeta(TestHelpers):
     def test_get_automation_condition_from_meta_valid(self):
