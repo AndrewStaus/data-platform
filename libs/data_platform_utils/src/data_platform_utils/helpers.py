@@ -35,7 +35,8 @@ def get_database_name(database: str) -> str:
         str: Database name optionally prefixed with ``_dev_`` in development
         environments.
     """
-    if target := os.getenv("TARGET"):
+    if os.getenv("TARGET", "").lower() != "prod":
+        target = os.getenv("TARGET")
         database = f"_{target}_{database}"
     return database.upper()
 
