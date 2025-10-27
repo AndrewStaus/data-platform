@@ -61,6 +61,7 @@ FROM python:3.12-slim-bullseye AS data_foundation
     COPY /packages/data_foundation/pyproject.toml pyproject.toml
     RUN --mount=type=cache,target=/root/.cache/uv,id=foundation_uv_cache \
         uv sync --no-dev --compile-bytecode --link-mode=copy \
+        && ln -sf '/usr/local/bin/dbt' '/usr/local/bin/dbtf' \
         && rm .venv/bin/dbt
     COPY --from=dbt_compiler dbt dbt
 

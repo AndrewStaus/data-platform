@@ -12,3433 +12,1375 @@ sources:
         columns:
           - name: DATE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD___1INCH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AAVE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ADA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AED
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AFN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AGIX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AKT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ALGO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ALL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AMD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AMP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ANG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AOA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__APE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__APT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ARB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ARS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ATOM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ATS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AUD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AVAX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AWG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AXS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AZM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__AZN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BAKE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BAM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BAT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BBD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BCH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BDT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BEF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BGN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BHD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BIF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BMD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BNB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BND
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BOB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BRL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BSV
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BSW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BTC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BTG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BTN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BTT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BUSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BWP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BYN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BYR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__BZD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CAD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CAKE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CDF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CELO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CFX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CHF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CHZ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CLP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CNH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CNY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__COMP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__COP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CRC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CRO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CRV
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CSPR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CUC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CUP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CVE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CVX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CYP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__CZK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DAI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DASH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DCR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DEM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DFI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DJF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DKK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DOGE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DOP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DOT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DYDX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__DZD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__EEK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__EGLD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__EGP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ENJ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__EOS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ERN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ESP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ETB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ETC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ETH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__EUR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__EURC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FEI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FIL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FIM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FJD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FKP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FLOW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FLR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FRAX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FRF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__FTT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GALA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GBP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GEL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GGP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GHC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GHS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GIP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GMD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GMX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GNF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GNO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GRD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GRT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GTQ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GUSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__GYD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__HBAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__HKD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__HNL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__HNT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__HOT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__HRK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__HT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__HTG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__HUF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ICP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__IDR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__IEP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ILS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__IMP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__IMX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__INJ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__INR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__IQD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__IRR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ISK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ITL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__JEP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__JMD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__JOD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__JPY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KAS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KAVA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KCS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KDA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KES
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KGS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KHR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KLAY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KMF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KNC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KPW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KRW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KSM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KWD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KYD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__KZT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LAK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LBP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LDO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LEO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LINK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LKR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LRC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LRD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LSL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LTC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LTL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LUF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LUNA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LUNC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LVL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__LYD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MAD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MANA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MBX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MDL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MGA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MGF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MINA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MKD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MKR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MMK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MNT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MOP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MRO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MRU
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MTL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MUR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MVR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MWK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MXN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MXV
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MYR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MZM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__MZN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NAD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NEAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NEO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NEXO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NFT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NGN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NIO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NLG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NOK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NPR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__NZD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__OKB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__OMR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ONE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__OP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ORDI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PAB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PAXG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PEN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PEPE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PGK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PHP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PKR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PLN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__POL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PTE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__PYG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__QAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__QNT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__QTUM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ROL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__RON
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__RPL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__RSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__RUB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__RUNE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__RVN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__RWF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SAND
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SBD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SCR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SDD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SDG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SEK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SGD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SHIB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SHP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SIT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SKK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SLE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SLL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SNX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SOL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SOS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SPL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SRD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SRG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__STD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__STN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__STX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SUI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SVC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SYP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__SZL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__THB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__THETA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TJS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TMM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TMT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TND
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TON
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TOP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TRL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TRX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TRY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TTD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TUSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TVD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TWD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TWT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__TZS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__UAH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__UGX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__UNI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__USD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__USDC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__USDD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__USDP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__USDT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__UYU
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__UZS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__VAL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__VEB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__VED
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__VEF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__VES
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__VET
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__VND
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__VUV
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__WAVES
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__WEMIX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__WOO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__WST
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XAF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XAG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XAU
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XAUT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XBT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XCD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XCG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XCH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XDC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XDR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XEC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XEM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XLM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XMR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XOF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XPD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XPF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XPT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XRP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__XTZ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__YER
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ZAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ZEC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ZIL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ZMK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ZMW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ZWD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ZWG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: CAD__ZWL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: _DLT_LOAD_ID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: _DLT_ID
             description: ''
-            config:
-              meta: {}
-              tags: []
       - name: usd
         columns:
           - name: DATE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD___1INCH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AAVE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ADA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AED
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AFN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AGIX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AKT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ALGO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ALL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AMD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AMP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ANG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AOA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__APE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__APT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ARB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ARS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ATOM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ATS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AUD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AVAX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AWG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AXS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AZM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__AZN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BAKE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BAM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BAT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BBD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BCH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BDT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BEF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BGN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BHD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BIF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BMD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BNB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BND
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BOB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BRL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BSV
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BSW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BTC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BTG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BTN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BTT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BUSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BWP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BYN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BYR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BZD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CAD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CAKE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CDF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CELO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CFX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CHF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CHZ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CLP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CNH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CNY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__COMP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__COP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CRC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CRO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CRV
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CSPR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CUC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CUP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CVE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CVX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CYP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__CZK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DAI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DASH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DCR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DEM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DFI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DJF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DKK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DOGE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DOP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DOT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DYDX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__DZD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__EEK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__EGLD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__EGP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ENJ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__EOS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ERN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ESP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ETB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ETC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ETH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__EUR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__EURC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FEI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FIL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FIM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FJD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FKP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FLOW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FLR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FRAX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FRF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__FTT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GALA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GBP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GEL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GGP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GHC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GHS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GIP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GMD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GMX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GNF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GNO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GRD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GRT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GTQ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GUSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__GYD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__HBAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__HKD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__HNL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__HNT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__HOT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__HRK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__HT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__HTG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__HUF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ICP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__IDR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__IEP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ILS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__IMP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__IMX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__INJ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__INR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__IQD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__IRR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ISK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ITL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__JEP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__JMD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__JOD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__JPY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KAS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KAVA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KCS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KDA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KES
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KGS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KHR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KLAY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KMF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KNC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KPW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KRW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KSM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KWD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KYD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__KZT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LAK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LBP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LDO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LEO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LINK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LKR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LRC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LRD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LSL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LTC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LTL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LUF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LUNA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LUNC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LVL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__LYD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MAD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MANA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MBX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MDL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MGA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MGF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MINA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MKD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MKR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MMK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MNT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MOP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MRO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MRU
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MTL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MUR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MVR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MWK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MXN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MXV
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MYR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MZM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__MZN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NAD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NEAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NEO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NEXO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NFT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NGN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NIO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NLG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NOK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NPR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__NZD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__OKB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__OMR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ONE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__OP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ORDI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PAB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PAXG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PEN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PEPE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PGK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PHP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PKR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PLN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__POL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PTE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PYG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__QAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__QNT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__QTUM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ROL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__RON
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__RPL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__RSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__RUB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__RUNE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__RVN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__RWF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SAND
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SBD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SCR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SDD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SDG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SEK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SGD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SHIB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SHP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SIT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SKK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SLE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SLL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SNX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SOL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SOS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SPL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SRD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SRG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__STD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__STN
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__STX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SUI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SVC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SYP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__SZL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__THB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__THETA
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TJS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TMM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TMT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TND
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TON
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TOP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TRL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TRX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TRY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TTD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TUSD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TVD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TWD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TWT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__TZS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__UAH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__UGX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__UNI
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__USD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__USDC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__USDD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__USDP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__USDT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__UYU
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__UZS
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__VAL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__VEB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__VED
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__VEF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__VES
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__VET
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__VND
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__VUV
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__WAVES
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__WEMIX
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__WOO
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__WST
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XAF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XAG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XAU
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XAUT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XBT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XCD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XCG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XCH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XDC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XDR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XEC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XEM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XLM
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XMR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XOF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XPD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XPF
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XPT
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XRP
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__XTZ
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__YER
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ZAR
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ZEC
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ZIL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ZMK
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ZMW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ZWD
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ZWG
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__ZWL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: _DLT_LOAD_ID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: _DLT_ID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__BTCB
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: USD__PI
             description: ''
-            config:
-              meta: {}
-              tags: []

@@ -12,103 +12,43 @@ sources:
         columns:
           - name: DATE_TIME
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: MCVISID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: POST_VISID_HIGH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: POST_VISID_LOW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: HITID_HIGH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: HITID_LOW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: PAGE_URL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: POST_EVAR133
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: ORDERID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: _SLING_LOADED_AT
             description: ''
-            config:
-              meta: {}
-              tags: []
       - name: app_hits
         columns:
           - name: DATE_TIME
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: MCVISID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: POST_VISID_HIGH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: POST_VISID_LOW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: HITID_HIGH
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: HITID_LOW
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: PAGE_URL
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: POST_EVAR133
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: ORDERID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: _SLING_LOADED_AT
             description: ''
-            config:
-              meta: {}
-              tags: []

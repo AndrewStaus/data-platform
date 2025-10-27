@@ -15,13 +15,13 @@ from typing import Any
 import dagster as dg
 from dagster_dbt import (
     DagsterDbtTranslatorSettings,
+    DbtCliInvocation,
     DbtCliResource,
     DbtProject,
-    build_freshness_checks_from_dbt_assets,
+    # build_freshness_checks_from_dbt_assets,
     dbt_assets,
 )
 from dagster_dbt.asset_utils import DBT_DEFAULT_SELECT
-from dagster_dbt.core.dbt_event_iterator import DbtEventIterator
 
 from .constants import TIME_PARTITION_SELECTOR
 from .translator import CustomDagsterDbtTranslator
@@ -63,39 +63,42 @@ class Factory:
                 and the dbt CLI resource configured with the project directory supplied
                 by the callable.
         """
+
+        dbt_project = dbt()
+        assert dbt_project
         
         assets = [
             Factory._get_assets(
                 "dbt_partitioned_models",
-                dbt=dbt,
+                dbt_project=dbt_project,
                 select=TIME_PARTITION_SELECTOR,
                 partitioned=True,
             ),
             Factory._get_assets(
                 "dbt_non_partitioned_models",
-                dbt=dbt,
+                dbt_project=dbt_project,
                 exclude=TIME_PARTITION_SELECTOR,
                 partitioned=False,
             ),
         ]
 
-        freshness_checks = build_freshness_checks_from_dbt_assets(dbt_assets=assets)
-        freshness_sensor = dg.build_sensor_for_freshness_checks(
-            freshness_checks=freshness_checks, name="dbt_freshness_checks_sensor"
-        )
+        # freshness_checks = build_freshness_checks_from_dbt_assets(dbt_assets=assets)
+        # freshness_sensor = dg.build_sensor_for_freshness_checks(
+        #     freshness_checks=freshness_checks, name="dbt_freshness_checks_sensor"
+        # )
 
         return dg.Definitions(
-            resources={"dbt": DbtCliResource(project_dir=dbt())}, # type: ignore
+            resources={"dbt": DbtCliResource(project_dir=dbt_project)},
             assets=assets,
-            asset_checks=freshness_checks,
-            sensors=[freshness_sensor],
+            # asset_checks=freshness_checks,
+            # sensors=[freshness_sensor],
         )
 
     @cache
     @staticmethod
     def _get_assets(
         name: str | None,
-        dbt: Callable[[], DbtProject],
+        dbt_project: DbtProject,
         partitioned: bool = False,
         select: str = DBT_DEFAULT_SELECT,
         exclude: str | None = None,
@@ -104,7 +107,7 @@ class Factory:
 
         Args:
             name: The Dagster asset group name used to namespace materializations.
-            dbt: Callable that produces the configured :class:`DbtProject`.
+            dbt_project: Configured dbt project.
             partitioned: Indicates whether the assets rely on partition time windows.
             select: dbt selection string narrowing which models to materialize.
             exclude: Optional selection string for excluding models from the run.
@@ -112,10 +115,7 @@ class Factory:
         Returns:
             dagster.AssetsDefinition: A Dagster assets definition that streams dbt CLI
                 events and respects the provided partitioning behavior.
-        """
-
-        dbt_project = dbt()
-        assert dbt_project
+        """        
 
         @dbt_assets(
             name=name,
@@ -124,7 +124,8 @@ class Factory:
             exclude=exclude,
             dagster_dbt_translator=CustomDagsterDbtTranslator(
                 settings=DagsterDbtTranslatorSettings(
-                    enable_duplicate_source_asset_keys=True,
+                    # enable_duplicate_source_asset_keys=False,
+                    enable_asset_checks=False,
                 )
             ),
             backfill_policy=dg.BackfillPolicy.single_run(),
@@ -133,7 +134,8 @@ class Factory:
         )
         def assets( # pragma: no coverage
             context: dg.AssetExecutionContext, dbt: DbtCliResource, config: DbtConfig
-        ) -> Generator[DbtEventIterator, Any, Any]:
+        ) -> Generator[dg.Output[Any] | dg.AssetMaterialization | dg.AssetObservation
+                       | dg. AssetCheckResult | dg.AssetCheckEvaluation, Any, Any]:
             """Materialize the selected dbt models via the dbt CLI resource.
 
             Args:
@@ -145,15 +147,15 @@ class Factory:
                     toggles dbt CLI flags.
 
             Yields:
-                dagster_dbt.core.dbt_event_iterator.DbtEventIterator: The stream of
-                    structured dbt events produced during the CLI invocation. Yielding
-                    the iterator allows Dagster to surface granular run status in the
-                    UI.
+                The stream of structured dbt events produced during the CLI invocation.
+                    Yielding the results allows Dagster to surface granular run status
+                    in the UI.
             """
             args = ["build"]
 
             if config.full_refresh:
                 args.append("--full-refresh")
+
             if config.defer_to_prod:
                 args.extend(dbt.get_defer_args())
                 if config.favor_state:
@@ -171,14 +173,26 @@ class Factory:
 
                 args.extend(("--vars", json.dumps(dbt_vars)))
 
-                yield from dbt.cli(
-                    args,
-                    context=context
-                ).stream()  # .with_insights() # type: ignore
-            else:
-                yield from dbt.cli(
-                    args,
-                    context=context
-                ).stream()  # .with_insights() # type: ignore
+            # yield from dbt.cli(args, context=context).stream()
+            yield from Factory._safe_stream(dbt.cli(args, context=context))
 
         return assets
+    
+    @staticmethod
+    def _safe_stream(invocation: DbtCliInvocation
+    ) -> Generator[dg.Output[Any] | dg.AssetMaterialization | dg.AssetObservation
+            | dg. AssetCheckResult | dg.AssetCheckEvaluation, Any, Any]:
+        """Patch to prevent errors due to dbt fusion not returning node_id for
+        for asset checks.  When an error happens, a asset check will not show an updated
+        status, but the run will not crash.  Should be able to remove once the dbt
+        fusion stabilizes."""
+
+        stream = invocation.stream()
+        while True:
+            try:
+                if event := next(stream, None):
+                    yield event
+                else:
+                    break
+            except KeyError:
+                continue

@@ -12,21 +12,9 @@ sources:
         columns:
           - name: PARTY_KEY
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: ENTITY_ID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: UPDATED
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: _SLING_LOADED_AT
             description: ''
-            config:
-              meta: {}
-              tags: []

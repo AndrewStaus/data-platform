@@ -12,31 +12,13 @@ sources:
         columns:
           - name: ID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: NAME
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: START_DATE
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: UPDATED
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: _DLT_LOAD_ID
             description: ''
-            config:
-              meta: {}
-              tags: []
           - name: _DLT_ID
             description: ''
-            config:
-              meta: {}
-              tags: []

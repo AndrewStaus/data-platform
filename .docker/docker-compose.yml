@@ -28,7 +28,7 @@ services:
   # webserver.
   dagster-data-foundation:
     build:
-      context: .
+      context: ../.
       dockerfile: .docker/data_foundation.dockerfile
       args:
         TARGET: ${TARGET}
@@ -40,7 +40,7 @@ services:
         - destination__password
         - destination__warehouse
     container_name: dagster-data-foundation
-    env_file: ".env"
+    env_file: "../.env"
     environment:
       DAGSTER_CURRENT_IMAGE: "data_platform-data-foundation"
     networks: ["dagster_network"]
@@ -53,10 +53,10 @@ services:
   # webserver.
   dagster-data-science:
     build:
-      context: .
+      context: ../.
       dockerfile: .docker/data_science.dockerfile
     container_name: dagster-data-science
-    env_file: ".env"
+    env_file: "../.env"
     environment:
       DAGSTER_CURRENT_IMAGE: "data_platform-data-science"
     networks: ["dagster_network"]
@@ -66,11 +66,11 @@ services:
   # a queue and later dequeued and launched by dagster-daemon.
   dagster-webserver:
     build:
-      context: .
+      context: ../.
       dockerfile: .docker/webserver.dockerfile
     entrypoint: ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000", "-w", "workspace.yaml"]
     container_name: dagster-webserver
-    env_file: ".env"
+    # env_file: "../.env"
     volumes: # Make docker client accessible so we can launch containers using host docker
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
@@ -89,7 +89,7 @@ services:
   # off of the queue and launching them, as well as creating runs from schedules or sensors.
   dagster-daemon:
     build:
-      context: .
+      context: ../.
       dockerfile: .docker/webserver.dockerfile
     entrypoint: 
       - dagster-daemon

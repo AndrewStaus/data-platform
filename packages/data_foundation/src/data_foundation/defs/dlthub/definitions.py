@@ -1,5 +1,4 @@
 """Resource definitions for dltHub integrations."""
-
 import os
 from pathlib import Path
 

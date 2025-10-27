@@ -21,9 +21,9 @@ def get_schema_name(schema: str) -> str:
         ensure isolation between developers.
     """
     postfix = os.getenv("DESTINATION__USER", "")
-    if os.getenv("TARGET") == "dev":
+    if os.getenv("TARGET", "").lower() == "dev":
         schema = f"{schema}__{postfix}"
-    return schema
+    return schema.upper()
 
 def get_database_name(database: str) -> str:
     """Return the database name adjusted for the current environment.
@@ -35,9 +35,10 @@ def get_database_name(database: str) -> str:
         str: Database name optionally prefixed with ``_dev_`` in development
         environments.
     """
-    if os.getenv("TARGET") == "dev":
-        database = f"_dev_{database}"
-    return database
+    if os.getenv("TARGET", "").lower() != "prod":
+        target = os.getenv("TARGET")
+        database = f"_{target}_{database}"
+    return database.upper()
 
 def get_automation_condition_from_meta(
     meta: dict[str, str],

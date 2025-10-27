@@ -248,7 +248,7 @@ class Factory:
         return assets_definition
 
     @staticmethod
-    def _build_data_generator(resource_config: dict) -> Generator[Any, Any, None]:
+    def _build_data_generator(resource_config: dict) -> Generator[Any, Any]:
         """ Dynamically imports and initializes a data generator function based on a
         resource configuration.
 
