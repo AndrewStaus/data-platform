@@ -23,8 +23,8 @@ theme:
     - navigation.path
     - navigation.indexes
     - toc.integrate
-  # logo: 
-  # favicon: 
+  logo: assets/images/logo.svg
+  favicon: assets/images/logo.svg
   palette:
     # Light mode
     - media: "(prefers-color-scheme: light)"
