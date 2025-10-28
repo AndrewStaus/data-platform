@@ -62,7 +62,7 @@ Create a new SQL file named with the convention:
 ???+ quote "Creating Staging Models"
     ![dbt Staging](../../../assets/images/dbt/2_staging.gif){ align=left }
 
-??? example "models/staging/my_database/stg_my_database__accounts.sql"
+??? example "models/staging/my_database/stg_my_database__my_table.sql"
 
     ```sql
     {{
@@ -95,7 +95,7 @@ Create a new SQL file named with the convention:
 
 ---
 ## 3. Add dbt and Dagster Jinja Configuration Block
-??? example "models/staging/my_database/stg_my_database__accounts.sql"
+??? example "models/staging/my_database/stg_my_database__my_table.sql"
     ```sql
     {{-
         config(
@@ -249,17 +249,5 @@ Or by using the dbt extension:
 
 This command runs models, executes tests, and builds dependencies automatically.
 
-
----
-
-✅ **Summary**
-
-| Step | Description |
-| ---- | ------------ |
-| **Sources** | Declare raw tables for use in dbt. |
-| **Staging** | Clean and standardize data from the raw schema. |
-| **Intermediate** | Join and enrich data across domains. |
-| **Marts** | Build curated datasets for analytics. |
-| **Build & Test** | Use `dbt build` to validate and materialize models. |
 
 ---
