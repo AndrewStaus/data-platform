@@ -38,7 +38,7 @@ FROM python:3.12-slim-bullseye AS dbt_compiler
         && export DESTINATION__ROLE=$(cat /run/secrets/destination__role) \
         && export DESTINATION__PASSWORD=$(cat /run/secrets/destination__password) \
         && export DESTINATION__WAREHOUSE=$(cat /run/secrets/destination__warehouse) \
-        && pip install dbt-core dbt-snowflake
+        && pip install dbt-core dbt-snowflake \
         && cd dbt && dbt clean && dbt deps && dbt compile
 
 FROM python:3.12-slim-bullseye AS data_foundation
