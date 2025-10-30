@@ -8,21 +8,23 @@ FROM python:3.12-bullseye AS sling_builder
         && chmod +x sling \
         && strip sling && upx sling
 
-FROM python:3.12-bullseye AS dbt_builder
-    # install and compress the latest dbt fusion binary for use in other stages.
-    # binary will be available in the builder root directory `/dbt`.
-    RUN apt-get update && apt-get --no-install-recommends -y install binutils upx
-    RUN curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh \
-            | /bin/bash -s -- --update \
-        && cd /root/.local/bin/ \
-        && strip dbt && upx dbt \
-        && mv /root/.local/bin/dbt /dbt
+## disabled dbt fusion
+# FROM python:3.12-bullseye AS dbt_builder
+#     # install and compress the latest dbt fusion binary for use in other stages.
+#     # binary will be available in the builder root directory `/dbt`.
+#     RUN apt-get update && apt-get --no-install-recommends -y install binutils upx
+#     RUN curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh \
+#             | /bin/bash -s -- --update \
+#         && cd /root/.local/bin/ \
+#         && strip dbt && upx dbt \
+#         && mv /root/.local/bin/dbt /dbt
 
 FROM python:3.12-slim-bullseye AS dbt_compiler
     # compile dbt target so that recompile is not needed at runtime in dagster
     ARG TARGET="dev"
     ENV TARGET=$TARGET
-    COPY --from=dbt_builder dbt /usr/local/bin/dbt
+    ## disabled dbt fusion
+    # COPY --from=dbt_builder dbt /usr/local/bin/dbt
     COPY /packages/data_foundation/dbt dbt
     RUN --mount=type=secret,id=destination__user \
         --mount=type=secret,id=destination__database \
@@ -36,6 +38,7 @@ FROM python:3.12-slim-bullseye AS dbt_compiler
         && export DESTINATION__ROLE=$(cat /run/secrets/destination__role) \
         && export DESTINATION__PASSWORD=$(cat /run/secrets/destination__password) \
         && export DESTINATION__WAREHOUSE=$(cat /run/secrets/destination__warehouse) \
+        && pip install dbt-core dbt-snowflake
         && cd dbt && dbt clean && dbt deps && dbt compile
 
 FROM python:3.12-slim-bullseye AS data_foundation
@@ -49,7 +52,7 @@ FROM python:3.12-slim-bullseye AS data_foundation
     # install binaries
     COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
     COPY --from=sling_builder sling /usr/local/bin/sling
-    COPY --from=dbt_builder dbt /usr/local/bin/dbt
+    # COPY --from=dbt_builder dbt /usr/local/bin/dbt
     
     # copy libs and configs
     COPY .docker/dagster.yaml $DAGSTER_HOME
@@ -60,9 +63,10 @@ FROM python:3.12-slim-bullseye AS data_foundation
     COPY /packages/data_foundation/src src
     COPY /packages/data_foundation/pyproject.toml pyproject.toml
     RUN --mount=type=cache,target=/root/.cache/uv,id=foundation_uv_cache \
-        uv sync --no-dev --compile-bytecode --link-mode=copy \
-        && ln -sf '/usr/local/bin/dbt' '/usr/local/bin/dbtf' \
-        && rm .venv/bin/dbt
+        uv sync --no-dev --compile-bytecode --link-mode=copy
+        ## removed dbt fusion
+        # && ln -sf '/usr/local/bin/dbt' '/usr/local/bin/dbtf' \
+        # && rm .venv/bin/dbt
     COPY --from=dbt_compiler dbt dbt
 
     # this is for keyvault stub will be removed in real deployment

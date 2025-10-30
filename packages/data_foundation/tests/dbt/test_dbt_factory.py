@@ -21,21 +21,21 @@ class TestFactory(unittest.TestCase):
 class TestBuildDefinitions(TestFactory):
 
     @patch("data_foundation.defs.dbt.factory.Factory._get_assets")
-    # @patch("data_foundation.defs.dbt.factory.build_freshness_checks_from_dbt_assets")
-    # @patch("data_foundation.defs.dbt.factory.dg.build_sensor_for_freshness_checks")
+    @patch("data_foundation.defs.dbt.factory.build_freshness_checks_from_dbt_assets")
+    @patch("data_foundation.defs.dbt.factory.dg.build_sensor_for_freshness_checks")
     @patch("data_foundation.defs.dbt.factory.DbtCliResource")
     def test_builds_correct_definitions(
                 self,
                 mock_dbt_cli_resource,
-                # mock_build_sensor,
-                # mock_build_freshness,
+                mock_build_sensor,
+                mock_build_freshness,
                 mock_get_assets,
             ):
         # Arrange
         Factory.build_definitions.cache_clear()
         mock_get_assets.side_effect = [self.mock_assets_definition]*2
-        # mock_build_freshness.return_value = self.mock_freshness_checks
-        # mock_build_sensor.return_value = self.mock_sensor
+        mock_build_freshness.return_value = self.mock_freshness_checks
+        mock_build_sensor.return_value = self.mock_sensor
         mock_dbt_cli_resource.return_value = MagicMock()
 
         # Act
@@ -45,8 +45,8 @@ class TestBuildDefinitions(TestFactory):
         self.assertIsInstance(definitions, dg.Definitions)
         self.assertIn("dbt", definitions.resources)
         self.assertEqual(definitions.assets, [self.mock_assets_definition]*2)
-        # self.assertEqual(definitions.asset_checks, self.mock_freshness_checks)
-        # self.assertEqual(definitions.sensors, [self.mock_sensor])
+        self.assertEqual(definitions.asset_checks, self.mock_freshness_checks)
+        self.assertEqual(definitions.sensors, [self.mock_sensor])
 
 
 class TestGetAssets(TestFactory):

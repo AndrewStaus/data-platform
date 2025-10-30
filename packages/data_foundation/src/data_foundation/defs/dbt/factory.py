@@ -15,10 +15,9 @@ from typing import Any
 import dagster as dg
 from dagster_dbt import (
     DagsterDbtTranslatorSettings,
-    DbtCliInvocation,
     DbtCliResource,
     DbtProject,
-    # build_freshness_checks_from_dbt_assets,
+    build_freshness_checks_from_dbt_assets,
     dbt_assets,
 )
 from dagster_dbt.asset_utils import DBT_DEFAULT_SELECT
@@ -82,16 +81,16 @@ class Factory:
             ),
         ]
 
-        # freshness_checks = build_freshness_checks_from_dbt_assets(dbt_assets=assets)
-        # freshness_sensor = dg.build_sensor_for_freshness_checks(
-        #     freshness_checks=freshness_checks, name="dbt_freshness_checks_sensor"
-        # )
+        freshness_checks = build_freshness_checks_from_dbt_assets(dbt_assets=assets)
+        freshness_sensor = dg.build_sensor_for_freshness_checks(
+            freshness_checks=freshness_checks, name="dbt_freshness_checks_sensor"
+        )
 
         return dg.Definitions(
             resources={"dbt": DbtCliResource(project_dir=dbt_project)},
             assets=assets,
-            # asset_checks=freshness_checks,
-            # sensors=[freshness_sensor],
+            asset_checks=freshness_checks,
+            sensors=[freshness_sensor],
         )
 
     @cache
@@ -124,8 +123,9 @@ class Factory:
             exclude=exclude,
             dagster_dbt_translator=CustomDagsterDbtTranslator(
                 settings=DagsterDbtTranslatorSettings(
-                    # enable_duplicate_source_asset_keys=False,
-                    enable_asset_checks=False,
+                    enable_duplicate_source_asset_keys=False,
+                    enable_asset_checks=True,
+                    enable_source_tests_as_checks=True,
                 )
             ),
             backfill_policy=dg.BackfillPolicy.single_run(),
@@ -173,26 +173,6 @@ class Factory:
 
                 args.extend(("--vars", json.dumps(dbt_vars)))
 
-            # yield from dbt.cli(args, context=context).stream()
-            yield from Factory._safe_stream(dbt.cli(args, context=context))
+            yield from dbt.cli(args, context=context).stream()
 
         return assets
-    
-    @staticmethod
-    def _safe_stream(invocation: DbtCliInvocation
-    ) -> Generator[dg.Output[Any] | dg.AssetMaterialization | dg.AssetObservation
-            | dg. AssetCheckResult | dg.AssetCheckEvaluation, Any, Any]:
-        """Patch to prevent errors due to dbt fusion not returning node_id for
-        for asset checks.  When an error happens, a asset check will not show an updated
-        status, but the run will not crash.  Should be able to remove once the dbt
-        fusion stabilizes."""
-
-        stream = invocation.stream()
-        while True:
-            try:
-                if event := next(stream, None):
-                    yield event
-                else:
-                    break
-            except KeyError:
-                continue
