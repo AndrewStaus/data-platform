@@ -5,10 +5,7 @@
     {% endif %}
 
     {% if delete_interval %}
-        {% do delete_historical(
-            reference_date_column,
-            delete_interval
-        ) %}
+        {% do delete_historical(reference_date_column, delete_interval) %}
     {% endif %}
 
     {% if anonymize_interval %}

@@ -20,8 +20,8 @@ def get_schema_name(schema: str) -> str:
         str: Schema name suffixed with the destination user when targeting ``dev`` to
         ensure isolation between developers.
     """
-    postfix = os.getenv("DESTINATION__USER", "")
     if os.getenv("TARGET", "").lower() == "dev":
+        postfix = os.getenv("DESTINATION__USER", "")
         schema = f"{schema}__{postfix}"
     return schema.upper()
 

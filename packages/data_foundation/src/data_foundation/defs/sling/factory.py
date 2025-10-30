@@ -191,7 +191,7 @@ class Factory:
                     progress events produced during the replication.
             """
 
-            if context.has_partition_key:
+            if context.has_partition_key or context.has_partition_key_range:
                 time_window = context.partition_time_window
 
                 format = "%Y-%m-%d %H:%M:%S"

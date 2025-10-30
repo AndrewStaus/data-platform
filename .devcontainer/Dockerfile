@@ -6,16 +6,17 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS sling_builder
         && rm -f sling_linux_amd64.tar.gz \
         && chmod +x sling
 
-FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS dbt_builder
-    # install the latest dbt fusion binary for use in other stages.
-    # binary will be available in the builder root directory `/dbt`.
-    RUN curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh \
-        | /bin/bash -s -- --update \
-        && mv /root/.local/bin/dbt /dbt
+## disabled dbt-fusion
+# FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS dbt_builder
+#     # install the latest dbt fusion binary for use in other stages.
+#     # binary will be available in the builder root directory `/dbt`.
+#     RUN curl -fsSL https://public.cdn.getdbt.com/fs/install/install.sh \
+#         | /bin/bash -s -- --update \
+#         && mv /root/.local/bin/dbt /dbt
 
 FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS data_platform_dev_container
     ENV SLING_BINARY=/usr/local/bin/sling
-    ENV DBT_BINARY=/home/vscode/.local/bin/dbt
+    # ENV DBT_BINARY=/home/vscode/.local/bin/dbt
 
     ENV UV_CACHE_DIR=/home/vscode/.cache/uv
     ENV UV_LINK_MODE=copy
@@ -25,7 +26,8 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS data_platform_dev
     ENV PATH="/home/vscode/.local/bin/:$PATH"
 
     COPY --from=sling_builder sling $SLING_BINARY
-    COPY --from=dbt_builder dbt $DBT_BINARY
+    ## disabled dbt fusion
+    # COPY --from=dbt_builder dbt $DBT_BINARY
 
     RUN --mount=type=secret,id=env-file,target=/home/vscode/.tmp/.env \
         . /home/vscode/.tmp/.env \
@@ -39,9 +41,12 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS data_platform_dev
         && echo "warehouse = \"$DESTINATION__WAREHOUSE\"" >> connections.toml
 
     RUN pip install uv \
-        && uv pip install --system ruff sqlfluff \
+        && uv pip install --system ruff sqlfluff dbt-core dbt-snowflake \
         && mkdir -p /home/vscode/.vscode-server/extensions \
         && mkdir -p /home/vscode/.local/bin/ \
-        && ln -sf '/home/vscode/.local/bin/dbt' '/home/vscode/.local/bin/dbtf' \
-        && echo 'alias dbtf=/home/vscode/.local/bin/dbt' >> /home/vscode/.bashrc \
-        && chown -R vscode /home/vscode/
+        && chown -R vscode /home/vscode/ \
+        && chmod -R 640 $SNOWFLAKE_HOME/connections.toml
+
+        ## disabled dbt fusion
+        # && ln -sf '/home/vscode/.local/bin/dbt' '/home/vscode/.local/bin/dbtf' \
+        # && echo 'alias dbtf=/home/vscode/.local/bin/dbt' >> /home/vscode/.bashrc \

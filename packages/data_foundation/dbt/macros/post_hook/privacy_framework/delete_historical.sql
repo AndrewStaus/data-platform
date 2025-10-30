@@ -12,10 +12,12 @@
         {% endset %}
 
         {% set affected_rows = run_query(delete_dml)[0][0] %}
-        
+
         {% do _log_privacy_operation(
-            "delete", reference_date_column,
-            retention_interval, affected_rows, columns
+            "delete",
+            reference_date_column,
+            retention_interval,
+            affected_rows
         ) %}
 
     {% endif %}

@@ -123,9 +123,9 @@ dagster dev
 
 ---
 
-### Running dbt-Fusion
+### Running dbt
 
-- **dbt-Fusion** and its extensions are automatically installed inside the container.  
+- **dbt** and its extensions are automatically installed inside the container.  
   You can execute dbt models directly from VS Code using the built-in terminal.
 
 ---
