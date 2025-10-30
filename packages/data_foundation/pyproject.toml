@@ -16,7 +16,9 @@ dependencies = [
     "data-platform-utils",
     "scikit-learn",
     "pandas",
-    "pyarrow"
+    "pyarrow",
+    "dbt-core>=1.10.11",
+    "dbt-snowflake>=1.10.2",
 ]
 
 [dependency-groups]
