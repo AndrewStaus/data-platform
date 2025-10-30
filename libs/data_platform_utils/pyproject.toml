@@ -1,7 +1,7 @@
 [project]
 name = "data_platform_utils"
 description = "Shared utilities for code locations / packages."
-version = "0.1.6"
+version = "0.1.7"
 authors = [{name = "Andrew Staus"}]
 requires-python = ">=3.10"
 dependencies = [
