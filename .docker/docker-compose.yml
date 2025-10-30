@@ -70,7 +70,6 @@ services:
       dockerfile: .docker/webserver.dockerfile
     entrypoint: ["dagster-webserver", "-h", "0.0.0.0", "-p", "3000", "-w", "workspace.yaml"]
     container_name: dagster-webserver
-    # env_file: "../.env"
     volumes: # Make docker client accessible so we can launch containers using host docker
       - /var/run/docker.sock:/var/run/docker.sock
       - /tmp/io_manager_storage:/tmp/io_manager_storage
