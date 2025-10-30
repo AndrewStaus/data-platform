@@ -45,7 +45,7 @@ FROM mcr.microsoft.com/devcontainers/python:1-3.12-bullseye AS data_platform_dev
         && mkdir -p /home/vscode/.vscode-server/extensions \
         && mkdir -p /home/vscode/.local/bin/ \
         && chown -R vscode /home/vscode/ \
-        && chmod -R 755 /home/vscode/
+        && chmod -R 640 $SNOWFLAKE_HOME/connections.toml
 
         ## disabled dbt fusion
         # && ln -sf '/home/vscode/.local/bin/dbt' '/home/vscode/.local/bin/dbtf' \
