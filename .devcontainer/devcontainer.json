@@ -42,9 +42,9 @@
 		"settings": {
 			"editor.snippetSuggestions": "bottom",
 			"yaml.schemas": {
-				"/workspaces/data-platform/.yaml/dlthub/sources.json": "**/dlthub/**/*.yaml",
-				"/workspaces/data-platform/.yaml/sling/connections.json": "**/sling/**/connections.yaml",
-				"/workspaces/data-platform/.yaml/sling/replication.json": "**/sling/**/*replication*.yaml"
+				"/workspaces/data-platform/.vscode/yaml_schemas/dlthub/sources.json": "**/dlthub/**/*.yaml",
+				"/workspaces/data-platform/.vscode/yaml_schemas/sling/connections.json": "**/sling/**/connections.yaml",
+				"/workspaces/data-platform/.vscode/yaml_schemas/sling/replication.json": "**/sling/**/*replication*.yaml"
 			},
 			"sqlfluff.dbtInterface.enabled": false,
 			"sqlfluff.dialect": "",
