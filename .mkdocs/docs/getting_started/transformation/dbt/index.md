@@ -1,4 +1,4 @@
-# dbt
+# ![dbt](../../../assets/images/dbt/0_logo.png){ width="250" }
 
 ## Overview
 
@@ -222,7 +222,7 @@ dbt defines the **SQL logic and transformations**, while Dagster ensures those t
 
 ---
 
-✅ **Summary**
+**Summary**
 
 | Directory | Purpose |
 | ---------- | -------- |

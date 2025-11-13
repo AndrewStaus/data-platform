@@ -1,4 +1,4 @@
-# dltHub
+# ![dltHub](../../../assets/images/dlt/0_logo.png){ width="250" }
 
 ## Overview
 
@@ -151,16 +151,3 @@ All dltHub connectors include:
 - **Automatic asset mapping** into Dagster’s lineage graph  
 
 This ensures every dataset — from an external API to the final mart — is fully traceable across ingestion, transformation, and consumption.
-
----
-
-✅ **Summary**
-
-| Directory | Purpose |
-| ---------- | -------- |
-| `__init__.py` | Marks the module; defines helper functions or constants |
-| `data.py` | Implements the generator that retrieves and yields raw data |
-| `sources.yaml` | Defines resource configuration, replication behavior, and destinations |
-| Folder (e.g. `exchange_rate/`, `facebook_ads/`) | Represents one external data source |
-
----

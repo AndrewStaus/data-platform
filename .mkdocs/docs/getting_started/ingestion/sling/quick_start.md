@@ -19,11 +19,21 @@ Inside that folder, create two files:
 
 ## 2. Scaffold `connections.yaml`
 
-Sling provides IntelliSense scaffolds to simplify setup.  
-Press `Ctrl + Space` to open the autocomplete pane and select **`sling-connections`** to populate a connection template.
+IntelliSense scaffolds are provided to simplify setup.
+Open `connections.yaml` and press `Ctrl + Space` to open the autocomplete pane and select **`sling-connections`** to populate a connection template.
 
 ???+ quote "connections.yaml"
     ![Sling Connections](../../../assets/images/sling/2_connections.gif){ align=left }
+
+---
+
+## 3. Scaffold `replication.yaml`
+
+IntelliSense scaffolds are provided to simplify setup.  
+Open `replication.yaml` and press `Ctrl + Space` to open the autocomplete pane and select **`sling-replication`** to populate a replication template.
+
+???+ quote "replication.yaml"
+    ![Sling Replication](../../../assets/images/sling/3_replication.gif){ align=left }
 
 ---
 
@@ -45,3 +55,18 @@ YAML schemas are enabled to validate inputs, provide autocomplete, and display f
     ![YAML Hints](../../../assets/images/sling/5_hints.gif){ align=left }
 
 ---
+
+## 6. View and Run in Dagster
+
+Open Dagster to view and run your newly configured replications.
+??? hint "dagster dev"
+    Run `dagster dev` or press `Reload definitions` in the dagster UI if it is already running.
+    This will result in your replications being displayed.  See the [Dagster quick start guide](../../orchestration/dagster/quick_start.md)
+    for more info.
+
+---
+
+## 7. Submit a Pull Request
+
+Once you are satisifed with your changes, you may open a pull request to have your
+changes merged into the QA branch for testing and validation.
