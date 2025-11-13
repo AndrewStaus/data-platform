@@ -1,4 +1,4 @@
-# Dagster
+# ![Dagster](../../../assets/images/dagster/0_logo.png){ width="400" }
 
 Dagster is the **data orchestration layer** of the platform — the control center where ingestion, transformation, and quality workflows come together.  
 It enables **observability**, **automation**, and **governance** across the full data lifecycle.

@@ -1,4 +1,4 @@
-# Sling
+# ![Sling](../../../assets/images/sling/0_logo.webp){ width="280" } 
 
 ## Overview
 
@@ -204,7 +204,7 @@ To replicate a new data source:
 ---
 
 
-✅ **Summary**
+**Summary**
 
 | File | Purpose |
 | ---- | -------- |

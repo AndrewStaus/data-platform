@@ -66,82 +66,17 @@ Press `Ctrl + Space` and select **`dlt-sources`** to scaffold a sources template
 
 ---
 
-# Sources
+## 5. View and Run in Dagster
 
-??? example "sources.yaml"
-
-    ```yaml
-    sources:
-        my_api:
-            resources:
-            - my_api.users
-            - my_api.transactions
-            meta:
-                dagster:
-                    automation_condition: on_schedule
-                    automation_condition_config:
-                        cron_schedule: "@daily"
-                        cron_timezone: utc
-                    freshness_lower_bound_delta_seconds: 108000
-    ```
-
-**Explanation:**
-- The `sources` block declares a data source (e.g., an API, database, or file store).
-- Each source can contain one or more **resources**, representing individual endpoints or tables.
-- Grouping them provides modularity and reuse for replication definitions.
+Open Dagster to view and run your newly configured replications.
+??? hint "dagster dev"
+    Run `dagster dev` or press `Reload definitions` in the dagster UI if it is already running.
+    This will result in your replications being displayed.  See the [Dagster quick start guide](../../orchestration/dagster/quick_start.md)
+    for more info.
 
 ---
 
-# Resources
+## 6. Submit a Pull Request
 
-??? example "sources.yaml"
-
-    ```yaml
-    resources:
-        my_api.users:
-            entry: data.fetch_users
-            write_disposition: append
-            primary_key: ["id"]
-            kinds: {api}
-
-        my_api.transactions:
-            entry: data.fetch_transactions
-            write_disposition: append
-            primary_key: ["id"]
-            kinds: {api}
-    ```
-
-**Explanation:**
-- Each resource maps to a data generator function (defined in `data.py`).
-- The resource defines how its data is written to the target system.
-- Use multiple resources when extracting from different endpoints or datasets.
-
----
-
-# Data Generator
-
-??? example "data.py"
-
-    ```python
-    import requests
-
-    def fetch_transactions():
-        """Fetch paginated transactions from API"""
-        page = 1
-        while True:
-            response = requests.get(f"https://api.example.com/transactions?page={page}")
-            data = response.json()
-            if not data:
-                break
-            yield data
-            page += 1
-    ```
-
-    !!! tip
-        - Always use **`yield`** (not `return`) to stream data in small chunks.  
-        - Use API pagination, cursors, or offsets to avoid loading too much data into memory.  
-        - Each yield should return a list (or iterable) of records, e.g. `[{...}, {...}, ...]`.
-
-The **data generator** defines *how* data is fetched.  
-It can yield any iterable of dictionaries (records).  
-dltHub automatically batches and streams data to the destination.
+Once you are satisifed with your changes, you may open a pull request to have your
+changes merged into the QA branch for testing and validation.
