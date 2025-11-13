@@ -1,4 +1,4 @@
-# ![dbt](../../../assets/images/dbt/0_logo.png){ width="250" }
+# ![dbt](../../../assets/images/dbt/0_logo_w.png#only-dark){ width="250" } ![dbt](../../../assets/images/dbt/0_logo_b.png#only-light){ width="250" }
 
 ## Overview
 
