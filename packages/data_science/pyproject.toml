@@ -12,10 +12,7 @@ dependencies = [
     "data-platform-utils",
     "faker==37.11.0",
     "psutil==7.1.0",
-    "snowflake>=1.8.0",
-    "snowflake-ml-python>=1.18.0",
-    "snowflake-snowpark-python>=1.41.0",
-    "xgboost==3.0.1",
+    "snowflake-ml-python>=1.19.0",
 ]
 
 [dependency-groups]
@@ -25,11 +22,6 @@ dev = [
     "pytest-xdist>=3.8.0",
 ]
 
-
-[tool.uv]
-override-dependencies = [
-    "nvidia-nccl-cu12; sys_platform == 'never'"
-]
 
 [tool.uv.sources]
 data-platform-utils = { path = "../../libs/data_platform_utils" }
