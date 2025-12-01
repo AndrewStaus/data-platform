@@ -25,12 +25,12 @@ class TestGetSchemaName(TestHelpers):
     def test_get_schema_name_dev_environment(self):
         os.environ["TARGET"] = "dev"
         os.environ["DESTINATION__USER"] = "alice"
-        result = helpers.get_schema_name("my_schema")
+        result = helpers.get_schema_name("MY_SCHEMA")
         self.assertEqual(result, "MY_SCHEMA__ALICE")
 
     def test_get_schema_name_non_dev(self):
         os.environ["TARGET"] = "prod"
-        result = helpers.get_schema_name("my_schema")
+        result = helpers.get_schema_name("MY_SCHEMA")
         self.assertEqual(result, "MY_SCHEMA")
 
 class TestGetDatabaseName(TestHelpers):

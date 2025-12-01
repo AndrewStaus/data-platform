@@ -240,7 +240,6 @@ class Factory:
                 schema, table = stream_object.split(".")
                 object = ".".join((get_schema_name(schema), table))
                 replication_config["streams"][stream]["object"] = object
-
         return replication_config
 
     @staticmethod
